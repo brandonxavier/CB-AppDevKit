@@ -1,0 +1,27 @@
+cb.onTip(func)
+Receive a notification when a tip is sent. The func argument should be a function that receives 1 argument itself, tip.
+
+These fields are available:
+
+amount: amount of tip
+message: message in tip
+to_user: user who received tip
+from_user: user who sent tip
+from_user_in_fanclub: is the user in the broadcasters fan club
+from_user_has_tokens: does the user have at least 1 token
+from_user_is_mod: is the user a moderator
+from_user_tipped_recently: is the user a “dark blue”?
+from_user_gender: “m” (male), “f” (female), “s” (shemale), or “c” (couple)
+Example Usage
+var total_tipped = 0;
+cb.onTip(function (tip) {
+    total_tipped += parseInt(tip['amount'])
+    cb.chatNotice("Total Tipped: " + total_tipped);
+    cb.chatNotice(tip);
+});
+Example Output
+Notice: Total Tipped: 5
+Notice: {u'to_user': u'testuser', u'amount': 5, u'message': u'',
+         u'from_user': u'testuser2', u'from_user_in_fanclub': False,
+         u'from_user_has_tokens': False, u'from_user_is_mod': False,
+         u'from_user_gender': u'm', u'from_user_tipped_recently': True}

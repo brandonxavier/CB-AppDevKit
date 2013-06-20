@@ -1,0 +1,21 @@
+cb.tipOptions(func)
+This function is only available to apps, not bots.
+
+When users send a tip, present them with a list of messages to send with their tip. These messages can be received and processed later by cb.onTip(func).
+
+Example Code
+cb.tipOptions(function(user) {
+    return {options:[{label: 'choice1'}, {label: 'choice2'},  {label: 'choice3'}],
+            label:"Select a choice:"};
+});
+When a tip is received, the object will look like this:
+
+{u'to_user': u'testuser', u'amount': 5, u'message': u'choice1',
+         u'from_user': u'testuser2'}
+Disabling tip options
+If you no longer wish to display custom tip options and would prefer the user type his own message, simply return nothing.
+
+cb.tipOptions(function(user) {
+    // If we determine we want to show no custom tip options, do this . . .
+    return;
+});

@@ -1,0 +1,29 @@
+Example Usage
+cb.settings_choices = [
+    {name:'tokens_per_minute_to_be_king', type:'int',
+        minValue:1, maxValue:99, defaultValue:5, label: "Tokens per Minute"},
+    {name:'remove_king_when', type:'choice',
+        choice1:'someone else outbids',
+        choice2:'score decays to 0', defaultValue:'someone else outbids'}
+];
+Accessing the initialized variables
+For each name in cb.settings_choices, there will be a value loaded in cb.settings. For the example above, there will be a cb.settings.remove_king_when variable.
+
+Field Types
+int
+{name:'somefield', type:'int', minValue:1, maxValue:99},
+str
+{name: 'somefield', type: 'str', minLength: 1, maxLength: 255}
+choice
+{name:'remove_king_when', type:'choice',
+    choice1:'foo',
+    choice2:'bar', defaultValue: 'foo'}
+You may add as many choices as needed. The next choice would be choice3, followed by choice4, etc.
+
+Optional fields
+All fields accept a required: false parameter which makes them become optional.
+
+All fields accept a label: "Some String" field. This will be the display name for the field as shown in the final rendered form.
+
+Default values
+All fields accept a defaultValue: parameter.

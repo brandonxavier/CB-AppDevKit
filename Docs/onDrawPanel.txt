@@ -1,0 +1,79 @@
+cb.onDrawPanel(func)
+This function is only available to apps, not bots.
+
+Return data needed to display the info panel for a user. The func function
+takes 1 argument, the username.
+The return value is a key-value set with a template key. Depending on the template chosen, additional
+keys should be passed in. For more information, see Available Templates
+
+Available Templates
+These are the supported templates with examples of how to use them.
+
+3_rows_of_labels
+/* Layout is roughly
+    {row1_label}: {row1_value}
+    {row2_label}: {row2_value}
+    {row3_label}: {row3_value}
+*/
+cb.onDrawPanel(function(user) {
+    return {
+        'template': '3_rows_of_labels',
+        'row1_label': 'Tip Received / Goal :',
+        'row1_value': '0',
+        'row2_label': 'Highest Tip:',
+        'row2_value': 'username',
+        'row3_label': 'Latest Tip Received:',
+        'row3_value': '0'
+    };
+});
+3_rows_11_21_31
+/* Layout is roughly
+    {row1_value}
+    {row2_value}
+    {row3_value}
+*/
+
+cb.onDrawPanel(function(user) {
+    return {
+        'template': '3_rows_11_21_31',
+        'row1_value': '0',
+        'row2_value': 'username',
+        'row3_value': '0'
+    };
+});
+3_rows_12_21_31
+/* Layout is roughly
+    {row1_label}: {row1_value}
+    {row2_value}
+    {row3_value}
+*/
+
+cb.onDrawPanel(function(user) {
+    return {
+        'template': '3_rows_12_21_31',
+        'row1_label': 'Tip Received / Goal :',
+        'row1_value': '0',
+        'row2_value': 'username',
+        'row3_value': '0'
+    };
+});
+3_rows_12_22_31
+/* Layout is roughly
+    {row1_label}: {row1_value}
+    {row2_label}: {row2_value}
+    {row3_value}
+*/
+
+cb.onDrawPanel(function(user) {
+    return {
+        'template': '3_rows_12_22_31',
+        'row1_label': 'Tip Received / Goal :',
+        'row1_value': '0',
+        'row2_label': 'Highest Tip:',
+        'row2_value': 'username',
+        'row3_value': '0'
+    };
+});
+Additional templates
+If nothing here works for you, please email support and request an additional template to suit your needs.
+Let us know what you’re looking for and we’ll try to accomidate you.

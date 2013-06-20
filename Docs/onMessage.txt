@@ -1,0 +1,41 @@
+cb.onMessage(func)
+Receive a notification when a message is sent. The func argument should be a function that receives 1 argument
+itself, message.
+
+Your app can manipulate the message.
+
+You must return the original message object.
+
+The message variable passed to the function has these fields:
+
+c: message color
+m: the message text
+user: username of message sender
+f: message font
+in_fanclub: is the user in the broadcasters fan club
+has_tokens: does the user have at least 1 token
+is_mod: is the user a moderator
+tipped_recently: is the user a “dark blue”?
+gender: “m” (male), “f” (female), “s” (shemale), or “c” (couple)
+Example Usage
+cb.onMessage(function (message) {
+    cb.chatNotice(message);
+});
+Example Output
+Notice: {u'c': u'#494949', u'm': u'hello', u'user': u'testuser',
+         u'f': u'default',  u'in_fanclub': False, u'has_tokens': False,
+         u'is_mod': False, u'gender': u'm', u'tipped_recently': True}
+Changing the background color of a message
+cb.onMessage(function (msg) {
+    msg['background'] = '#9F9';
+    return msg;
+});
+Hiding a message from chat
+Accomplished by setting the ‘X-Spam’ attribute on the message.
+
+cb.onMessage(function (msg) {
+    if (msg['m'] == '/stats') {
+        msg['X-Spam'] = true;
+    }
+    return msg;
+});
