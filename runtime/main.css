@@ -1,0 +1,110 @@
+/**
+ * Created with JetBrains WebStorm
+ * User: brandonxavier
+ * Date: 6/20/13
+ *
+
+ Copyright 2013 Brandon Xavier (brandonxavier421@gmail.com)
+
+ This file is part of CB-AppDevKit.
+
+ CB-AppDevKit is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ CB-AppDevKit is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with CB-AppDevKit.  If not, see <http://www.gnu.org/licenses/>.
+
+ */
+
+/* TODO: Cleanup and optimize the css */
+
+html {
+    height:100%;
+    width:100%;
+}
+
+body {
+    height:100%;
+    width:100%;
+}
+
+div {
+    border:1px solid black;
+    float:left;
+    width:48%;
+    height:30%;
+    margin: 5px;
+}
+
+textarea {
+    resize:none;
+    width:95%;
+    height:65%;
+    margin:13px;
+
+}
+
+.inputAreas {
+    resize:none;
+    width:80%;
+    height:10%;
+    margin: 13px;
+}
+
+.button {
+    font-size:12px;
+    width:60px;
+    margin:13px auto;
+}
+
+#Startup {
+    overflow-y:scroll;
+}
+
+#txtSubject {
+    width:80%;
+    height:20%;
+    color:black;
+}
+
+#txtUserChat {
+    color:red;
+}
+
+#txtLog {
+    width:95%;
+    height:90%;
+    color:blue;
+}
+
+#txtBroadcaster {
+    color:blue;
+}
+
+#btnSubject{
+    vertical-align:top;
+}
+
+#btnActivate {
+    vertical-align: bottom;
+    text-align:center;
+    margin:0 auto;
+    display:block;
+    position:relative;
+}
+
+#lstUsers {
+    float:left;
+    margin: 13px;
+}
+
+#inUser {
+    width:65%;
+}
