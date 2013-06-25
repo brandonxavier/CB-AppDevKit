@@ -1,6 +1,6 @@
 /**
  * Created with JetBrains WebStorm
- * User: brandonxavier
+ * User: brandonxavier (brandonxavier421@gmail.com)
  * Date: 6/20/13
  *
 
@@ -43,12 +43,96 @@ div {
     margin: 5px;
 }
 
-textarea {
+.textareas {
     resize:none;
     width:95%;
     height:65%;
     margin:13px;
+    overflow-y:scroll;
+    display:block;
+    font-family:monospace;
 
+}
+
+#panelTable, .panelHeadings {
+    width:90%;
+    height:45%;
+    border:0px;
+    padding:13px;
+    margin: 13px auto;
+
+}
+
+.panelHeadings, .panelCell {
+    width:45%;
+    height: 20%;
+    padding:0;
+    margin:0;
+    float:left;
+    display: inline-block;
+    text-align:center;
+}
+
+.panelCell {
+    height:80%;
+    min-width:290px;
+    min-height:99px;
+    font-family: 'UbuntuRegular', Arial, Helvetica, sans-serif;
+   /* line-height: 1.4em; */
+    font-size: 12px;
+
+}
+
+.panel, .panelEvenRow, .panelOddRow {
+    padding:0;
+    margin:13px;
+    width:267px;
+    height:70px;
+    border:0px;
+}
+
+.panelOddRow {
+    height:33%;
+    margin:0px;
+    background-color: #d5ebf8;
+    border: 0px;
+}
+
+.panelEvenRow {
+    height:33%;
+    margin:0px;
+    background-color: #f2f9fd;
+    border:0px;
+    overflow-y: visible;
+}
+
+.leftColumn {
+    padding:0;
+    margin:0;
+    width:49%;
+    text-align:right;
+    border:0;
+/*     font-weight:bold; */
+
+}
+
+.rightColumn {
+    padding:0;
+    padding-left:5px;
+    margin:0;
+    width:49%;
+    text-align:left;
+    border:0;
+}
+
+.singleColumn {
+    padding:0;
+    margin:0;
+    width:100%;
+    text-align:center;
+    border:0;
+    font-weight:bold;
+    color:green;
 }
 
 .inputAreas {
@@ -69,19 +153,21 @@ textarea {
 }
 
 #txtSubject {
+    resize:none;
+    margin:13px;
     width:80%;
     height:20%;
     color:black;
 }
 
 #txtUserChat {
-    color:red;
+    color:green;
 }
 
 #txtLog {
     width:95%;
     height:90%;
-    color:blue;
+    color:red;
 }
 
 #txtBroadcaster {
@@ -100,6 +186,14 @@ textarea {
     position:relative;
 }
 
+#btnSendTip {
+    vertical-align: bottom;
+    text-align:center;
+    margin:0 auto;
+    display:block;
+    position:relative;
+}
+
 #lstUsers {
     float:left;
     margin: 13px;
@@ -108,3 +202,10 @@ textarea {
 #inUser {
     width:65%;
 }
+
+#inTipNote {
+    width:50%;
+    height:40%;
+    display:block;
+}
+

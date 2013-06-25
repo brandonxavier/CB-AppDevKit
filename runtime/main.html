@@ -1,0 +1,116 @@
+<!--
+
+ * User: brandonxavier(brandonxavier421@gmail.com)
+ * Date: ${DATE}
+ *
+
+ Copyright 2013 Brandon Xavier (brandonxavier421@gmail.com)
+
+ This file is part of ${PRODUCT_NAME}.
+
+ ${PRODUCT_NAME} is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ ${PRODUCT_NAME} is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with ${PRODUCT_NAME}.  If not, see <http://www.gnu.org/licenses/>.
+
+ -->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv='Content-type' content='text/html;charset=UTF-8'>
+    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+    <title>CB App Dev</title>
+    <link rel='stylesheet' type='text/css' href='./main.css' >
+
+</head>
+
+<body>
+
+
+<DIV id='Startup' title='Startup' ></DIV>
+
+<DIV id='Subject' title='Subject & Panels'>
+    <TEXTAREA id='txtSubject'></TEXTAREA>
+    <BUTTON class='button' id='btnSubject' onclick='cb.subjectChangeClicked()'>Change</BUTTON>
+    <DIV id='panelTable' >
+        <DIV class='panelHeadings'>Broadcaster Panel:</DIV>
+
+        <DIV class='panelHeadings'>User Panel:</DIV>
+
+        <DIV class='panelCell'>
+        <DIV class='panel' id='bPanel'>
+            <DIV class='panelOddRow' id='brow1'>Not Currently Implemented</DIV>
+            <DIV class='panelEvenRow' id='brow2'></DIV>
+            <DIV class='panelOddRow' id='brow3'></DIV>
+        </DIV>
+        </DIV>
+
+        <DIV class='panelCell'>
+        <DIV class='panel' id='uPanel'>
+            <DIV class='panelOddRow' id='urow1'></DIV>
+            <DIV class='panelEvenRow' id='urow2'></DIV>
+            <DIV class='panelOddRow' id='urow3'></DIV>
+        </DIV>
+        </DIV>
+
+    </DIV>
+
+</DIV>
+
+<DIV id="Broadcaster" title="Broadcaster Chat">
+    <DIV id='txtBroadcaster' class='textareas'></DIV>
+
+    <INPUT type='text' class='inputAreas' id='inBroadcaster' onkeydown='return press (event)'>
+    <BUTTON class='button' id='btnBroadcaster' onclick='cb.sendClicked("inBroadcaster")'>Send</BUTTON>
+
+</DIV>
+
+<DIV id="User" title="User Chat">
+    <DIV id="txtUserChat" class='textareas'></DIV>
+    <SELECT id="lstUsers"></SELECT>
+    <INPUT type="text" class="inputAreas" id="inUser" onkeydown="return press (event)">
+    <BUTTON class="button" id="btnUser" onclick="cb.sendClicked('inUser')">Send</BUTTON>
+</DIV>
+
+<DIV id='Tip' title='Tipping Window'></DIV>
+
+<DIV id='Log' title='Logged Output'>
+    <DIV id='txtLog' class='textareas'></DIV>
+</DIV>
+
+
+<SCRIPT src="ObjCB.js"></SCRIPT>
+
+<!-- ***********************************************************************************************
+*****      Put the name of script and YOUR startup/load function in as arguments to cbInit()
+*****      Hint: Init seems to be a popular name for this function.
+*****
+*****      For example:  cbInit("YourCoolScript.js", "Init");
+*****
+*****
+*****      In your script file, you probably want to wrap the the call to your Init function
+*****      like this:
+*****
+*****      if (!!AppDevKit == false )
+*****           Init();
+*****
+*****      AppDevKit is a boolean defined in the ADK - this prevents the function from being
+*****      called twice: once by the ADK and then again by your script
+*****
+****************************************************************************************************
+-->
+<SCRIPT>cbInit("../testscripts/yellowrain.js","init")</SCRIPT>
+
+
+</body>
+</html>
