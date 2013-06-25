@@ -1,0 +1,9 @@
+cb.setTimeout(func, msecs)
+Example Code
+This example will print “hello world” in the chat every 10 seconds.
+
+function callme() {
+    cb.chatNotice("hello world");
+    cb.setTimeout(callme, 10000)
+}
+cb.setTimeout(callme, 10000)
