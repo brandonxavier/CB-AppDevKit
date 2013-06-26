@@ -681,7 +681,7 @@ function objTipObject(fromUser, amt, msg){
 
 function sendTipClicked() {
 
-    var amt = document.getElementById ("inTipAmount" ).value ;
+    var amt = parseInt(document.getElementById ("inTipAmount" ).value) ;
     var msg = document.getElementById ("lstTipping");
     if (msg == null)
         msg = document.getElementById("inTipNote" ).value ;
