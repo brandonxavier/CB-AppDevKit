@@ -90,7 +90,18 @@ function objCB(scriptName, initFunction) {
 
     this.populateUserDropdown();
 
-    // var e = document.getElementById("Body");
+
+    /** TODO
+     *
+     * If the initFunction is null, extract the cb.settings_choices from the
+     * script file and eval it so that scripts without an init function can
+     * load properly
+     *
+     * I don't want to get into a pissing contest over the wisdom of executing
+     * code outside functions :-)
+     *
+     */
+    //
     var script = document.createElement("script");
     script.type = "text/javascript";
 
@@ -625,7 +636,8 @@ function btnActivateClicked() {
 if (validateSettings() == "") {
     cb.log("Validation successful");
     cb.changeRoomSubject( cb.room_slug + "'s room" );
-    window[cb.initFunction]();
+    if (cb.initFunction != null )  // Allow for scripts with no init function
+        window[cb.initFunction]();
     cb.drawPanel();
 
 }
@@ -745,5 +757,9 @@ function createMesg ( fromUser, mesg){
     }
 
     return tmp;
+
+}
+
+okBtnClicked() {
 
 }

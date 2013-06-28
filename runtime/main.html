@@ -36,6 +36,11 @@
 
 <body>
 
+<DIV id='Script' title='Script & Init Function'>
+    <input type='file' id='inFileList'>
+    <input type='text' value=''>
+    <BUTTON id="btnOK" onClick='okBtnClicked()'>OK</BUTTON>
+</DIV>
 
 <DIV id='Startup' title='Startup' ></DIV>
 
@@ -93,9 +98,9 @@
 
 <!-- ***********************************************************************************************
 *****      Put the name of script and YOUR startup/load function in as arguments to cbInit()
-*****      Hint: Init seems to be a popular name for this function.
+*****      Hint: init seems to be a popular name for this function.
 *****
-*****      For example:  cbInit("YourCoolScript.js", "Init");
+*****      For example:  cbInit("YourCoolScript.js", "init");
 *****
 *****
 *****      In your script file, you probably want to wrap the the call to your Init function
@@ -105,11 +110,13 @@
 *****           Init();
 *****
 *****      AppDevKit is a boolean defined in the ADK - this prevents the function from being
-*****      called twice: once by the ADK and then again by your script
+*****      called twice: once by the ADK and then again by your script.  A sure sign that you
+*****      this is happening is if your subject and panel changes BEFORE you hit the "Activate"
+*****      button.
 *****
 ****************************************************************************************************
 -->
-<SCRIPT>cbInit("../testscripts/yellowrain.js","init")</SCRIPT>
+<SCRIPT>cbInit("YOUR-SCRIPT-NAME-HERE.js","YOUR-Init-Function-Here")</SCRIPT>
 
 
 </body>
