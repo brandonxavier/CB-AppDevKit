@@ -34,16 +34,6 @@
 
 var AppDevKit = true;
 
-// var cb = new objCB("LuckyUnlucky.js");
-
-
-function cbInit(scriptFile, appInitFunction) {
-
-    cb = new objCB(scriptFile, appInitFunction);
-
-
-}
-
 function objCB(scriptName, initFunction) {
 
     this.room_slug = "Betty Broadcaster"; // Just a random name I picked
@@ -760,6 +750,145 @@ function createMesg ( fromUser, mesg){
 
 }
 
-okBtnClicked() {
+/**
+ *
+ * cbInit - the main entry point
+ *
+ * Instantiates the cb object and tries to do something smart
+ * about the script name and startup/init function
+ *
+ * @param scriptFile
+ * @param appInitFunction
+ */
+
+function cbInit(scriptFile, appInitFunction) {
+
+    /**
+     * First, check to see if there's an Init function specified -- if so,
+     * then we can go on our merry way . . . otherwise . . .
+     */
+    if (appInitFunction != null ){ // Init-less script so prepare to parse for cb_settings
+        /**
+         * This is screwy - it's possible an Init function was specified, but not the
+         * script name -- but since we're going to the trouble of implementing the File API
+         * anyway, we'll allow this as a valid thing to do
+         */
+        if (scriptFile == null){
+            document.getElementById('inFileList').addEventListener('change', function(){}, false);
+        }
+    } else {
+        document.getElementById('inFileList').addEventListener('change', readScript, false);
+
+    }
+
+    cb = new objCB(scriptFile, appInitFunction);
+
+
+}
+
+/**
+ *
+ * Everything below here is related to extracting the cb_settings
+ * from scripts that choose to execute code outside functions (i.e.
+ * init-less scripts)
+ *
+ */
+function okBtnClicked() {
+
+}
+
+function readScript(evt) {
+
+    var contents, parsedContents;
+
+    var sFile = evt.target.files[0];
+
+    if (sFile) {
+        var fReader = new FileReader();
+        fReader.onload = function (e) {
+            contents = e.target.result;
+            alert (contents);
+            parsedContents = parseScript(contents);
+        };
+        fReader.readAsText(sFile);
+    } else {
+        alert("Failed to load file");
+    }
+
+}
+
+
+
+function parseScript (scriptInput){
+
+    var i, x;
+    var workingContents;
+    var multilineComment = false;
+
+    // Get rid of annoying CRs
+    scriptInput = scriptInput.replace(/\r/g,"");
+    // split the the mass of text into an easy to work with Array
+    workingContents = scriptInput.split("\n");
+
+    for ( i = 0 ; i < workingContents.length; i++ ) {
+        /**
+         *
+         * Do some very crude processing to get rid of comments & blank lines first
+         *
+         *
+         */
+
+        // First, if we're in the middle of a multiline comment check for "*/"
+        //
+        if ( multilineComment == true ) {
+            if ( workingContents[i].indexOf( "*/" ) != -1 ) {
+                multilineComment = false;
+                workingContents.splice( i, 1 );
+                i--;
+                continue;
+            }
+        }
+        // Then check to see if we're starting a multiliner (/*) . . .
+        if (x = workingContents[i].indexOf("/*") != -1 ) {
+            multilineComment = true;
+            workingContents[i] = workingContents[i].substr(0,x - 1);
+        }
+        // Then check to see if we're starting a end of liner (//) . . .
+        if (x = workingContents[i].indexOf("//") != -1 ) {
+            workingContents[i] = workingContents[i].substr(0,x -1);
+        }
+        // Get rid of the whitespace
+        workingContents[i] = workingContents[i].trim();
+        // Now see if there's anything left of the line
+        if (workingContents[i] == "" ) {
+            workingContents.splice(i,1);
+            i--;
+            continue;
+        }
+
+        /**
+         *
+         * OK, we should have a fairly clean script now in memory so
+         * let's find what we came looking for . . . cb.settings_choices
+         *
+         */
+        var foundTarget = false, targetString = "", patt = "cb.settings_choices *=";
+         for (i = 0 ; i < workingContents.length; i++ ) {
+             if (workingContents[i].match(patt) ) {
+                 foundTarget = true;
+             }
+             if (foundTarget == true) {
+                 targetString += workingContents[i];
+                 alert (targetString);
+                 if (targetString.substr(targetString.length - 1) == ";")
+                    return targetString;
+             }
+
+
+         }
+
+    }
+
+
 
 }

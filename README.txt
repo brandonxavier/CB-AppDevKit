@@ -60,7 +60,7 @@ The ADK runtime system is composed of 3 files:
 objCB.js    -   This provides the cb object.  Generally you should not have
                 to modify this.
 main.html   -   Basic HTML to display the ADK screen and load objCB.js along
-                with your app/bot script.  You'll have to modify this to specify
+                with your app/bot script.  You MAY have to modify this to specify
                 the name of your app/bot script and it's Init function.
 main.css    -   All the basic formatting is done via css, so change it here
                 to suit your preferences.  Some formatting of generated elements
@@ -73,8 +73,9 @@ Put these 3 files along with YOUR app/bot script in a folder/directory, fix up
 main.html to point to your app/bot and then simply point your IDE/browser/debugger
 to main.html!
 
-When the window opens in the browser, you should have 6 viewports:
+When the window opens in the browser, you should have 7 panels:
 
+Script & Init   -   See below
 Startup         -   (Top left) Processes the cb.settings_choices and provides
                     a (de)activate button
 Subject & Panel -   (Top right) Shows/Sets the Room Subject and also displays
@@ -89,6 +90,30 @@ Tip             -   (Bottom Left) The tip window laid out according to
                     cb.tipOptions.
 Log             -   (Bottom Right) cb.log messages are displayed here rather
                     than the user/bcast areas.  No /debug required to see them.
+
+
+Specifying Your Script File & Init Function:
+
+There are several ways to do this:
+
+-   Change the optional parameters to cbInit in the main.html (well documented near
+    the bottom of the file).  This is by far the most productive thing to do.
+    However, if you don't use an Init-type script or if you execute any code outside
+    of functions this can lead to problems. I'm tempted to go into and old-school
+    rant about the wisdom of executing code outside of functions . . . but JS
+    permits it . . . so I'll accept it as "valid" . . . and leave it at that.
+-   Leave the optional Init function out of the cbInit call.  The ADK will then try
+    to parse your file to locate the "cb.settings_choices = " line(s) and eval them.
+    This imitates the behavior of the "real" CB (i.e. the settings choices are
+    set BEFORE code executes).  NOTE:  YOU WILL HAVE TO CHOOSE YOUR SCRIPT FILE
+    EVERY TIME IF YOU USE THIS METHOD!  No way around this!  JS will not permit
+    access to files on your computer without some sort of direct user interaction.
+    The act of "choosing a file" is considered by JS to be permission to access
+    that file (even though it's a nuisance here in this very limited case, as
+    a general security precaution it's probably a very good thing JS does this)
+-   Leave both the optional script and Init function out of main.html.  You can
+    then select the script at runtime and optionally specify an Init function.
+
 
 
 
