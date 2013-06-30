@@ -86,6 +86,8 @@ User            -   (Middle Right) Shows the chat as users see it. Note: Message
                     sent to a specific user are suffixed with " to <username>".
                     You can chat as different users by selecting one in the
                     dropdown list. (No more having to open different browsers!)
+                    The currently selected user is also assumed to be the one
+                    sending tips and receiving customized panels (if implemented).
 Tip             -   (Bottom Left) The tip window laid out according to
                     cb.tipOptions.
 Log             -   (Bottom Right) cb.log messages are displayed here rather
@@ -99,7 +101,7 @@ There are several ways to do this:
 -   Change the optional parameters to cbInit in the main.html (well documented near
     the bottom of the file).  This is by far the most productive thing to do.
     However, if you don't use an Init-type script or if you execute any code outside
-    of functions this can lead to problems. I'm tempted to go into and old-school
+    of functions this can lead to problems. I'm tempted to go into an old-school
     rant about the wisdom of executing code outside of functions . . . but JS
     permits it . . . so I'll accept it as "valid" . . . and leave it at that.
 -   Leave the optional Init function out of the cbInit call.  The ADK will then try
@@ -110,10 +112,45 @@ There are several ways to do this:
     access to files on your computer without some sort of direct user interaction.
     The act of "choosing a file" is considered by JS to be permission to access
     that file (even though it's a nuisance here in this very limited case, as
-    a general security precaution it's probably a very good thing JS does this)
+    a general security precaution it's probably a VERY good thing JS does this)
 -   Leave both the optional script and Init function out of main.html.  You can
     then select the script at runtime and optionally specify an Init function.
 
+    Confused yet?  Here's the two scenarios that will cover about 99% of everything:
+
+    1.  You have an Init function named myInit() in a script file named "MyScript.js"
+        Simply make your main.html file look like:
+
+        <SCRIPT>cbInit( "MyScript.js","myInit")</SCRIPT>
+
+        And then COMPLETELY IGNORE THE SMALL "Script & Init Function" PANEL.  (It's
+        not required or recommended if both items are specified.)
+
+     2. You do NOT use an Init function and/or you execute code outside of functions
+        in your script file named "MyScript.js".  Make your main.html look like:
+
+        <SCRIPT>cbInit("","")</SCRIPT>
+
+        Then in the "Script & Init Function" Panel, hit "Choose File" to browse to your
+        "MyScript.js" file, leave "Init function" blank, and hit OK.  NOTE:  You MUST
+        use the "Choose File" button -- this is what gives JS permission to read the
+        file. Then fill in any settings in the "Startup" panel and hit "Activate".
+
+      Other possible combinations of HTML and UI options may (probably) work but these
+      are the simplest and most tested.  Perhaps sometime in the not too distant future
+      if I get happier with the "<input type='file'>" tag this'll all converge into one
+      clean and simpler method.
+
+Problem Reporting:
+
+If you come across a situation where a script is not working under the ADK as it does
+on the live/testbed servers, by all means please let me know.  I can be reached (in
+general order of preference) via github, email at brandonxavier421@gmail.com, or the
+Chaturbate API discussions (my access there during normal business hours is effectively
+zero though ;)   I will need the following:  name and location (testbed or live server)
+of your script, init function you use (or none, if you don't use one), what browser
+version you use, and a general description of what the problem is unless it's obvious
+(like the ADK crashes).
 
 
 
