@@ -582,9 +582,9 @@ function createHTMLFromSettings(allsettings) {
 
     for ( s = 0; s < allsettings.length; s++ ) {
         if ( allsettings[s].label != undefined ) {
-            str = str + '<DIV <LABEL STYLE="display:inline-block;margin:0;width:90%;height:28px">' + allsettings[s].label + "</LABEL>";
+            str += '<DIV STYLE="display:inline-block;margin:0;width:90%;height:28px"><LABEL >' + allsettings[s].label + "</LABEL>";
         } else {
-            str = str + '<DIV STYLE="display:inline-block;margin:0;width:90%;height:28px"><LABEL >' + allsettings[s].name + "</LABEL>";
+            str += '<DIV STYLE="display:inline-block;margin:0;width:90%;height:28px"><LABEL >' + allsettings[s].name + "</LABEL>";
         }
 
         //
