@@ -593,7 +593,9 @@ function createHTMLFromSettings(allsettings) {
         if ( allsettings[s].type == "int" || allsettings[s].type == "str" ) {
             str = str + '<INPUT type="text"  id="in' + allsettings[s].name +
                 '" ';
-            if ( allsettings[s].defaultValue != undefined ) {
+            if ( allsettings[s].default != undefined ) {
+                str = str + 'value="' + allsettings[s].default + '" ';
+            }if ( allsettings[s].defaultValue != undefined ) {
                 str = str + 'value="' + allsettings[s].defaultValue + '" ';
             }
         } else {
