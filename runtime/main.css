@@ -43,6 +43,12 @@ div {
     margin: 5px;
 }
 
+#Script {
+    width:48%;
+    height:25px;
+    margin: 5px;
+    margin-right: 125px;
+}
 .textareas {
     resize:none;
     width:95%;

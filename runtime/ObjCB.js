@@ -33,18 +33,11 @@
  */
 
 var AppDevKit = true;
+var ADK = {'readyToRun': false, 'scriptName': "", 'initFunction': "", settingsChoices: "" };
 
-// var cb = new objCB("LuckyUnlucky.js");
+var cb;
 
-
-function cbInit(scriptFile, appInitFunction) {
-
-    cb = new objCB(scriptFile, appInitFunction);
-
-
-}
-
-function objCB(scriptName, initFunction) {
+function objCB() {
 
     this.room_slug = "Betty Broadcaster"; // Just a random name I picked
     this.cbUsers = [];  // An array of logged in (dummy) users
@@ -64,10 +57,16 @@ function objCB(scriptName, initFunction) {
     this.writeToChatArea = writeToChatArea;
     this.sendClicked = sendClicked;
     this.populateUserDropdown = populateUserDropdown ;
-    this.scriptName = scriptName;
-    this.initFunction = initFunction ;
+    this.scriptName = ADK.scriptName;
+    this.initFunction = ADK.initFunction ;
     this.tipOptions = [];
-    this.settings_choices = [];
+    if ( ADK.settingsChoices != "" ) {
+        this.settings_choices = eval (ADK.settingsChoices);
+        createHTMLFromSettings(this.settings_choices );
+        createValidationCode (this.settings_choices);
+    } else {
+        this.settings_choices = [];
+    }
     this.settings = [];
 
     this.panelHandler = function(){};
@@ -86,30 +85,12 @@ function objCB(scriptName, initFunction) {
     this.cbUsers['Carol'] = new objCBUser ("Carol", "f", false, true, true, true);
     this.cbUsers['Ted'] = new objCBUser ("Ted", "m", true, false, false, false);
     this.cbUsers['Alice'] = new objCBUser ("Alice", "f", false, false, false, true);
-    this.cbUsers['Joe'] = new objCBUser ("Joe", "m", false, false, false, false);
 
     this.populateUserDropdown();
 
-    // var e = document.getElementById("Body");
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-
-    if (script.readyState){  //IE
-        script.onreadystatechange = function(){
-            if (script.readyState == "loaded" ||
-                script.readyState == "complete"){
-                script.onreadystatechange = null;
-                callback();
-            }
-        };
-    } else {  //Others
-        script.onload = function(){
-            callback();
-        };
+    if (ADK.scriptName.match(/^blob:/ ) == null) { // The script was specified via HTML
+        loadScript();
     }
-
-    script.src = this.scriptName ;
-    document.getElementsByTagName("body")[0].appendChild(script);
 
     function populateUserDropdown() {
 
@@ -207,6 +188,19 @@ function objCB(scriptName, initFunction) {
                 tData['row3_label'] = t.row3_label;
                 tData['row3_value'] = t.row3_value;
                 break;
+            case "3_rows_12_21_31":
+                tData['row1_label'] = t.row1_label;
+                tData['row1_value'] = t.row1_value;
+                tData['row2_value'] = t.row2_value;
+                tData['row3_value'] = t.row3_value;
+                break;
+            case "3_rows_12_22_31":
+                tData['row1_label'] = t.row1_label;
+                tData['row1_value'] = t.row1_value;
+                tData['row2_label'] = t.row2_label;
+                tData['row2_value'] = t.row2_value;
+                tData['row3_value'] = t.row3_value;
+                break;
             default:
                 cb.log( "Invalid template" + t.template );
                 break;
@@ -275,15 +269,16 @@ function objCB(scriptName, initFunction) {
     }
 
 
-
-
+    /**
+     *
+     * Avoid changing this
+     *
+     * @param func
+     * @param msecs
+     */
     function setTimeout(func, msecs) {
 
-        /**
-         *
-         * This should be considered an immutable function -- don't attempt to redefine it
-         *
-         */
+        window.setTimeout (func, msecs);
 
     }
 
@@ -306,11 +301,16 @@ function objCB(scriptName, initFunction) {
         area.innerHTML += "<span style='color: black;background-color: white;' >" +
             "Room subject changed to: " + document.getElementById( "txtSubject" ).value + "</span></br>";
         area.scrollTop = area.scrollHeight;
-        // this.sendMsg(  "Room subject changed to: " + document.getElementById( "txtSubject" ).value ); FIXASAP
+
 
 
     }
 
+    /**
+     *
+     * @param toUser
+     * @param msg1
+     */
     function sendMsg(toUser, msg1) {
 
 
@@ -318,13 +318,16 @@ function objCB(scriptName, initFunction) {
         this.writeToChatArea ( "txtUserChat", msg1);
     }
 
+    /**
+     *
+     * @param targetArea
+     * @param msg
+     */
     function writeToChatArea(targetArea, msg) {
 
        // cb.log("typeof msg" + typeof msg);
 
         var mstr = "";
-
-        // msg1 = ADKmsgArray1;
 
         //
         // Check spam flag first and simply return if true
@@ -353,7 +356,7 @@ function objCB(scriptName, initFunction) {
         if (msg['tipped_recently'] == true ) {
             mstr = "<SPAN STYLE='color:#009;font-weight:bold'>" + msg['user'] + ": </SPAN>"
         } else
-            mstr = "<SPAN STYLE='color:#666'>" + msg['user'] + ": </SPAN>"
+            mstr = "<SPAN STYLE='color:#666'>" + msg['user'] + ": </SPAN>";
 
         // Background color is a pain
         if (msg['background'] != "white" && msg['background'] != "#ffffff") {
@@ -361,7 +364,7 @@ function objCB(scriptName, initFunction) {
         }
 
         // Foreground isn't so bad
-        mstr = mstr + "<SPAN STYLE='color:" + msg['c'] + "'>" + msg['m'] + "</SPAN"
+        mstr = mstr + "<SPAN STYLE='color:" + msg['c'] + "'>" + msg['m'] + "</SPAN";
 
         // Close up the background span
         if (msg['background'] != "white" && msg['background'] != "#ffffff") {
@@ -448,7 +451,12 @@ function objCBUser(username, gender, fanclub, has_tokens, is_mod, tipped_recentl
 }
 
 
-
+/**
+ *
+ *
+ * @param sc
+ * @returns {string}
+ */
 function createValidationCode(sc) {
 
     /**
@@ -561,7 +569,7 @@ function createTippingHTML(defaultTip, defaultNote) {
 
 function createHTMLFromSettings(allsettings) {
 
-    var i, str, e, settings,s;
+    var str, e, s;
 
     str = "";
 
@@ -622,15 +630,25 @@ function createHTMLFromSettings(allsettings) {
 
 function btnActivateClicked() {
 
-if (validateSettings() == "") {
-    cb.log("Validation successful");
-    cb.changeRoomSubject( cb.room_slug + "'s room" );
-    window[cb.initFunction]();
-    cb.drawPanel();
+//noinspection JSUnresolvedFunction
+    if ( validateSettings() == "" ) {
+        cb.log( "Validation successful" );
+        cb.changeRoomSubject( cb.room_slug + "'s room" );
+        if ( ADK.initFunction != "" )
+            window[ADK.initFunction]();
+        else {
+            // NOW, it's safe to load the script after the settings_choices have
+            // been input and validated
+            loadScript();
+        }
 
-}
-else
-    cb.log("Validation failed: " + validateSettings());
+        cb.drawPanel();
+
+    }
+    else
+        { //noinspection JSUnresolvedFunction
+            cb.log( "Validation failed: " + validateSettings() );
+        }
 
 }
 
@@ -716,13 +734,6 @@ function sendTipClicked() {
 
 }
 
-function callback() {
-    cb.log(cb.scriptName + " loaded");
-    createHTMLFromSettings(cb.settings_choices); // Script has to be loaded before these can be done
-    createValidationCode(cb.settings_choices);
-    createTippingHTML (1, "");
-}
-
 function createMesg ( fromUser, mesg){
 
     var tmp = [];
@@ -746,4 +757,210 @@ function createMesg ( fromUser, mesg){
 
     return tmp;
 
+}
+
+/**
+ *
+ * cbInit - the main entry point
+ *
+ * Instantiates the cb object and tries to do something smart
+ * about the script name and startup/init function
+ *
+ * @param scriptFile
+ * @param appInitFunction
+ */
+
+function cbInit(scriptFile, appInitFunction) {
+
+    /**
+     * First, check to see if there's an Init function specified -- if so,
+     * then we can go on our merry way . . . otherwise . . .
+     */
+    if (appInitFunction != "" ){ // Init-less script so prepare to parse for cb_settings
+        document.getElementById('inInitFunction' ).value = appInitFunction;
+        ADK.initFunction = appInitFunction;
+        /**
+         * This is screwy - it's possible an Init function was specified, but not the
+         * script name -- but since we're going to the trouble of implementing the File API
+         * anyway, we'll allow this as a valid thing to do
+         */
+        if (scriptFile == ""){
+            document.getElementById('inFileList').addEventListener('change', setScript, false);
+        } else {
+            ADK.scriptName = scriptFile;
+            ADK.readyToRun = true; // we have a script and init function
+        }
+
+    } else {
+        if (window.File && window.FileList && window.FileReader){
+            document.getElementById('inFileList').addEventListener('change', readScript, false);
+        } else {
+            alert("Your browser doesn't appear to fully support the HTML5 FILE APIs\n" +
+                  "required to parse the script file.  Please consider upgrading your\n" +
+                  "browser or using an Init function");
+        }
+    }
+
+    if (ADK.readyToRun == true){
+        cb = new objCB();
+    }
+
+}
+
+/**
+ *
+ * Everything below here is related to extracting the cb_settings
+ * from scripts that choose to execute code outside functions (i.e.
+ * init-less scripts) and handling script loading.
+ *
+ */
+function okBtnClicked() {
+
+    ADK.initFunction = document.getElementById( 'inInitFunction' ).value;
+
+    if ( ADK.scriptName != "" ) {
+        cb = new objCB();
+        if ( ADK.initFunction != "" ) {  // We have an init function, so DON'T defer script loading
+            loadScript();
+        }
+    }
+
+}
+function readScript(evt) {
+
+    var contents;
+    var sFile = evt.target.files[0];
+    ADK.scriptName =  window.URL.createObjectURL(evt.target.files[0]);
+
+    if (sFile) {
+        var fReader = new FileReader();
+        fReader.onload = function (e) {
+            contents = e.target.result;
+            ADK.settingsChoices = parseScript(contents);
+        };
+        fReader.readAsText(sFile);
+    } else {
+        alert("Failed to load file");
+    }
+
+}
+
+/**
+ *
+ * Callback that simply sets the filename selected (no parsing)
+ *
+ * @param evt
+ */
+function setScript (evt) {
+
+    ADK.scriptName =  window.URL.createObjectURL(evt.target.files[0]);
+
+}
+
+
+function parseScript (scriptInput){
+
+    var i, x;
+    var workingContents;
+    var multilineComment = false;
+
+    // Get rid of annoying CRs
+    scriptInput = scriptInput.replace(/\r/g,"");
+    // split the the mass of text into an easy to work with Array
+    workingContents = scriptInput.split("\n");
+
+    for ( i = 0 ; i < workingContents.length; i++ ) {
+        /**
+         *
+         * Do some very crude processing to get rid of comments & blank lines first
+         *
+         *
+         */
+
+        // First, if we're in the middle of a multiline comment check for "*/"
+        //
+        if ( multilineComment == true ) {
+            if ( workingContents[i].indexOf( "*/" ) != -1 ) {
+                multilineComment = false;
+                workingContents.splice( i, 1 );
+                i--;
+                continue;
+            }
+        }
+        // Then check to see if we're starting a multiliner (/*) . . .
+        if (x = workingContents[i].indexOf("/*") != -1 ) {
+            multilineComment = true;
+            workingContents[i] = workingContents[i].substr(0,x - 1);
+        }
+        // Then check to see if we're starting a end of liner (//) . . .
+        if (x = workingContents[i].indexOf("//") != -1 ) {
+            workingContents[i] = workingContents[i].substr(0,x -1);
+        }
+        // Get rid of the whitespace
+        workingContents[i] = workingContents[i].trim();
+        // Now see if there's anything left of the line
+        if (workingContents[i] == "" ) {
+            workingContents.splice(i,1);
+            i--;
+            continue;
+        }
+
+        /**
+         *
+         * OK, we should have a fairly clean script now in memory so
+         * let's find what we came looking for . . . cb.settings_choices
+         *
+         */
+        var foundTarget = false, targetString = "", patt = "cb.settings_choices *=";
+         for (i = 0 ; i < workingContents.length; i++ ) {
+             if (workingContents[i].match(patt) ) {
+                 workingContents[i] = workingContents[i].substr(workingContents[i].indexOf("=") + 1 );
+                 foundTarget = true;
+             }
+             if (foundTarget == true) {
+                 targetString += workingContents[i];
+                 if (targetString.substr(targetString.length - 1) == ";"){
+                    return targetString.substr(0,targetString.length - 1);
+                 }
+             }
+
+
+         }
+
+    }
+
+
+     return "";
+
+}
+
+function loadScript() {
+
+    var script = document.createElement( "script" );
+    script.type = "text/javascript";
+
+    if ( script.readyState ) {  //IE
+        script.onreadystatechange = function () {
+            if ( script.readyState == "loaded" ||
+                script.readyState == "complete" ) {
+                script.onreadystatechange = null;
+                callback();
+            }
+        };
+    } else {  //Others
+        script.onload = function () {
+            callback();
+        };
+    }
+    script.src = ADK.scriptName;
+    document.getElementsByTagName( "body" )[0].appendChild( script );
+}
+
+function callback() {
+    cb.log( ADK.scriptName + " loaded" );
+    if (ADK.settingsChoices == "" ) {
+        createHTMLFromSettings( cb.settings_choices ); // Script has to be loaded before these can be done
+        createValidationCode( cb.settings_choices );
+    }
+    createTippingHTML( 1, "" );
 }
