@@ -2,6 +2,8 @@
 Chaturbate App Developer Kit (ADK)
 
 
+*******************************************************************************
+*******************************************************************************
 
 What the ADK IS:
 
@@ -25,6 +27,8 @@ What the ADK IS:
     improve this project, feel free to send me pull requests or contact me
     about rw access to the repository.
 
+*******************************************************************************
+*******************************************************************************
 
 What the ADK is NOT:
 
@@ -43,8 +47,8 @@ What the ADK is NOT:
     the same results Chaturbate does - the code/means used to produce those
     results will almost certainly be different (I ain't psychic! LOL).  In
     addition, some objects are available in the ADK that are NOT available in
-    the real Chaturbate -- most notably the "window" object (so be wary of using
-    things like alert(), confirm(), etc. in your app/bot code)
+    the real Chaturbate -- most notably the "window" object (so be wary of
+    using things like alert(), confirm(), etc. in your app/bot code)
  -  Pretty! If you want "pretty", visit your local art museum! LOL  Seriously
     though, it's primarily meant to be functional, not pleasing to the eye.
     To that end, I'll fix anything, or accept pull requests (hint, hint) for
@@ -52,6 +56,8 @@ What the ADK is NOT:
     stuff not displaying correctly, etc.) but requests for things like "can
     you change the background to blue?" are likely to be graciously ignored
 
+*******************************************************************************
+*******************************************************************************
 
 Usage:
 
@@ -60,8 +66,8 @@ The ADK runtime system is composed of 3 files:
 objCB.js    -   This provides the cb object.  Generally you should not have
                 to modify this.
 main.html   -   Basic HTML to display the ADK screen and load objCB.js along
-                with your app/bot script.  You MAY have to modify this to specify
-                the name of your app/bot script and it's Init function.
+                with your app/bot script.  You MAY have to modify this to
+                specify the name of your app/bot script and it's Init function.
 main.css    -   All the basic formatting is done via css, so change it here
                 to suit your preferences.  Some formatting of generated elements
                 (such as the settings_choices) is done with style attributes
@@ -70,8 +76,8 @@ main.css    -   All the basic formatting is done via css, so change it here
                 NOT be included in pull requests.
 
 Put these 3 files along with YOUR app/bot script in a folder/directory, fix up
-main.html to point to your app/bot and then simply point your IDE/browser/debugger
-to main.html!
+main.html to point to your app/bot and then simply point your IDE/browser/
+debugger to main.html!
 
 When the window opens in the browser, you should have 7 panels:
 
@@ -94,63 +100,85 @@ Log             -   (Bottom Right) cb.log messages are displayed here rather
                     than the user/bcast areas.  No /debug required to see them.
 
 
+*******************************************************************************
+*******************************************************************************
+
 Specifying Your Script File & Init Function:
 
 There are several ways to do this:
 
--   Change the optional parameters to cbInit in the main.html (well documented near
-    the bottom of the file).  This is by far the most productive thing to do.
-    However, if you don't use an Init-type script or if you execute any code outside
-    of functions this can lead to problems. I'm tempted to go into an old-school
-    rant about the wisdom of executing code outside of functions . . . but JS
-    permits it . . . so I'll accept it as "valid" . . . and leave it at that.
--   Leave the optional Init function out of the cbInit call.  The ADK will then try
-    to parse your file to locate the "cb.settings_choices = " line(s) and eval them.
-    This imitates the behavior of the "real" CB (i.e. the settings choices are
-    set BEFORE code executes).  NOTE:  YOU WILL HAVE TO CHOOSE YOUR SCRIPT FILE
-    EVERY TIME IF YOU USE THIS METHOD!  No way around this!  JS will not permit
-    access to files on your computer without some sort of direct user interaction.
-    The act of "choosing a file" is considered by JS to be permission to access
-    that file (even though it's a nuisance here in this very limited case, as
-    a general security precaution it's probably a VERY good thing JS does this)
+-   Change the optional parameters to cbInit in the main.html (well documented
+    near the bottom of the file).  This is by far the most productive thing to
+    do. However, if you don't use an Init-type script or if you execute any code
+    outside of functions this can lead to problems. I'm tempted to go into an
+    old-school rant about the wisdom of executing code outside of functions . . .
+    but JS permits it . . . so I'll accept it as "valid" . . . and just leave it
+    at that.
+-   Leave the optional Init function out of the cbInit call.  The ADK will then
+    try to parse your file to locate the "cb.settings_choices = " line(s) and
+    eval them. This imitates the behavior of the "real" CB (i.e. the settings
+    choices are set BEFORE code executes).  NOTE:  YOU WILL HAVE TO CHOOSE YOUR
+    SCRIPT FILE EVERY TIME IF YOU USE THIS METHOD!  No way around this!  JS will
+    not permit access to files on your computer without some sort of direct user
+    interaction. The act of "choosing a file" is considered by JS to be per-
+    mission to access that file (even though it's a nuisance here in this very
+    limited case, as a general security precaution it's probably a VERY good
+    thing JS does this)
 -   Leave both the optional script and Init function out of main.html.  You can
     then select the script at runtime and optionally specify an Init function.
 
-    Confused yet?  Here's the two scenarios that will cover about 99% of everything:
+    Confused yet?  These two scenarios that will cover about 99% of everything:
 
-    1.  You have an Init function named myInit() in a script file named "MyScript.js"
-        Simply make your main.html file look like:
+    1.  You have an Init function named myInit() in a script file named
+        "MyScript.js"  Simply make your main.html file look like:
 
         <SCRIPT>cbInit( "MyScript.js","myInit")</SCRIPT>
 
-        And then COMPLETELY IGNORE THE SMALL "Script & Init Function" PANEL.  (It's
-        not required or recommended if both items are specified.)
+        And then COMPLETELY IGNORE THE SMALL "Script & Init Function" PANEL.
+        (It's not required or recommended if both items are specified.)
 
-     2. You do NOT use an Init function and/or you execute code outside of functions
-        in your script file named "MyScript.js".  Make your main.html look like:
+     2. You do NOT use an Init function and/or you execute code outside of
+        functions in your script file named "MyScript.js".  Make your main.html
+        look like:
 
         <SCRIPT>cbInit("","")</SCRIPT>
 
-        Then in the "Script & Init Function" Panel, hit "Choose File" to browse to your
-        "MyScript.js" file, leave "Init function" blank, and hit OK.  NOTE:  You MUST
-        use the "Choose File" button -- this is what gives JS permission to read the
-        file. Then fill in any settings in the "Startup" panel and hit "Activate".
+        Then in the "Script & Init Function" Panel, hit "Choose File" to browse
+        to your "MyScript.js" file, leave "Init function" blank, and hit OK.
+        NOTE:  You MUST use the "Choose File" (or whatever your browser calls
+        it) button -- this is what gives JS permission to read the file. Then
+        fill in any settings in the "Startup" panel and hit "Activate".
 
-      Other possible combinations of HTML and UI options may (probably) work but these
-      are the simplest and most tested.  Perhaps sometime in the not too distant future
-      if I get happier with the "<input type='file'>" tag this'll all converge into one
-      clean and simpler method.
+      Other possible combinations of HTML and UI options may (probably) work
+      but these are the simplest and most tested.  Perhaps sometime in the not
+      too distant future if I get happier with the "<input type='file'>" tag
+      this'll all converge into one clean and simpler method.
+
+*******************************************************************************
+*******************************************************************************
+
+Emote Support:
+
+Emote support is now available in a limited form for testing purposes. All
+emotes are stored in the "emotes" folder located under "runtime".  The filename
+of the emotes should match your emote tag, less the extension.  No attempt is
+made to maintain mappings of tags to filenames.  So, for example, to show the
+smile.gif file, you would use ":smile"
+
+*******************************************************************************
+*******************************************************************************
 
 Problem Reporting:
 
-If you come across a situation where a script is not working under the ADK as it does
-on the live/testbed servers, by all means please let me know.  I can be reached (in
-general order of preference) via github, email at brandonxavier421@gmail.com, or the
-Chaturbate API discussions (my access there during normal business hours is effectively
-zero though ;)   I will need the following:  name and location (testbed or live server)
-of your script, init function you use (or none, if you don't use one), what browser
-version you use, and a general description of what the problem is unless it's obvious
-(like the ADK crashes).
+If you come across a situation where a script is not working under the ADK as
+it does on the live/testbed servers, by all means please let me know.  I can be
+reached (in general order of preference) via github (issues), email at
+brandonxavier421@gmail.com, or the Chaturbate API DISQUS discussions (my access
+there during normal business hours is effectively zero though ;)   I will need
+the following:  name and location (testbed or live server)of your script, init
+function you use (or none, if you don't use one), what browser version you use,
+and a general description of what the problem is unless it's obvious (like the
+ADK crashes).
 
 
 

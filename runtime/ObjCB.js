@@ -132,6 +132,7 @@ function objCB() {
         while (message.indexOf("\n") >= 0 )
             message = message.replace("\n","</br>Notice -- ");
 
+
         if ( to_user == null ) {
             // area = document.getElementById(this.cbDiv['Main'].txtMainChat);
 
@@ -335,6 +336,10 @@ function objCB() {
         if (msg['X-Spam'] == true)
             return;
 
+        // Handle emotes - the regexes become MUCH easier if this is done before
+        // any other HTML tagging is done (lot of damn ":"s in HTML)
+        msg['m'] = insertEmotes (msg['m']);
+
         //
         // First set the color of the name
         //
@@ -370,6 +375,8 @@ function objCB() {
         if (msg['background'] != "white" && msg['background'] != "#ffffff") {
             mstr = mstr + "</SPAN>"
         }
+
+
 
         // End with a newline
         mstr = mstr + "</br></br>"; // No, I don't know why I need 2 of these here
@@ -759,6 +766,36 @@ function createMesg ( fromUser, mesg){
 
 }
 
+/**
+ *
+ * insertEmotes
+ *
+ * Takes a string and replaces occurences of ":emote tags" with <IMG> tags
+ *
+ * An emote tag can be an arbitrary sequence of letters & numbers only
+ * (no spaces or special characters).  And for simple testing purposes
+ * will be case insensitive.
+ *
+ * @param htmlString
+ *
+ */
+function insertEmotes(htmlString) {
+
+    var ePos, eString;
+
+    if ( htmlString.indexOf( "<IMG src=" ) == -1 ) { // check to make sure we haven't already done this chunk
+        while ( (eString = htmlString.match( /:\w*/ )) != null ) {
+            ePos = htmlString.indexOf( eString[0] );
+            htmlString = htmlString.substr( 0, ePos ) +
+                "<IMG src='" + "emotes/" + eString[0].substr( 1 ) + ".gif' alt='" + "@!@" +
+                eString[0].substr( 1 ) + "' IMG/>" + htmlString.substr( ePos + eString[0].length );
+        }
+        htmlString = htmlString.replace( /@!@/g, ":" ); // Can't use the : in the alt tag or we get infinite loops
+    }
+
+    return htmlString;
+
+}
 /**
  *
  * cbInit - the main entry point
