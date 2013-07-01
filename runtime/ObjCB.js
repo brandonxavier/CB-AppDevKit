@@ -216,29 +216,29 @@ function objCB() {
         * more effort than this quick-n-dirty solution requires
         *
         */
-        e = document.getElementById( "urow3" );
-        if ( typeof tData['row3_label'] == "undefined" )
-            e.innerHTML = "<DIV class='singleColumn' >" + tData['row3_value'] + "</DIV>";
-        else {
-            e.innerHTML = "<DIV class='leftColumn' >" + tData['row3_label'] + "</DIV>" +
-                "<DIV class='rightColumn' >" + tData['row3_value'] + "</DIV>";
-        }
-        e = document.getElementById( "urow2" );
-        if ( typeof tData['row2_label'] == "undefined" )
-            e.innerHTML = "<DIV class='singleColumn' >" + tData['row2_value'] + "</DIV>";
-        else {
-            e.innerHTML = "<DIV class='leftColumn' >" + tData['row2_label'] + "</DIV>" +
-                "<DIV class='rightColumn' >" + tData['row2_value'] + "</DIV>";
-        }
-
         e = document.getElementById( "urow1" );
         if ( typeof tData['row1_label'] == "undefined" )
-            e.innerHTML = "<DIV class='singleColumn' >" + tData['row1_value'] + "</DIV>";
+            e.innerHTML = "<TD class='singleTopColumn' >" + tData['row1_value'] + "</TD>";
         else {
-            e.innerHTML = "<DIV class='topLeftColumn' >" + tData['row1_label'] + "</DIV>" +
-                "<DIV class='rightColumn' >" + tData['row1_value'] + "</DIV>";
+            e.innerHTML = "<TD class='topLeftColumn' >" + tData['row1_label'] + "</TD>" +
+                "<TD class='rightColumn' >" + tData['row1_value'] + "</TD>";
         }
 
+        e = document.getElementById( "urow2" );
+        if ( typeof tData['row2_label'] == "undefined" )
+            e.innerHTML = "<TD class='singleColumn' >" + tData['row2_value'] + "</TD>";
+        else {
+            e.innerHTML = "<TD class='leftColumn' >" + tData['row2_label'] + "</TD>" +
+                "<TD class='rightColumn' >" + tData['row2_value'] + "</TD>";
+        }
+
+        e = document.getElementById( "urow3" );
+        if ( typeof tData['row3_label'] == "undefined" )
+            e.innerHTML = "<TD class='singleColumn' >" + tData['row3_value'] + "</TD>";
+        else {
+            e.innerHTML = "<TD class='leftColumn' >" + tData['row3_label'] + "</TD>" +
+                "<TD class='rightColumn' >" + tData['row3_value'] + "</TD>";
+        }
 
 
     }

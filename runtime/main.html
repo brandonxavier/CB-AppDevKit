@@ -54,19 +54,25 @@
         <DIV class='panelHeadings'>User Panel:</DIV>
 
         <DIV class='panelCell'>
-        <DIV class='panel' id='bPanel'>
-            <DIV class='panelOddRow' id='brow1'>Not Currently Implemented</DIV>
-            <DIV class='panelEvenRow' id='brow2'></DIV>
-            <DIV class='panelOddRow' id='brow3'></DIV>
+        <TABLE class='panelCell'>
+        <DIV class='panel' >
+        <TBODY id='bPanel'>
+            <TR class='panelOddRow' id='brow1'><TD>Not Currently Implemented</TD></TR>
+            <TR class='panelEvenRow' id='brow2'><TD> </TD></TR>
+            <TR class='panelOddRow' id='brow3'><TD> </TD></TR>
+        </TBODY>
         </DIV>
+        </TABLE>
         </DIV>
 
         <DIV class='panelCell'>
-        <DIV class='panel' id='uPanel'>
-            <DIV class='panelOddRow' id='urow1'></DIV>
-            <DIV class='panelEvenRow' id='urow2'></DIV>
-            <DIV class='panelOddRow' id='urow3'></DIV>
-        </DIV>
+        <TABLE class='panelCell'>
+        <TBODY class='panel' id='uPanel'>
+            <TR class='panelOddRow' id='urow1'><TD> </TD></TR>
+            <TR class='panelEvenRow' id='urow2'><TD> </TD></TR>
+            <TR class='panelOddRow' id='urow3'><TD> </TD></TR>
+        </TBODY>
+        </TABLE>
         </DIV>
 
     </DIV>
@@ -117,7 +123,8 @@
 *****
 ****************************************************************************************************
 -->
-<SCRIPT>cbInit( "","")</SCRIPT>
+
+<SCRIPT>cbInit( "../../testscripts/LuckyUnlucky.js","Init")</SCRIPT>
 
 
 </body>

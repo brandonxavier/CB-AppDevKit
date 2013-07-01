@@ -66,6 +66,7 @@ div {
     border:0px;
     padding:13px;
     margin: 13px auto;
+    text-align: center;
 
 }
 
@@ -85,6 +86,8 @@ div {
     margin:0px auto;
     height:80%;
     font-size: 12px;
+    text-align: center;
+    overflow-y: hidden;
 
 }
 
@@ -101,6 +104,7 @@ div {
     border:0;
     border-collapse: collapse;
     vertical-align: text-bottom;
+
 }
 
 .panel, .panelEvenRow, .panelOddRow {
@@ -110,6 +114,8 @@ div {
     width:267px;
     height:70px;
     border:0px;
+    text-align: center;
+    overflow-y: hidden;
 }
 
 .panelOddRow {
@@ -117,14 +123,16 @@ div {
     margin:0px;
     background-color: #d5ebf8;
     border: 0px;
+    display: table-row;
 }
 
 .panelEvenRow {
     height:23px;
+    max-height: 46px;
     margin:0px;
     background-color: #f2f9fd;
     border:0px;
-    overflow-y: visible;
+    display: table-row;
 }
 
 .leftColumn {
@@ -150,17 +158,29 @@ To match CB, we need a top left column class to make bold headings
     text-align:left;
 }
 
+.singleTopColumn {
+    padding:0;
+    max-width:255px;
+    width: 255px;
+    text-align:center;
+    border:0;
+    /* word-wrap: normal; */
+    display: table-row;
+    float:left;
+    font-weight: bold;
+}
+
 .singleColumn {
     padding:0;
     max-width:267px;
-    max-height: 46px;
-    width: 267px;
+    max-height:46px;
+    width: 255px;
     text-align:center;
     border:0;
     word-wrap: normal;
-    overflow-y: visible;
-    overflow-x: hidden;
-    display: table-row;
+    overflow-y:visible;
+    font-weight: normal;
+
 }
 
 .inputAreas {
