@@ -216,27 +216,30 @@ function objCB() {
         * more effort than this quick-n-dirty solution requires
         *
         */
-        e = document.getElementById("urow1")  ;
-        if ( typeof tData['row1_label'] == "undefined" )
-            e.innerHTML = "<DIV class='singleColumn' >" + tData['row1_value']+ "</DIV>";
-        else {
-            e.innerHTML = "<DIV class='leftColumn' >" + tData['row1_label'] + "</DIV>" +
-                    "<DIV class='rightColumn' >" + tData['row1_value'] + "</DIV>";
-        }
-        e = document.getElementById("urow2")  ;
-        if ( typeof tData['row2_label'] == "undefined" )
-            e.innerHTML = "<DIV class='singleColumn' >" + tData['row2_value']+ "</DIV>";
-        else {
-            e.innerHTML = "<DIV class='leftColumn' >" + tData['row2_label'] + "</DIV>" +
-                "<DIV class='rightColumn' >" + tData['row2_value'] + "</DIV>";
-        }
-        e = document.getElementById("urow3")  ;
+        e = document.getElementById( "urow3" );
         if ( typeof tData['row3_label'] == "undefined" )
-            e.innerHTML = "<DIV class='singleColumn' >" + tData['row3_value']+ "</DIV>";
+            e.innerHTML = "<DIV class='singleColumn' >" + tData['row3_value'] + "</DIV>";
         else {
             e.innerHTML = "<DIV class='leftColumn' >" + tData['row3_label'] + "</DIV>" +
                 "<DIV class='rightColumn' >" + tData['row3_value'] + "</DIV>";
         }
+        e = document.getElementById( "urow2" );
+        if ( typeof tData['row2_label'] == "undefined" )
+            e.innerHTML = "<DIV class='singleColumn' >" + tData['row2_value'] + "</DIV>";
+        else {
+            e.innerHTML = "<DIV class='leftColumn' >" + tData['row2_label'] + "</DIV>" +
+                "<DIV class='rightColumn' >" + tData['row2_value'] + "</DIV>";
+        }
+
+        e = document.getElementById( "urow1" );
+        if ( typeof tData['row1_label'] == "undefined" )
+            e.innerHTML = "<DIV class='singleColumn' >" + tData['row1_value'] + "</DIV>";
+        else {
+            e.innerHTML = "<DIV class='topLeftColumn' >" + tData['row1_label'] + "</DIV>" +
+                "<DIV class='rightColumn' >" + tData['row1_value'] + "</DIV>";
+        }
+
+
 
     }
 
@@ -606,7 +609,6 @@ function createHTMLFromSettings(allsettings) {
                 str = str + '<SELECT id=lst' + allsettings[s].name + ' >';
                 for ( var q in allsettings[s] ) {
                     if ( q.match( "^choice*" ) != null ) {
-                        // str = str + '<OPTION value="' + allsettings[q].value + '">' + allsettings[q].value + '</OPTION>'
                         str = str + '<OPTION value="' + allsettings[s][q] + '">' + allsettings[s][q] + '</OPTION>'
                     }
                 }
