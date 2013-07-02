@@ -30,7 +30,7 @@
     <meta http-equiv='Content-type' content='text/html;charset=UTF-8'>
     <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
     <title>CB App Dev</title>
-    <link rel='stylesheet' type='text/css' href='./main.css' >
+    <link rel='stylesheet' type='text/css' href='./main.css'>
 
 </head>
 
@@ -43,34 +43,46 @@
     <BUTTON id="btnOK" onClick='okBtnClicked()'>OK</BUTTON>
 </DIV>
 
-<DIV id='Startup' title='Startup' ></DIV>
+<DIV id='Startup' title='Startup'></DIV>
 
 <DIV id='Subject' title='Subject & Panels'>
     <TEXTAREA id='txtSubject'></TEXTAREA>
     <BUTTON class='button' id='btnSubject' onclick='cb.subjectChangeClicked()'>Change</BUTTON>
-    <DIV id='panelTable' >
-        <DIV class='panelHeadings'>Broadcaster Panel:</DIV>
 
-        <DIV class='panelHeadings'>User Panel:</DIV>
 
-        <DIV class='panelCell'>
-        <DIV class='panel' id='bPanel'>
-            <DIV class='panelOddRow' id='brow1'>Not Currently Implemented</DIV>
-            <DIV class='panelEvenRow' id='brow2'></DIV>
-            <DIV class='panelOddRow' id='brow3'></DIV>
-        </DIV>
-        </DIV>
+    <TABLE id='panelTable'>
 
-        <DIV class='panelCell'>
-        <DIV class='panel' id='uPanel'>
-            <DIV class='panelOddRow' id='urow1'></DIV>
-            <DIV class='panelEvenRow' id='urow2'></DIV>
-            <DIV class='panelOddRow' id='urow3'></DIV>
-        </DIV>
-        </DIV>
+        <tr>
+            <TH>Broadcaster Panel:</TH>
+            <TH>User Panel:</TH>
+        </tr>
 
-    </DIV>
+        <tr>
 
+            <TD class='panelColumn'>
+                <DIV class='innerTable'>
+                    <TABLE cellpadding='0' cellspacing='0' border='0'>
+                        <TR class='panelOddRow' id='brow1'></TR>
+                        <TR class='panelEvenRow' id='brow2'></TR>
+                        <TR class='panelOddRow' id='brow3'></TR>
+                    </TABLE>
+                </DIV>
+
+            </TD>
+
+            <TD class='panelColumn'>
+                <DIV class='innerTable'>
+                    <TABLE cellpadding='0' cellspacing='0' border='0'>
+                        <TR class='panelOddRow' id='urow1'></TR>
+                        <TR class='panelEvenRow' id='urow2'></TR>
+                        <TR class='panelOddRow' id='urow3'></TR>
+                    </TABLE>
+                </DIV>
+
+            </TD>
+        </tr>
+
+    </TABLE>
 </DIV>
 
 <DIV id="Broadcaster" title="Broadcaster Chat">
@@ -117,7 +129,10 @@
 *****
 ****************************************************************************************************
 -->
-<SCRIPT>cbInit( "","")</SCRIPT>
+
+<SCRIPT>cbInit( "", "" )</SCRIPT>
+<!-- <SCRIPT>cbInit("YourScriptName.js","YourInitFunction")</SCRIPT> Use this format if you have an init -->
+<!-- <SCRIPT>cbInit( "","")</SCRIPT>  Use this line instead if you don't use init functions -->
 
 
 </body>
