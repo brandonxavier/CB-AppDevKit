@@ -93,7 +93,7 @@ User            -   (Middle Right) Shows the chat as users see it. Note: Message
                     You can chat as different users by selecting one in the
                     dropdown list. (No more having to open different browsers!)
                     The currently selected user is also assumed to be the one
-                    sending tips and receiving customized panels (if implemented).
+                    sending tips and receiving customized panels.
 Tip             -   (Bottom Left) The tip window laid out according to
                     cb.tipOptions.
 Log             -   (Bottom Right) cb.log messages are displayed here rather
@@ -164,6 +164,19 @@ emotes are stored in the "emotes" folder located under "runtime".  The filename
 of the emotes should match your emote tag, less the extension.  No attempt is
 made to maintain mappings of tags to filenames.  So, for example, to show the
 smile.gif file, you would use ":smile"
+
+*******************************************************************************
+*******************************************************************************
+
+Panel Revamp:
+
+Panels now should behave very nearly identically to real CB panels.  In
+addition, customized panels are now supported.  So for example, the broadcaster,
+Bob, Carol and every other user could be show a complerely different panel.
+This has some interesting possibilities for some multiplayer games (Texas Hold
+'Em comes to mind offhand (thinking players 2 cards on top row, flop/turn/river
+cards on second, other info on third).  For ADK purposes, only the currently
+selected users' panel is displayed.
 
 *******************************************************************************
 *******************************************************************************
