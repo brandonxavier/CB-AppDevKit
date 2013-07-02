@@ -48,33 +48,41 @@
 <DIV id='Subject' title='Subject & Panels'>
     <TEXTAREA id='txtSubject'></TEXTAREA>
     <BUTTON class='button' id='btnSubject' onclick='cb.subjectChangeClicked()'>Change</BUTTON>
-    <DIV id='panelTable' >
-        <DIV class='panelHeadings'>Broadcaster Panel:</DIV>
 
-        <DIV class='panelHeadings'>User Panel:</DIV>
 
-        <DIV class='panelCell'>
-        <TABLE class='panelCell'>
-        <DIV class='panel' >
-        <TBODY id='bPanel'>
-            <TR class='panelOddRow' id='brow1'><TD>Not Currently Implemented</TD></TR>
-            <TR class='panelEvenRow' id='brow2'><TD> </TD></TR>
-            <TR class='panelOddRow' id='brow3'><TD> </TD></TR>
-        </TBODY>
-        </DIV>
+        <TABLE id='panelTable'>
+
+                <tr >
+                    <TH >Broadcaster Panel:</TH>
+                    <TH >User Panel:</TH>
+                </tr>
+
+                <tr>
+
+                    <TD class='panelColumn'>
+                        <DIV class='innerTable'>
+                            <TABLE class='innerTable'>
+                                <TR class='panelOddRow' id='brow1'></TR>
+                                <TR class='panelEvenRow' id='brow2'></TR>
+                                <TR class='panelOddRow' id='brow3'></TR>
+                            </TABLE>
+                        </DIV>
+
+                    </TD>
+
+                    <TD class='panelColumn'>
+                        <DIV class='innerTable'>
+                            <TABLE class='innerTable'>
+                                <TR class='panelOddRow' id='urow1'></TR>
+                                <TR class='panelEvenRow' id='urow2'></TR>
+                                <TR class='panelOddRow' id='urow3'></TR>
+                            </TABLE>
+                        </DIV>
+
+                    </TD>
+                </tr>
+
         </TABLE>
-        </DIV>
-
-        <DIV class='panelCell'>
-        <TABLE class='panelCell'>
-        <TBODY class='panel' id='uPanel'>
-            <TR class='panelOddRow' id='urow1'><TD> </TD></TR>
-            <TR class='panelEvenRow' id='urow2'><TD> </TD></TR>
-            <TR class='panelOddRow' id='urow3'><TD> </TD></TR>
-        </TBODY>
-        </TABLE>
-        </DIV>
-
     </DIV>
 
 </DIV>
