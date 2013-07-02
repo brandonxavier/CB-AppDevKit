@@ -158,88 +158,107 @@ function objCB() {
          *
          */
 
-         var tData = [];
-
-        var t = cb.panelHandler();
-
-        if (typeof t == "undefined")  // No custom panel defined
-            return;
-
-        var e;
-
-        switch (t['template']) {
-            case "3_rows_11_21_31":
-                tData['row1_value'] = t.row1_value;
-                tData['row2_value']  = t.row2_value;
-                tData['row3_value']  = t.row3_value;
-                break;
-            case "3_rows_11_22_32":
-                tData['row1_value'] = t.row1_value;
-                tData['row2_label'] = t.row2_label;
-                tData['row2_value'] = t.row2_value;
-                tData['row3_label'] = t.row3_label;
-                tData['row3_value'] = t.row3_value;
-                break;
-            case "3_rows_12_22_32":
-            case "3_rows_of_labels":
-                tData['row1_label'] = t.row1_label;
-                tData['row1_value'] = t.row1_value;
-                tData['row2_label'] = t.row2_label;
-                tData['row2_value'] = t.row2_value;
-                tData['row3_label'] = t.row3_label;
-                tData['row3_value'] = t.row3_value;
-                break;
-            case "3_rows_12_21_31":
-                tData['row1_label'] = t.row1_label;
-                tData['row1_value'] = t.row1_value;
-                tData['row2_value'] = t.row2_value;
-                tData['row3_value'] = t.row3_value;
-                break;
-            case "3_rows_12_22_31":
-                tData['row1_label'] = t.row1_label;
-                tData['row1_value'] = t.row1_value;
-                tData['row2_label'] = t.row2_label;
-                tData['row2_value'] = t.row2_value;
-                tData['row3_value'] = t.row3_value;
-                break;
-            default:
-                cb.log( "Invalid template" + t.template );
-                break;
-
-        }
-
-
-
         /**
-        * This is a horribly bad way to do this . . . but honestly there
-        * aren't really enough variations in the templates to justify much
-        * more effort than this quick-n-dirty solution requires
-        *
-        */
-        e = document.getElementById( "urow1" );
-        if ( typeof tData['row1_label'] == "undefined" )
-            e.innerHTML = "<TD  >" + tData['row1_value'] + "</TD>";
-        else {
-            e.innerHTML = "<TD >" + tData['row1_label'] + "</TD>" +
-                "<TD >" + tData['row1_value'] + "</TD>";
-        }
+         *
+         * In theory, we should loop thru all the users logged in and give them each
+         * a shot at having their own personalized panel (that could make for some really
+         * interesting games -- like a Texas Hold'Em with the players cards being shown to
+         * them in their panel).  But since this is for testing, and we have only the one
+         * user display panel, we'll just do the broadcaster and selected user
+         *
+         */
 
-        e = document.getElementById( "urow2" );
-        if ( typeof tData['row2_label'] == "undefined" )
-            e.innerHTML = "<TD >" + tData['row2_value'] + "</TD>";
-        else {
-            e.innerHTML = "<TD >" + tData['row2_label'] + "</TD>" +
-                "<TD >" + tData['row2_value'] + "</TD>";
-        }
+        var tgtUsers = [cb.room_slug, getSelectedUser()];
+        for ( var z = 0; z < tgtUsers.length ; z++  ) {
+            var tData = [];
 
-        e = document.getElementById( "urow3" );
-        if ( typeof tData['row3_label'] == "undefined" )
-            e.innerHTML = "<TD >" + tData['row3_value'] + "</TD>";
-        else {
-            e.innerHTML = "<TD >" + tData['row3_label'] + "</TD>" +
-                "<TD >" + tData['row3_value'] + "</TD>";
-        }
+            var t = cb.panelHandler( tgtUsers[z] );
 
+            if ( typeof t == "undefined" )  // No custom panel defined
+                return;
+
+            var e;
+
+            switch (t['template']) {
+                case "3_rows_11_21_31":
+                    tData['row1_value'] = t.row1_value;
+                    tData['row2_value'] = t.row2_value;
+                    tData['row3_value'] = t.row3_value;
+                    break;
+                case "3_rows_11_22_32":
+                    tData['row1_value'] = t.row1_value;
+                    tData['row2_label'] = t.row2_label;
+                    tData['row2_value'] = t.row2_value;
+                    tData['row3_label'] = t.row3_label;
+                    tData['row3_value'] = t.row3_value;
+                    break;
+                case "3_rows_12_22_32":
+                case "3_rows_of_labels":
+                    tData['row1_label'] = t.row1_label;
+                    tData['row1_value'] = t.row1_value;
+                    tData['row2_label'] = t.row2_label;
+                    tData['row2_value'] = t.row2_value;
+                    tData['row3_label'] = t.row3_label;
+                    tData['row3_value'] = t.row3_value;
+                    break;
+                case "3_rows_12_21_31":
+                    tData['row1_label'] = t.row1_label;
+                    tData['row1_value'] = t.row1_value;
+                    tData['row2_value'] = t.row2_value;
+                    tData['row3_value'] = t.row3_value;
+                    break;
+                case "3_rows_12_22_31":
+                    tData['row1_label'] = t.row1_label;
+                    tData['row1_value'] = t.row1_value;
+                    tData['row2_label'] = t.row2_label;
+                    tData['row2_value'] = t.row2_value;
+                    tData['row3_value'] = t.row3_value;
+                    break;
+                default:
+                    cb.log( "Invalid template" + t.template );
+                    break;
+
+            }
+
+
+            /**
+             * This is a horribly bad way to do this . . . but honestly there
+             * aren't really enough variations in the templates to justify much
+             * more effort than this quick-n-dirty solution requires
+             *
+             */
+            if ( tgtUsers[z] == cb.room_slug ) {
+                var elemArray = ["brow1", "brow2", "brow3"];
+
+            } else {
+                var elemArray = ["urow1", "urow2", "urow3"];
+            }
+
+            e = document.getElementById( elemArray[0] );
+            if ( typeof tData['row1_label'] == "undefined" )
+                e.innerHTML = "<TD class='singleTopColumn' >" + tData['row1_value'] + "</TD>";
+            else {
+                e.innerHTML = "<TD class='topLeftColumn' >" + tData['row1_label'] + "</TD>" +
+                    "<TD class='rightColumn' >" + tData['row1_value'] + "</TD>";
+            }
+
+            e = document.getElementById( elemArray[1] );
+            if ( typeof tData['row2_label'] == "undefined" )
+                e.innerHTML = "<TD class='singleColumn' >" + tData['row2_value'] + "</TD>";
+            else {
+                e.innerHTML = "<TD class='leftColumn' >" + tData['row2_label'] + "</TD>" +
+                    "<TD class='rightColumn' >" + tData['row2_value'] + "</TD>";
+            }
+
+            e = document.getElementById( elemArray[2] );
+            if ( typeof tData['row3_label'] == "undefined" )
+                e.innerHTML = "<TD class='singleColumn' >" + tData['row3_value'] + "</TD>";
+            else {
+                e.innerHTML = "<TD class='leftColumn' >" + tData['row3_label'] + "</TD>" +
+                    "<TD class='rightColumn' >" + tData['row3_value'] + "</TD>";
+            }
+
+        }
 
     }
 

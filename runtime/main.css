@@ -69,6 +69,7 @@ div {
     padding:13px;
     margin: 13px;
     text-align: center;
+    font-size:62.5%;
 
 }
 
@@ -120,7 +121,6 @@ div {
     margin:0px;
     background-color: #f2f9fd;
     border:0px;
-   /*  display: table-row; */
 }
 
 .innerTable {
@@ -130,26 +130,20 @@ div {
     text-align:center;
     margin:0 auto;
     display:inline-table;
-    float:none
+    float:none;
+    padding:0;
+    vertical-align: middle;
 }
 
 
-.leftColumn, .rightColumn, .topLeftColumn, .singleColumn {
-
-    font-family: 'UbuntuRegular', Arial, Helvetica, sans-serif;
+/* .leftColumn, .rightColumn, .topLeftColumn, .singleColumn { */
+.leftColumn, .rightColumn, .topLeftColumn {
     font-size: 100.01%;
     height: 16px;
     line-height: 16px;
     max-width: 125px;
-    font-weight:bold;
-    overflow:hidden;
-    border:0;
-    border-collapse: collapse;
-    vertical-align: text-bottom;
-
+    vertical-align: middle;
 }
-
-
 
 .leftColumn {
     text-align:right;
@@ -159,7 +153,6 @@ div {
 .topLeftColumn {
     text-align:right;
     font-weight: bold;
-    display:block;
     color:#057205;
 }
 
@@ -169,20 +162,10 @@ div {
     text-align:left;
 }
 
-.singleTopColumn {
-    padding:0;
-    max-width:255px;
-    width: 255px;
-    text-align:center;
-    border:0;
 
-    display: table-row;
-    float:left;
-    font-weight: bold;
-}
-
-.singleColumn {
+.singleColumn, .singleTopColumn {
     padding:0;
+    margin:0;
     max-width:267px;
     max-height:46px;
     width: 255px;
@@ -191,7 +174,12 @@ div {
     word-wrap: normal;
     overflow-y:visible;
     font-weight: normal;
+}
 
+.singleTopColumn {
+    font-weight: bold;
+    max-height:23px;
+    overflow-y:hidden;
 }
 
 .inputAreas {
