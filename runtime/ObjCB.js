@@ -23,15 +23,6 @@
 
  */
 
-
-/**
- * Created with JetBrains WebStorm
- * User: brandonxavier
- * Date: 6/15/13
- * Time: 6:40 AM
- *
- */
-
 var AppDevKit = true;
 var ADK = {'readyToRun': false, 'scriptName': "", 'initFunction': "", settingsChoices: "" };
 
@@ -49,46 +40,48 @@ function objCB() {
     this.log = log;
     this.onDrawPanel = onDrawPanel;
     this.onMessage = onMessage;
-    this.onTip  = onTip;
+    this.onTip = onTip;
     this.setTimeout = setTimeout;
 
     this.sendMsg = sendMsg;
     this.writeToTextarea = writeToTextarea;
     this.writeToChatArea = writeToChatArea;
     this.sendClicked = sendClicked;
-    this.populateUserDropdown = populateUserDropdown ;
+    this.populateUserDropdown = populateUserDropdown;
     this.scriptName = ADK.scriptName;
-    this.initFunction = ADK.initFunction ;
+    this.initFunction = ADK.initFunction;
     this.tipOptions = [];
     if ( ADK.settingsChoices != "" ) {
-        this.settings_choices = eval (ADK.settingsChoices);
-        createHTMLFromSettings(this.settings_choices );
-        createValidationCode (this.settings_choices);
+        this.settings_choices = eval( ADK.settingsChoices );
+        createHTMLFromSettings( this.settings_choices );
+        createValidationCode( this.settings_choices );
     } else {
         this.settings_choices = [];
     }
     this.settings = [];
 
-    this.panelHandler = function(){};
-    this.mesgHandler = function() {};
-    this.tipHandler = function() {};
-
+    this.panelHandler = function () {
+    };
+    this.mesgHandler = function () {
+    };
+    this.tipHandler = function () {
+    };
 
 
     // Seed some dummy users;
     //
     // (name, gender, fan_club, has_tokens, is_mod, recent_tipper)
     //
-    this.cbUsers[this.room_slug] = new objCBUser (this.room_slug, "f", true, true, true, true);
-    this.cbUsers['Notice'] = new objCBUser ("Notice","m",false,false,false,false); // Cheesy way to set formatting for notices
-    this.cbUsers['Bob'] = new objCBUser ("Bob", "m", false, true, false, false);
-    this.cbUsers['Carol'] = new objCBUser ("Carol", "f", false, true, true, true);
-    this.cbUsers['Ted'] = new objCBUser ("Ted", "m", true, false, false, false);
-    this.cbUsers['Alice'] = new objCBUser ("Alice", "f", false, false, false, true);
+    this.cbUsers[this.room_slug] = new objCBUser( this.room_slug, "f", true, true, true, true );
+    this.cbUsers['Notice'] = new objCBUser( "Notice", "m", false, false, false, false ); // Cheesy way to set formatting for notices
+    this.cbUsers['Bob'] = new objCBUser( "Bob", "m", false, true, false, false );
+    this.cbUsers['Carol'] = new objCBUser( "Carol", "f", false, true, true, true );
+    this.cbUsers['Ted'] = new objCBUser( "Ted", "m", true, false, false, false );
+    this.cbUsers['Alice'] = new objCBUser( "Alice", "f", false, false, false, true );
 
     this.populateUserDropdown();
 
-    if (ADK.scriptName.match(/^blob:/ ) == null) { // The script was specified via HTML
+    if ( ADK.scriptName.match( /^blob:/ ) == null ) { // The script was specified via HTML
         loadScript();
     }
 
@@ -100,23 +93,23 @@ function objCB() {
          */
         var dropdownList, newentry, i;
 
-        dropdownList = document.getElementById ("lstUsers");
-        for ( i in this.cbUsers ){
-            if ( i != this.room_slug && i != "Notice" ){
-                newentry = document.createElement ("option");
+        dropdownList = document.getElementById( "lstUsers" );
+        for ( i in this.cbUsers ) {
+            if ( i != this.room_slug && i != "Notice" ) {
+                newentry = document.createElement( "option" );
                 newentry.value = this.cbUsers[i].u;
                 newentry.textContent = this.cbUsers[i].u;
-                dropdownList.appendChild(newentry);
+                dropdownList.appendChild( newentry );
             }
         }
 
     }
 
     function changeRoomSubject(new_subject) {
-        document.getElementById("txtSubject" ).value = new_subject;
-        this.writeToTextarea ( "txtSubject", new_subject, true );
+        document.getElementById( "txtSubject" ).value = new_subject;
+        this.writeToTextarea( "txtSubject", new_subject, true );
 
-        }
+    }
 
     function chatNotice(message, to_user) {
 
@@ -129,23 +122,23 @@ function objCB() {
         var msgObj;
 
         // replace newlines in message with </br>
-        while (message.indexOf("\n") >= 0 )
-            message = message.replace("\n","</br>Notice -- ");
+        while ( message.indexOf( "\n" ) >= 0 )
+            message = message.replace( "\n", "</br>Notice -- " );
 
 
         if ( to_user == null ) {
             // area = document.getElementById(this.cbDiv['Main'].txtMainChat);
 
-            msgObj = createMesg ("Notice", message);
-            this.writeToChatArea ( "txtUserChat" ,msgObj);
-            this.writeToChatArea ( "txtBroadcaster" ,msgObj);
+            msgObj = createMesg( "Notice", message );
+            this.writeToChatArea( "txtUserChat", msgObj );
+            this.writeToChatArea( "txtBroadcaster", msgObj );
         }
         else {
-            msgObj = createMesg ("Notice", message + " to " + to_user);
+            msgObj = createMesg( "Notice", message + " to " + to_user );
             if ( to_user == cb.room_slug )
-                this.writeToChatArea ( "txtBroadcaster" ,msgObj);
+                this.writeToChatArea( "txtBroadcaster", msgObj );
             else
-                this.writeToChatArea ( "txtUserChat" ,msgObj);
+                this.writeToChatArea( "txtUserChat", msgObj );
         }
 
     }
@@ -169,7 +162,7 @@ function objCB() {
          */
 
         var tgtUsers = [cb.room_slug, getSelectedUser()];
-        for ( var z = 0; z < tgtUsers.length ; z++  ) {
+        for ( var z = 0; z < tgtUsers.length; z++ ) {
             var tData = [];
 
             var t = cb.panelHandler( tgtUsers[z] );
@@ -269,8 +262,8 @@ function objCB() {
          * This should be considered an immutable function -- don't attempt to redefine it
          *
          */
-        document.getElementById("txtLog" ).innerHTML += message + "</br>";
-        document.getElementById("txtLog").scrollTop = document.getElementById("txtLog").scrollHeight;
+        document.getElementById( "txtLog" ).innerHTML += message + "</br>";
+        document.getElementById( "txtLog" ).scrollTop = document.getElementById( "txtLog" ).scrollHeight;
 
     }
 
@@ -301,7 +294,7 @@ function objCB() {
      */
     function setTimeout(func, msecs) {
 
-        window.setTimeout (func, msecs);
+        window.setTimeout( func, msecs );
 
     }
 
@@ -315,16 +308,15 @@ function objCB() {
 
         this.changeRoomSubject( document.getElementById( "txtSubject" ).value );
 
-        var area = document.getElementById("txtUserChat");
+        var area = document.getElementById( "txtUserChat" );
         area.innerHTML += "<span style='color: black;background-color: white;' >" +
             "Room subject changed to: " + document.getElementById( "txtSubject" ).value + "</span></br>";
         area.scrollTop = area.scrollHeight;
 
-        area = document.getElementById("txtBroadcaster");
+        area = document.getElementById( "txtBroadcaster" );
         area.innerHTML += "<span style='color: black;background-color: white;' >" +
             "Room subject changed to: " + document.getElementById( "txtSubject" ).value + "</span></br>";
         area.scrollTop = area.scrollHeight;
-
 
 
     }
@@ -337,8 +329,8 @@ function objCB() {
     function sendMsg(toUser, msg1) {
 
 
-        this.writeToChatArea ( "txtBroadcaster", msg1);
-        this.writeToChatArea ( "txtUserChat", msg1);
+        this.writeToChatArea( "txtBroadcaster", msg1 );
+        this.writeToChatArea( "txtUserChat", msg1 );
     }
 
     /**
@@ -348,45 +340,40 @@ function objCB() {
      */
     function writeToChatArea(targetArea, msg) {
 
-       // cb.log("typeof msg" + typeof msg);
+        // cb.log("typeof msg" + typeof msg);
 
         var mstr = "";
 
         //
         // Check spam flag first and simply return if true
         //
-        if (msg['X-Spam'] == true)
+        if ( msg['X-Spam'] == true )
             return;
 
         // Handle emotes - the regexes become MUCH easier if this is done before
         // any other HTML tagging is done (lot of damn ":"s in HTML)
-        msg['m'] = insertEmotes (msg['m']);
+        msg['m'] = insertEmotes( msg['m'] );
 
         //
         // First set the color of the name
         //
         if ( msg['user'] == "Notice" ) {
             mstr = "<SPAN STYLE='color:black'>" + msg['user'] + ": </SPAN>"
-        } else
-        if ( msg['user'] == cb.room_slug ) {
+        } else if ( msg['user'] == cb.room_slug ) {
             mstr = "<SPAN STYLE='color:#DC5500;font-weight:bold'>" + msg['user'] + ": </SPAN>"
-        } else
-        if ( msg['is_mod'] == true ) {
+        } else if ( msg['is_mod'] == true ) {
             mstr = "<SPAN STYLE='color:#ff0000;font-weight:bold'>" + msg['user'] + ": </SPAN>"
-        } else
-        if ( msg['in_fanclub'] == true ) {
+        } else if ( msg['in_fanclub'] == true ) {
             mstr = "<SPAN STYLE='color:#090;font-weight:bold'>" + msg['user'] + ": </SPAN>"
-        } else
-        if ( msg['has_tokens'] == true ) {
+        } else if ( msg['has_tokens'] == true ) {
             mstr = "<SPAN STYLE='color:#69A;font-weight:bold'>" + msg['user'] + ": </SPAN>"
-        } else
-        if (msg['tipped_recently'] == true ) {
+        } else if ( msg['tipped_recently'] == true ) {
             mstr = "<SPAN STYLE='color:#009;font-weight:bold'>" + msg['user'] + ": </SPAN>"
         } else
             mstr = "<SPAN STYLE='color:#666'>" + msg['user'] + ": </SPAN>";
 
         // Background color is a pain
-        if (msg['background'] != "white" && msg['background'] != "#ffffff") {
+        if ( msg['background'] != "white" && msg['background'] != "#ffffff" ) {
             mstr = mstr + "<SPAN STYLE='background-color:" + msg['background'] + "'>"
         }
 
@@ -394,18 +381,17 @@ function objCB() {
         mstr = mstr + "<SPAN STYLE='color:" + msg['c'] + "'>" + msg['m'] + "</SPAN";
 
         // Close up the background span
-        if (msg['background'] != "white" && msg['background'] != "#ffffff") {
+        if ( msg['background'] != "white" && msg['background'] != "#ffffff" ) {
             mstr = mstr + "</SPAN>"
         }
-
 
 
         // End with a newline
         mstr = mstr + "</br></br>"; // No, I don't know why I need 2 of these here
 
         var area = document.getElementById( targetArea );
-            area.innerHTML += mstr;
-            area.scrollTop = area.scrollHeight;
+        area.innerHTML += mstr;
+        area.scrollTop = area.scrollHeight;
 
     }
 
@@ -435,18 +421,18 @@ function objCB() {
 
         if ( document.getElementById( targetField ).value.trim() != "" ) {
             if ( targetField == "inBroadcaster" ) {
-                msgObj = createMesg(this.room_slug, document.getElementById( "inBroadcaster" ).value);
-                cb.mesgHandler(msgObj);
-                this.sendMsg( this.room_slug, msgObj);
+                msgObj = createMesg( this.room_slug, document.getElementById( "inBroadcaster" ).value );
+                cb.mesgHandler( msgObj );
+                this.sendMsg( this.room_slug, msgObj );
                 document.getElementById( targetField ).value = "";
             } else {
-                var m =  document.getElementById( "inUser" ).value;
-                if ( m.length > 4 ){
-                    if ( m.search("^/tip ") == 0 ) { // We have a tip!
-                        var t = parseInt( m.substr(5));
-                        var p = (m.substr(5)).indexOf(" ");
-                        var tm = ( p != -1 ? m.substr(p+6) : "" );
-                        createTippingHTML(t,tm);
+                var m = document.getElementById( "inUser" ).value;
+                if ( m.length > 4 ) {
+                    if ( m.search( "^/tip " ) == 0 ) { // We have a tip!
+                        var t = parseInt( m.substr( 5 ) );
+                        var p = (m.substr( 5 )).indexOf( " " );
+                        var tm = ( p != -1 ? m.substr( p + 6 ) : "" );
+                        createTippingHTML( t, tm );
                         //
                         // Terminate msg processing and allow onTip to take over after Send Tip clicked
                         document.getElementById( targetField ).value = "";
@@ -455,9 +441,9 @@ function objCB() {
                 }
 
 
-                msgObj = createMesg(getSelectedUser(), document.getElementById( "inUser" ).value);
-                cb.mesgHandler(msgObj);
-                this.sendMsg(getSelectedUser(),msgObj);
+                msgObj = createMesg( getSelectedUser(), document.getElementById( "inUser" ).value );
+                cb.mesgHandler( msgObj );
+                this.sendMsg( getSelectedUser(), msgObj );
                 document.getElementById( targetField ).value = "";
             }
 
@@ -468,7 +454,7 @@ function objCB() {
 
 }
 
-function objCBUser(username, gender, fanclub, has_tokens, is_mod, tipped_recently){
+function objCBUser(username, gender, fanclub, has_tokens, is_mod, tipped_recently) {
 
     this['u'] = username;
     this['gender'] = gender;
@@ -536,7 +522,7 @@ function createValidationCode(sc) {
                 } else {
                     // No error checking here, just add whatever is in the field
                     fstr = fstr + "{ cb.settings['" + sc[x].name + "'] = document.getElementById('in" + sc[x].name +
-                             "').value.trim();}";
+                        "').value.trim();}";
                 }
                 break;
             case "choice":
@@ -564,17 +550,17 @@ function createTippingHTML(defaultTip, defaultNote) {
     var hstr;
 
     // Massage the optional variables
-    if (typeof defaultTip == "undefined"){
+    if ( typeof defaultTip == "undefined" ) {
         defaultTip = 1;
     }
-    if (typeof defaultNote == "undefined" ){
+    if ( typeof defaultNote == "undefined" ) {
         defaultNote = "";
     }
 
-    hstr =  "<LABEL >Tip Amount</LABEL>" +
-            "<INPUT type='text' id='inTipAmount' class='inputAreas' STYLE='width:15%' + value='" + defaultTip + "'>";
+    hstr = "<LABEL >Tip Amount</LABEL>" +
+        "<INPUT type='text' id='inTipAmount' class='inputAreas' STYLE='width:15%' + value='" + defaultTip + "'>";
 
-    if (currTipOptions.length == 0 ){ // Display the default note box
+    if ( currTipOptions.length == 0 ) { // Display the default note box
         hstr = hstr + "<LABEL STYLE='display:block'>Tip Note</LABEL>" +
             "<TEXTAREA id='inTipNote' >" + defaultNote + "</TEXTAREA>";
     } else {
@@ -589,9 +575,9 @@ function createTippingHTML(defaultTip, defaultNote) {
     }
 
     hstr = hstr + "<BUTTON STYLE='display:block' id='btnSendTip' class='buttons' " + "" +
-                "onclick='sendTipClicked()'>Send Tip</BUTTON>";
+        "onclick='sendTipClicked()'>Send Tip</BUTTON>";
 
-    document.getElementById("Tip").innerHTML = hstr;
+    document.getElementById( "Tip" ).innerHTML = hstr;
 
 }
 
@@ -617,7 +603,8 @@ function createHTMLFromSettings(allsettings) {
                 '" ';
             if ( allsettings[s].default != undefined ) {
                 str = str + 'value="' + allsettings[s].default + '" ';
-            }if ( allsettings[s].defaultValue != undefined ) {
+            }
+            if ( allsettings[s].defaultValue != undefined ) {
                 str = str + 'value="' + allsettings[s].defaultValue + '" ';
             }
         } else {
@@ -643,16 +630,16 @@ function createHTMLFromSettings(allsettings) {
         str = str + "</DIV>"
     }
 
-    e = document.getElementById ("Startup");
+    e = document.getElementById( "Startup" );
 
     // Add the "Activate Button"
     str = str + "<BUTTON id='btnActivate' class='button' onclick='btnActivateClicked()'>Activate</BUTTON>";
 
-    e.innerHTML = str ;
+    e.innerHTML = str;
 
-    var scrpt = document.createElement("script");
-    scrpt.innerHTML = "function validateSettings() " + createValidationCode(allsettings);
-    document.body.appendChild(scrpt);
+    var scrpt = document.createElement( "script" );
+    scrpt.innerHTML = "function validateSettings() " + createValidationCode( allsettings );
+    document.body.appendChild( scrpt );
 
     return str;
 
@@ -675,10 +662,9 @@ function btnActivateClicked() {
         cb.drawPanel();
 
     }
-    else
-        { //noinspection JSUnresolvedFunction
-            cb.log( "Validation failed: " + validateSettings() );
-        }
+    else { //noinspection JSUnresolvedFunction
+        cb.log( "Validation failed: " + validateSettings() );
+    }
 
 }
 
@@ -696,28 +682,27 @@ function getSelectedUser() {
     // Since we seed some valid dummy sample users, no error checking is done
     //
     var ele = document.getElementById( "lstUsers" );
-    return  ele.options[ele.selectedIndex].value ;
+    return  ele.options[ele.selectedIndex].value;
 
 }
 
 function press(e) {
     // IE uses "window.event", others pass the event as argument
     var evt = e || window.event;
-    if (evt.keyCode == 13) {
-        cb.sendClicked(document.activeElement['id']);
+    if ( evt.keyCode == 13 ) {
+        cb.sendClicked( document.activeElement['id'] );
         return false;
     }
 }
 
-function objTipObject(fromUser, amt, msg){
-
+function objTipObject(fromUser, amt, msg) {
 
 
     this['amount'] = amt;  // amount of tip
-    this['message']= msg; // message in tip
-    this['to_user']= cb.room_slug;  // user who received tip
-    this['from_user']= fromUser; // user who sent tip
-    this['from_user_in_fanclub']= cb.cbUsers[fromUser].in_fanclub; // is the user in the broadcasters fan club
+    this['message'] = msg; // message in tip
+    this['to_user'] = cb.room_slug;  // user who received tip
+    this['from_user'] = fromUser; // user who sent tip
+    this['from_user_in_fanclub'] = cb.cbUsers[fromUser].in_fanclub; // is the user in the broadcasters fan club
     this['from_user_has_tokens'] = cb.cbUsers[fromUser].has_tokens; //does the user have at least 1 token
     this['from_user_is_mod'] = cb.cbUsers[fromUser].is_mod; // is the user a moderator
     this['from_user_tipped_recently'] = cb.cbUsers[fromUser].tipped_recently; // is the user a “dark blue”?
@@ -729,42 +714,40 @@ function objTipObject(fromUser, amt, msg){
 
 function sendTipClicked() {
 
-    var amt = parseInt(document.getElementById ("inTipAmount" ).value) ;
-    var msg = document.getElementById ("lstTipping");
-    if (msg == null)
-        msg = document.getElementById("inTipNote" ).value ;
+    var amt = parseInt( document.getElementById( "inTipAmount" ).value );
+    var msg = document.getElementById( "lstTipping" );
+    if ( msg == null )
+        msg = document.getElementById( "inTipNote" ).value;
     else
         msg = msg.options[msg.selectedIndex].value;
 
-    var currentTip = new objTipObject (getSelectedUser(),amt,msg);
+    var currentTip = new objTipObject( getSelectedUser(), amt, msg );
 
 
-
-    var area = document.getElementById("txtUserChat");
+    var area = document.getElementById( "txtUserChat" );
     area.innerHTML += "<span style='color: black;background-color: yellow;' >" +
         currentTip['from_user'] + " has tipped " + currentTip['amount'] + " tokens</span></br>";
     area.scrollTop = area.scrollHeight;
 
-    area = document.getElementById("txtBroadcaster");
+    area = document.getElementById( "txtBroadcaster" );
     area.innerHTML += "<span style='color: black;background-color: yellow;' >" +
         currentTip['from_user'] + " has tipped " + currentTip['amount'] + " tokens -- " + msg + "</span></br>";
     area.scrollTop = area.scrollHeight;
 
-    cb.tipHandler(currentTip);
-
+    cb.tipHandler( currentTip );
 
 
 }
 
- function onTip(func) {
+function onTip(func) {
 
-     this.tipHandler = func;
+    this.tipHandler = func;
 
-     return func;
+    return func;
 
 }
 
-function createMesg ( fromUser, mesg){
+function createMesg(fromUser, mesg) {
 
     var tmp = [];
 
@@ -773,14 +756,14 @@ function createMesg ( fromUser, mesg){
     tmp['c'] = "black";
     tmp['f'] = "some font";  // TODO: Implement changing fonts
     tmp['in_fanclub'] = cb.cbUsers[fromUser].in_fanclub;
-    tmp['has_tokens'] =  cb.cbUsers[fromUser].has_tokens;
-    tmp['is_mod'] =  cb.cbUsers[fromUser].is_mod;
+    tmp['has_tokens'] = cb.cbUsers[fromUser].has_tokens;
+    tmp['is_mod'] = cb.cbUsers[fromUser].is_mod;
     tmp['tipped_recently'] = cb.cbUsers[fromUser].tipped_recently;
     tmp['gender'] = cb.cbUsers[fromUser].gender;
-    tmp['X-Spam'] =  false ;
+    tmp['X-Spam'] = false;
     tmp['background'] = "white";
 
-    if (tmp['user'] == "Notice") {
+    if ( tmp['user'] == "Notice" ) {
         tmp['c'] = "black";
         tmp['background'] = "white";
     }
@@ -836,32 +819,32 @@ function cbInit(scriptFile, appInitFunction) {
      * First, check to see if there's an Init function specified -- if so,
      * then we can go on our merry way . . . otherwise . . .
      */
-    if (appInitFunction != "" ){ // Init-less script so prepare to parse for cb_settings
-        document.getElementById('inInitFunction' ).value = appInitFunction;
+    if ( appInitFunction != "" ) { // Init-less script so prepare to parse for cb_settings
+        document.getElementById( 'inInitFunction' ).value = appInitFunction;
         ADK.initFunction = appInitFunction;
         /**
          * This is screwy - it's possible an Init function was specified, but not the
          * script name -- but since we're going to the trouble of implementing the File API
          * anyway, we'll allow this as a valid thing to do
          */
-        if (scriptFile == ""){
-            document.getElementById('inFileList').addEventListener('change', setScript, false);
+        if ( scriptFile == "" ) {
+            document.getElementById( 'inFileList' ).addEventListener( 'change', setScript, false );
         } else {
             ADK.scriptName = scriptFile;
             ADK.readyToRun = true; // we have a script and init function
         }
 
     } else {
-        if (window.File && window.FileList && window.FileReader){
-            document.getElementById('inFileList').addEventListener('change', readScript, false);
+        if ( window.File && window.FileList && window.FileReader ) {
+            document.getElementById( 'inFileList' ).addEventListener( 'change', readScript, false );
         } else {
-            alert("Your browser doesn't appear to fully support the HTML5 FILE APIs\n" +
-                  "required to parse the script file.  Please consider upgrading your\n" +
-                  "browser or using an Init function");
+            alert( "Your browser doesn't appear to fully support the HTML5 FILE APIs\n" +
+                "required to parse the script file.  Please consider upgrading your\n" +
+                "browser or using an Init function" );
         }
     }
 
-    if (ADK.readyToRun == true){
+    if ( ADK.readyToRun == true ) {
         cb = new objCB();
     }
 
@@ -890,17 +873,17 @@ function readScript(evt) {
 
     var contents;
     var sFile = evt.target.files[0];
-    ADK.scriptName =  window.URL.createObjectURL(evt.target.files[0]);
+    ADK.scriptName = window.URL.createObjectURL( evt.target.files[0] );
 
-    if (sFile) {
+    if ( sFile ) {
         var fReader = new FileReader();
         fReader.onload = function (e) {
             contents = e.target.result;
-            ADK.settingsChoices = parseScript(contents);
+            ADK.settingsChoices = parseScript( contents );
         };
-        fReader.readAsText(sFile);
+        fReader.readAsText( sFile );
     } else {
-        alert("Failed to load file");
+        alert( "Failed to load file" );
     }
 
 }
@@ -911,25 +894,25 @@ function readScript(evt) {
  *
  * @param evt
  */
-function setScript (evt) {
+function setScript(evt) {
 
-    ADK.scriptName =  window.URL.createObjectURL(evt.target.files[0]);
+    ADK.scriptName = window.URL.createObjectURL( evt.target.files[0] );
 
 }
 
 
-function parseScript (scriptInput){
+function parseScript(scriptInput) {
 
     var i, x;
     var workingContents;
     var multilineComment = false;
 
     // Get rid of annoying CRs
-    scriptInput = scriptInput.replace(/\r/g,"");
+    scriptInput = scriptInput.replace( /\r/g, "" );
     // split the the mass of text into an easy to work with Array
-    workingContents = scriptInput.split("\n");
+    workingContents = scriptInput.split( "\n" );
 
-    for ( i = 0 ; i < workingContents.length; i++ ) {
+    for ( i = 0; i < workingContents.length; i++ ) {
         /**
          *
          * Do some very crude processing to get rid of comments & blank lines first
@@ -948,19 +931,19 @@ function parseScript (scriptInput){
             }
         }
         // Then check to see if we're starting a multiliner (/*) . . .
-        if (x = workingContents[i].indexOf("/*") != -1 ) {
+        if ( x = workingContents[i].indexOf( "/*" ) != -1 ) {
             multilineComment = true;
-            workingContents[i] = workingContents[i].substr(0,x - 1);
+            workingContents[i] = workingContents[i].substr( 0, x - 1 );
         }
         // Then check to see if we're starting a end of liner (//) . . .
-        if (x = workingContents[i].indexOf("//") != -1 ) {
-            workingContents[i] = workingContents[i].substr(0,x -1);
+        if ( x = workingContents[i].indexOf( "//" ) != -1 ) {
+            workingContents[i] = workingContents[i].substr( 0, x - 1 );
         }
         // Get rid of the whitespace
         workingContents[i] = workingContents[i].trim();
         // Now see if there's anything left of the line
-        if (workingContents[i] == "" ) {
-            workingContents.splice(i,1);
+        if ( workingContents[i] == "" ) {
+            workingContents.splice( i, 1 );
             i--;
             continue;
         }
@@ -972,25 +955,25 @@ function parseScript (scriptInput){
          *
          */
         var foundTarget = false, targetString = "", patt = "cb.settings_choices *=";
-         for (i = 0 ; i < workingContents.length; i++ ) {
-             if (workingContents[i].match(patt) ) {
-                 workingContents[i] = workingContents[i].substr(workingContents[i].indexOf("=") + 1 );
-                 foundTarget = true;
-             }
-             if (foundTarget == true) {
-                 targetString += workingContents[i];
-                 if (targetString.substr(targetString.length - 1) == ";"){
-                    return targetString.substr(0,targetString.length - 1);
-                 }
-             }
+        for ( i = 0; i < workingContents.length; i++ ) {
+            if ( workingContents[i].match( patt ) ) {
+                workingContents[i] = workingContents[i].substr( workingContents[i].indexOf( "=" ) + 1 );
+                foundTarget = true;
+            }
+            if ( foundTarget == true ) {
+                targetString += workingContents[i];
+                if ( targetString.substr( targetString.length - 1 ) == ";" ) {
+                    return targetString.substr( 0, targetString.length - 1 );
+                }
+            }
 
 
-         }
+        }
 
     }
 
 
-     return "";
+    return "";
 
 }
 
@@ -1018,7 +1001,7 @@ function loadScript() {
 
 function callback() {
     cb.log( ADK.scriptName + " loaded" );
-    if (ADK.settingsChoices == "" ) {
+    if ( ADK.settingsChoices == "" ) {
         createHTMLFromSettings( cb.settings_choices ); // Script has to be loaded before these can be done
         createValidationCode( cb.settings_choices );
     }

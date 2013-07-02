@@ -23,7 +23,15 @@
 
  */
 
-/* TODO: Cleanup and optimize the css */
+/*
+
+    TODO:   Cleanup and simplify the css -- unfortunately, css
+            just doesn't come naturally to me. Maybe someday
+            I'll take a few days, throw away everything I think
+            I know about css and relearn it from scratch.  But
+            not today . . .
+
+ */
 
 html {
     height:100%;
@@ -141,25 +149,32 @@ div {
     font-size: 100.01%;
     height: 16px;
     line-height: 16px;
-    max-width: 125px;
+    width:130px;
+    max-width: 130px;
     vertical-align: middle;
+    padding:0;
+    float:none;
 }
 
 .leftColumn {
     text-align:right;
     font-weight: bold;
+    padding-right: 1px;
 }
 
 .topLeftColumn {
     text-align:right;
     font-weight: bold;
+    padding-right: 1px;
     color:#057205;
 }
 
 .rightColumn {
-    width: 110px;
-    display: inline-table;
+    width: 130px;
+    /* display: inline-table; */
     text-align:left;
+    vertical-align:middle;
+    padding-left: 1px;
 }
 
 
