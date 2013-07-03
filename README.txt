@@ -85,7 +85,7 @@ Script & Init   -   See below
 Startup         -   (Top left) Processes the cb.settings_choices and provides
                     a (de)activate button
 Subject & Panel -   (Top right) Shows/Sets the Room Subject and also displays
-                    the Panel
+                    the Panels
 Broadcaster     -   (Middle Left) Show the chat as the broadcaster sees it,
                     and allows you to chat as the broadcaster.
 User            -   (Middle Right) Shows the chat as users see it. Note: Messages
@@ -127,7 +127,9 @@ wise it assumes you are working without an init function and preselects
 executing code outside of functions . . . but JS permits it . . . so I'll
 just have to accept it as "valid" . . . and leave it at that.
 
-
+Note: Pre v1.4 users who are accustomed to specifying BOTH their script
+name AND init function via HTML may continue to do so, but this should be
+considered a deprecated feature.
 
 *******************************************************************************
 *******************************************************************************
