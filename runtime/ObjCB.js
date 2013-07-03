@@ -124,7 +124,7 @@ function objCB() {
 
         // replace newlines in message with </br>
         while ( message.indexOf( "\n" ) >= 0 )
-            message = message.replace( "\n", "</br>Notice -- " );
+            message = message.replace( "\n", "</br>Notice: " );
 
 
         if ( to_user == null ) {
@@ -795,7 +795,8 @@ function insertEmotes(htmlString) {
             ePos = htmlString.indexOf( eString[0] );
             htmlString = htmlString.substr( 0, ePos ) +
                 "<IMG src='" + "emotes/" + eString[0].substr( 1 ) + ".gif' alt='" + "@!@" +
-                eString[0].substr( 1 ) + "' IMG/>" + htmlString.substr( ePos + eString[0].length );
+                eString[0].substr( 1 ) + "' title='@!@" + eString[0].substr( 1 ) + "'>" +
+                htmlString.substr( ePos + eString[0].length );
         }
         htmlString = htmlString.replace( /@!@/g, ":" ); // Can't use the : in the alt tag or we get infinite loops
     }
