@@ -39,7 +39,7 @@
 <DIV id='Script' title='Script & Init Function'>
     <input type='file' id='inFileList'>
     <LABEL>Init function:</LABEL>
-    <input type='text' id='inInitFunction' value=''>
+    <SELECT id="lstFunctions"></SELECT>
     <BUTTON id="btnOK" onClick='okBtnClicked()'>OK</BUTTON>
 </DIV>
 
@@ -89,7 +89,8 @@
     <DIV id='txtBroadcaster' class='textareas'></DIV>
 
     <INPUT type='text' class='inputAreas' id='inBroadcaster' onkeydown='return press (event)'>
-    <BUTTON class='button' id='btnBroadcaster' onclick='cb.sendClicked("inBroadcaster")'>Send</BUTTON>
+    <BUTTON class='button' id='btnBroadcaster' onclick='cb.sendClicked("inBroadcaster")'>Send
+    </BUTTON>
 
 </DIV>
 
@@ -123,7 +124,7 @@
 *****           Init();
 *****
 *****      AppDevKit is a boolean defined in the ADK - this prevents the function from being
-*****      called twice: once by the ADK and then again by your script.  A sure sign that you
+*****      called twice: once by the ADK and then again by your script.  A sure sign that
 *****      this is happening is if your subject and panel changes BEFORE you hit the "Activate"
 *****      button.
 *****

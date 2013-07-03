@@ -24,7 +24,8 @@
  */
 
 var AppDevKit = true;
-var ADK = {'readyToRun': false, 'scriptName': "", 'initFunction': "", settingsChoices: "" };
+var ADK = {'readyToRun': false, 'scriptName': "", 'initFunction': "",
+    settingsChoices: "", 'trueScriptName': "" };
 
 var cb;
 
@@ -123,7 +124,7 @@ function objCB() {
 
         // replace newlines in message with </br>
         while ( message.indexOf( "\n" ) >= 0 )
-            message = message.replace( "\n", "</br>Notice -- " );
+            message = message.replace( "\n", "</br>Notice: " );
 
 
         if ( to_user == null ) {
@@ -790,11 +791,12 @@ function insertEmotes(htmlString) {
     var ePos, eString;
 
     if ( htmlString.indexOf( "<IMG src=" ) == -1 ) { // check to make sure we haven't already done this chunk
-        while ( (eString = htmlString.match( /:\w*/ )) != null ) {
+        while ( (eString = htmlString.match( /:\w+/ )) != null ) {
             ePos = htmlString.indexOf( eString[0] );
             htmlString = htmlString.substr( 0, ePos ) +
                 "<IMG src='" + "emotes/" + eString[0].substr( 1 ) + ".gif' alt='" + "@!@" +
-                eString[0].substr( 1 ) + "' IMG/>" + htmlString.substr( ePos + eString[0].length );
+                eString[0].substr( 1 ) + "' title='@!@" + eString[0].substr( 1 ) + "'>" +
+                htmlString.substr( ePos + eString[0].length );
         }
         htmlString = htmlString.replace( /@!@/g, ":" ); // Can't use the : in the alt tag or we get infinite loops
     }
@@ -818,23 +820,21 @@ function cbInit(scriptFile, appInitFunction) {
     /**
      * First, check to see if there's an Init function specified -- if so,
      * then we can go on our merry way . . . otherwise . . .
+     *
+     * As of v1.4 this is deprecated
+     *
      */
-    if ( appInitFunction != "" ) { // Init-less script so prepare to parse for cb_settings
-        document.getElementById( 'inInitFunction' ).value = appInitFunction;
+    if ( appInitFunction != "" && scriptFile != "" ) { // Deprecated
         ADK.initFunction = appInitFunction;
-        /**
-         * This is screwy - it's possible an Init function was specified, but not the
-         * script name -- but since we're going to the trouble of implementing the File API
-         * anyway, we'll allow this as a valid thing to do
-         */
-        if ( scriptFile == "" ) {
-            document.getElementById( 'inFileList' ).addEventListener( 'change', setScript, false );
-        } else {
-            ADK.scriptName = scriptFile;
-            ADK.readyToRun = true; // we have a script and init function
-        }
+        ADK.scriptName = scriptFile;
+        ADK.trueScriptName = scriptFile;
 
-    } else {
+        document.getElementById( "Script" ).style.visibility = "hidden";
+
+        ADK.readyToRun = true; // we have a script and init function
+    }
+
+    else {
         if ( window.File && window.FileList && window.FileReader ) {
             document.getElementById( 'inFileList' ).addEventListener( 'change', readScript, false );
         } else {
@@ -859,7 +859,7 @@ function cbInit(scriptFile, appInitFunction) {
  */
 function okBtnClicked() {
 
-    ADK.initFunction = document.getElementById( 'inInitFunction' ).value;
+    ADK.initFunction = getInitFunction();
 
     if ( ADK.scriptName != "" ) {
         cb = new objCB();
@@ -874,12 +874,14 @@ function readScript(evt) {
     var contents;
     var sFile = evt.target.files[0];
     ADK.scriptName = window.URL.createObjectURL( evt.target.files[0] );
+    ADK.trueScriptName = evt.target.files[0].name;
 
     if ( sFile ) {
         var fReader = new FileReader();
         fReader.onload = function (e) {
             contents = e.target.result;
             ADK.settingsChoices = parseScript( contents );
+            parseFunctions( contents );
         };
         fReader.readAsText( sFile );
     } else {
@@ -888,19 +890,16 @@ function readScript(evt) {
 
 }
 
+
 /**
  *
- * Callback that simply sets the filename selected (no parsing)
+ * parseScript
  *
- * @param evt
+ * Parse thru the script file to find the cb.settings_choices line(s)
+ *
+ * @param scriptInput
+ * @returns {string}
  */
-function setScript(evt) {
-
-    ADK.scriptName = window.URL.createObjectURL( evt.target.files[0] );
-
-}
-
-
 function parseScript(scriptInput) {
 
     var i, x;
@@ -977,6 +976,109 @@ function parseScript(scriptInput) {
 
 }
 
+/**
+ * parseFunctions
+ *
+ * Populates the lstFunctions dropdown box with a list of
+ * function names found in the script file
+ *
+ * @param scriptInput
+ */
+function parseFunctions(scriptInput) {
+
+    var i, x;
+    var workingContents;
+    var multilineComment = false;
+
+    // Get rid of annoying CRs
+    scriptInput = scriptInput.replace( /\r/g, "" );
+    // split the the mass of text into an easy to work with Array
+    workingContents = scriptInput.split( "\n" );
+
+    for ( i = 0; i < workingContents.length; i++ ) {
+        /**
+         *
+         * Do some very crude processing to get rid of comments & blank lines first
+         *
+         *
+         */
+
+        // First, if we're in the middle of a multiline comment check for "*/"
+        //
+        if ( multilineComment == true ) {
+            if ( workingContents[i].indexOf( "*/" ) != -1 ) {
+                multilineComment = false;
+                workingContents.splice( i, 1 );
+                i--;
+                continue;
+            }
+        }
+        // Then check to see if we're starting a multiliner (/*) . . .
+        if ( x = workingContents[i].indexOf( "/*" ) != -1 ) {
+            multilineComment = true;
+            workingContents[i] = workingContents[i].substr( 0, x - 1 );
+        }
+        // Then check to see if we're starting a end of liner (//) . . .
+        if ( x = workingContents[i].indexOf( "//" ) != -1 ) {
+            workingContents[i] = workingContents[i].substr( 0, x - 1 );
+        }
+        // Get rid of the whitespace
+        workingContents[i] = workingContents[i].trim();
+        // Now see if there's anything left of the line
+        if ( workingContents[i] == "" ) {
+            workingContents.splice( i, 1 );
+            i--;
+            continue;
+        }
+    }
+    /**
+     *
+     * OK, we should have a fairly clean script now in memory so
+     * let's find what we came looking for . . . function names!
+     *
+     */
+    var funcName, found, dropdownFunctions, newEntry, targetString = "";
+
+    dropdownFunctions = document.getElementById( "lstFunctions" );
+
+    // Clear old functions in case user changes scripts
+    while ( dropdownFunctions.length > 0 ) {
+        dropdownFunctions.remove( 0 );
+    }
+
+    newEntry = document.createElement( "option" );
+    newEntry.value = "";
+    newEntry.textContent = "(none)";
+    dropdownFunctions.appendChild( newEntry );
+    dropdownFunctions.selectedIndex = 0;
+
+    for ( i = 0; i < workingContents.length; i++ ) {
+        if ( (found = workingContents[i].match( /^function \w*/i )) != null ) {
+            funcName = found[0].substr( 9 );
+            newEntry = document.createElement( "option" );
+            newEntry.value = funcName;
+            newEntry.textContent = funcName;
+            dropdownFunctions.appendChild( newEntry );
+
+            if ( funcName.match( /init/i ) != null ) {
+                dropdownFunctions.selectedIndex = dropdownFunctions.length - 1;
+            }
+
+        }
+    }
+
+}
+
+/**
+ *
+ * Merely returns the selected init function
+ *
+ * @returns {*}
+ */
+function getInitFunction() {
+    var ele = document.getElementById( "lstFunctions" );
+    return  ele.options[ele.selectedIndex].value;
+}
 function loadScript() {
 
     var script = document.createElement( "script" );
@@ -1000,7 +1102,7 @@ function loadScript() {
 }
 
 function callback() {
-    cb.log( ADK.scriptName + " loaded" );
+    cb.log( ADK.trueScriptName + " loaded" );
     if ( ADK.settingsChoices == "" ) {
         createHTMLFromSettings( cb.settings_choices ); // Script has to be loaded before these can be done
         createValidationCode( cb.settings_choices );
