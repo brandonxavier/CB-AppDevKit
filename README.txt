@@ -85,7 +85,7 @@ Script & Init   -   See below
 Startup         -   (Top left) Processes the cb.settings_choices and provides
                     a (de)activate button
 Subject & Panel -   (Top right) Shows/Sets the Room Subject and also displays
-                    the Panel
+                    the Panels
 Broadcaster     -   (Middle Left) Show the chat as the broadcaster sees it,
                     and allows you to chat as the broadcaster.
 User            -   (Middle Right) Shows the chat as users see it. Note: Messages
@@ -105,54 +105,31 @@ Log             -   (Bottom Right) cb.log messages are displayed here rather
 
 Specifying Your Script File & Init Function:
 
-There are several ways to do this:
+As of v1.4, there is one preferred way of specifying your script name and
+init function:  via the "Script & Init Function" panel.
 
--   Change the optional parameters to cbInit in the main.html (well documented
-    near the bottom of the file).  This is by far the most productive thing to
-    do. However, if you don't use an Init-type script or if you execute any code
-    outside of functions this can lead to problems. I'm tempted to go into an
-    old-school rant about the wisdom of executing code outside of functions . . .
-    but JS permits it . . . so I'll accept it as "valid" . . . and just leave it
-    at that.
--   Leave the optional Init function out of the cbInit call.  The ADK will then
-    try to parse your file to locate the "cb.settings_choices = " line(s) and
-    eval them. This imitates the behavior of the "real" CB (i.e. the settings
-    choices are set BEFORE code executes).  NOTE:  YOU WILL HAVE TO CHOOSE YOUR
-    SCRIPT FILE EVERY TIME IF YOU USE THIS METHOD!  No way around this!  JS will
-    not permit access to files on your computer without some sort of direct user
-    interaction. The act of "choosing a file" is considered by JS to be per-
-    mission to access that file (even though it's a nuisance here in this very
-    limited case, as a general security precaution it's probably a VERY good
-    thing JS does this)
--   Leave both the optional script and Init function out of main.html.  You can
-    then select the script at runtime and optionally specify an Init function.
+Simply use the "Browse" or "Choose File" (label is browser dependent) button
+to locate and select your script file.  The ADK will then try to parse your
+file to locate the "cb.settings_choices = " line(s) and eval them. This
+imitates the behavior of the "real" CB (i.e. the settings choices are set
+BEFORE code executes).  NOTE:  YOU WILL HAVE TO CHOOSE YOUR SCRIPT FILE EVERY
+TIME IF YOU USE THIS METHOD!  No way around this!  JS will not permit access
+to files on your computer without some sort of direct user interaction. The
+act of "choosing a file" is considered by JS to be permission to access that
+file (even though it's a nuisance here in this very limited case, as a general
+security precaution it's probably an EXCELLENT thing JS does this)
 
-    Confused yet?  These two scenarios that will cover about 99% of everything:
+Next, the ADK parses the function names from your script file and populates
+the "Init function" dropdown box.  If it finds a function name matching
+"init" (case-insensitive) it will pre-select that function for you.  Other-
+wise it assumes you are working without an init function and preselects
+"(none)".  I'm tempted to go into an old-school rant about the wisdom of
+executing code outside of functions . . . but JS permits it . . . so I'll
+just have to accept it as "valid" . . . and leave it at that.
 
-    1.  You have an Init function named myInit() in a script file named
-        "MyScript.js"  Simply make your main.html file look like:
-
-        <SCRIPT>cbInit( "MyScript.js","myInit")</SCRIPT>
-
-        And then COMPLETELY IGNORE THE SMALL "Script & Init Function" PANEL.
-        (It's not required or recommended if both items are specified.)
-
-     2. You do NOT use an Init function and/or you execute code outside of
-        functions in your script file named "MyScript.js".  Make your main.html
-        look like:
-
-        <SCRIPT>cbInit("","")</SCRIPT>
-
-        Then in the "Script & Init Function" Panel, hit "Choose File" to browse
-        to your "MyScript.js" file, leave "Init function" blank, and hit OK.
-        NOTE:  You MUST use the "Choose File" (or whatever your browser calls
-        it) button -- this is what gives JS permission to read the file. Then
-        fill in any settings in the "Startup" panel and hit "Activate".
-
-      Other possible combinations of HTML and UI options may (probably) work
-      but these are the simplest and most tested.  Perhaps sometime in the not
-      too distant future if I get happier with the "<input type='file'>" tag
-      this'll all converge into one clean and simpler method.
+Note: Pre v1.4 users who are accustomed to specifying BOTH their script
+name AND init function via HTML may continue to do so, but this should be
+considered a deprecated feature.
 
 *******************************************************************************
 *******************************************************************************
@@ -164,6 +141,11 @@ emotes are stored in the "emotes" folder located under "runtime".  The filename
 of the emotes should match your emote tag, less the extension.  No attempt is
 made to maintain mappings of tags to filenames.  So, for example, to show the
 smile.gif file, you would use ":smile"
+
+Note:  There is a long-standing Webkit bug in Chrome wherein the alt text of
+an img tag will not display (instead you see a broken image graphic).  While
+this bug COULD be worked around, it's outside the current scope of this project
+to do so.  Sorry.
 
 *******************************************************************************
 *******************************************************************************
