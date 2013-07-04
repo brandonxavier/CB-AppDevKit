@@ -565,7 +565,8 @@ function createTippingHTML(defaultTip, defaultNote) {
     }
 
     hstr = "<LABEL >Tip Amount</LABEL>" +
-        "<INPUT type='text' id='inTipAmount' class='inputAreas' STYLE='width:15%' + value='" + defaultTip + "'>";
+        "<INPUT type='text' id='inTipAmount' class='inputAreas' STYLE='width:15%' + value='" +
+        defaultTip + "'>";
 
     if ( currTipOptions.length == 0 ) { // Display the default note box
         hstr = hstr + "<LABEL STYLE='display:block'>Tip Note</LABEL>" +
@@ -591,28 +592,30 @@ function createTippingHTML(defaultTip, defaultNote) {
 
 function createHTMLFromSettings(allsettings) {
 
-    var str, e, s;
+    var str, e, s, selectDefaults = [];
 
     str = "";
 
     for ( s = 0; s < allsettings.length; s++ ) {
         if ( allsettings[s].label != undefined ) {
-            str += '<DIV STYLE="display:inline-block;margin:0;width:90%;height:28px"><LABEL >' + allsettings[s].label + "</LABEL>";
+            str += '<DIV STYLE="display:inline-block;margin:0;width:90%;height:28px"><LABEL >' +
+                allsettings[s].label + "</LABEL>";
         } else {
-            str += '<DIV STYLE="display:inline-block;margin:0;width:90%;height:28px"><LABEL >' + allsettings[s].name + "</LABEL>";
+            str += '<DIV STYLE="display:inline-block;margin:0;width:90%;height:28px"><LABEL >' +
+                allsettings[s].name + "</LABEL>";
         }
 
         //
         // For HTML DISPLAY purposes, there's little difference between a string and an int
         //
         if ( allsettings[s].type == "int" || allsettings[s].type == "str" ) {
-            str = str + '<INPUT type="text"  id="in' + allsettings[s].name +
+            str += '<INPUT type="text"  id="in' + allsettings[s].name +
                 '" ';
             if ( allsettings[s].default != undefined ) {
-                str = str + 'value="' + allsettings[s].default + '" ';
+                str += 'value="' + allsettings[s].default + '" ';
             }
             if ( allsettings[s].defaultValue != undefined ) {
-                str = str + 'value="' + allsettings[s].defaultValue + '" ';
+                str += 'value="' + allsettings[s].defaultValue + '" ';
             }
         } else {
             /**
@@ -622,10 +625,15 @@ function createHTMLFromSettings(allsettings) {
                 str = str + '<SELECT id=lst' + allsettings[s].name + ' >';
                 for ( var q in allsettings[s] ) {
                     if ( q.match( "^choice*" ) != null ) {
-                        str = str + '<OPTION value="' + allsettings[s][q] + '">' + allsettings[s][q] + '</OPTION>'
+                        str += '<OPTION value="' + allsettings[s][q] + '">' + allsettings[s][q] +
+                            '</OPTION>';
+                    }
+                    if ( q == "defaultValue" ) {
+                        selectDefaults.push( {'name': "lst" + allsettings[s].name,
+                            'defaultValue': allsettings[s][q]} );
                     }
                 }
-                str = str + "</SELECT>"
+                str += "</SELECT>"
             }
         }
 
@@ -640,9 +648,19 @@ function createHTMLFromSettings(allsettings) {
     e = document.getElementById( "Startup" );
 
     // Add the "Activate Button"
-    str = str + "<BUTTON id='btnActivate' class='button' onclick='btnActivateClicked()'>Activate</BUTTON>";
+    str += "<BUTTON id='btnActivate' class='button' onclick='btnActivateClicked()'>Activate</BUTTON>";
 
     e.innerHTML = str;
+
+    // Now that the "form" is created, set the default for the selects
+    for ( s = 0; s < selectDefaults.length; s++ ) {
+        e = document.getElementById( selectDefaults[s].name );
+        for ( q = 0; q < e.options.length; q++ ) {
+            if ( e.options[q].value == selectDefaults[s].defaultValue ) {
+                e.selectedIndex = q;
+            }
+        }
+    }
 
     var scrpt = document.createElement( "script" );
     scrpt.innerHTML = "function validateSettings() " + createValidationCode( allsettings );
@@ -715,7 +733,7 @@ function objTipObject(fromUser, amt, msg) {
     this['from_user_tipped_recently'] = cb.cbUsers[fromUser].tipped_recently; // is the user a “dark blue”?
     this['from_user_gender'] = cb.cbUsers[fromUser].gender; // “m” (male), “f” (female), “s” (shemale), or “c” (couple)
 
-    cb.cbUsers[fromUser].tipped_recently = true; // TODO: Should THIS tip count as recently tipped?
+    cb.cbUsers[fromUser].tipped_recently = true;
 
 }
 
@@ -758,6 +776,7 @@ function createMesg(fromUser, mesg) {
 
     var tmp = [];
 
+    // why am I using "tmp" instead of "this."?
     tmp['m'] = mesg;
     tmp['user'] = fromUser;
     tmp['c'] = "black";
