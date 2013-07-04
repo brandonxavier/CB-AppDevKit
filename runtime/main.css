@@ -164,14 +164,15 @@ div {
 .leftColumn {
     text-align: right;
     font-weight: bold;
-    padding-right: 1px;
+    padding-right: 0;
 }
 
 .topLeftColumn {
     text-align: right;
     font-weight: bold;
-    padding-right: 1px;
+    padding-right: 0;
     color: #057205;
+    font-size: 94%;
 }
 
 .rightColumn {
@@ -179,7 +180,7 @@ div {
     /* display: inline-table; */
     text-align: left;
     vertical-align: middle;
-    padding-left: 1px;
+    padding-left: 2px;
 }
 
 .singleColumn, .singleTopColumn {
