@@ -109,7 +109,15 @@ function objCB() {
     function changeRoomSubject(new_subject) {
         document.getElementById( "txtSubject" ).value = new_subject;
         this.writeToTextarea( "txtSubject", new_subject, true );
+        var area = document.getElementById( "txtUserChat" );
+        area.innerHTML += "<span style='color: #DC5500;background-color: white;font-weight:bold;' >" +
+            "room subject changed to \"" + new_subject + "\"</span></br>";
+        area.scrollTop = area.scrollHeight;
 
+        area = document.getElementById( "txtBroadcaster" );
+        area.innerHTML += "<span style='color: #DC5500;background-color: white;font-weight:bold;' >" +
+            "room subject changed to \"" + new_subject + "\"</span></br>";
+        area.scrollTop = area.scrollHeight;
     }
 
     function chatNotice(message, to_user) {
@@ -341,8 +349,6 @@ function objCB() {
      */
     function writeToChatArea(targetArea, msg) {
 
-        // cb.log("typeof msg" + typeof msg);
-
         var mstr = "";
 
         //
@@ -379,7 +385,7 @@ function objCB() {
         }
 
         // Foreground isn't so bad
-        mstr = mstr + "<SPAN STYLE='color:" + msg['c'] + "'>" + msg['m'] + "</SPAN";
+        mstr = mstr + "<SPAN STYLE='color:" + msg['c'] + "'>" + msg['m'] + "</SPAN>";
 
         // Close up the background span
         if ( msg['background'] != "white" && msg['background'] != "#ffffff" ) {
@@ -388,7 +394,7 @@ function objCB() {
 
 
         // End with a newline
-        mstr = mstr + "</br></br>"; // No, I don't know why I need 2 of these here
+        mstr = mstr + "</br>";
 
         var area = document.getElementById( targetArea );
         area.innerHTML += mstr;
