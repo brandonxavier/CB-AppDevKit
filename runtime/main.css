@@ -51,6 +51,25 @@ div {
     margin: 5px;
 }
 
+#Settings {
+    width: 84%;
+    height: 100%;
+    overflow-y: scroll;
+    border: 0;
+    margin: 0;
+}
+
+#Activate {
+    width: 14%;
+    height: 100%;
+    border: 0;
+    margin: 0;
+    padding: 4px;
+    float: none;
+    vertical-align: middle;
+    display: table;
+}
+
 #Subject {
     overflow-y: scroll;
     overflow-x: scroll;
@@ -215,10 +234,6 @@ div {
     margin: 13px auto;
 }
 
-#Startup {
-    overflow-y: scroll;
-}
-
 #txtSubject {
     resize: none;
     margin: 13px;
@@ -246,11 +261,11 @@ div {
 }
 
 #btnActivate {
-    vertical-align: bottom;
+    vertical-align: middle;
+    float: none;
     text-align: center;
     margin: 0 auto;
-    display: block;
-    position: relative;
+
 }
 
 #btnSendTip {

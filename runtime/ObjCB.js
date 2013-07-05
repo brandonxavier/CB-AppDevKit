@@ -29,6 +29,13 @@ var ADK = {'readyToRun': false, 'scriptName': "", 'initFunction': "",
 
 var cb;
 
+$( document ).ready( function () {
+
+    // do some jquery stuff here
+
+} );
+
+
 function objCB() {
 
     this.room_slug = "Betty Broadcaster"; // Just a random name I picked
@@ -589,9 +596,24 @@ function createTippingHTML(defaultTip, defaultNote) {
 
 }
 
+function loadSettings(settings) {
 
+    var z;
+}
 function createHTMLFromSettings(allsettings) {
 
+    /**
+     *
+     * This is in the process of being replaced by 2 functions:
+     *
+     * loadSettings(settings var) -- returns an array of objects
+     *      corresponding to the settings variable (either settings_choices
+     *      or tip options)
+     * showSettings(div to display in, settings objects) - generic
+     *      JQuery settings display (which will also place validation
+     *      handlers for each field)
+     *
+     */
     var str, e, s, selectDefaults = [];
 
     str = "";
@@ -645,10 +667,10 @@ function createHTMLFromSettings(allsettings) {
         str = str + "</DIV>"
     }
 
-    e = document.getElementById( "Startup" );
+    e = document.getElementById( "Settings" );
 
     // Add the "Activate Button"
-    str += "<BUTTON id='btnActivate' class='button' onclick='btnActivateClicked()'>Activate</BUTTON>";
+    // str += "<BUTTON id='btnActivate' class='button' onclick='btnActivateClicked()'>Activate</BUTTON>";
 
     e.innerHTML = str;
 
