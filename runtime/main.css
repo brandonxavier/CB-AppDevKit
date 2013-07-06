@@ -303,13 +303,18 @@ div {
 
 }
 
-.settingField {
+.settingField, .errorLabel {
     width: 48%;
-    height: 60px;
+    height: 48px;
     border: 0;
     margin: 0;
     padding: 0;
     padding-left: 2px;
     text-align: left;
     float: right;
+}
+
+.errorLabel {
+    height: 16px;
+    color: red;
 }
