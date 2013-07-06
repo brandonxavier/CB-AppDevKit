@@ -61,7 +61,7 @@ function objCB() {
     this.tipOptions = [];
     if ( ADK.settingsChoices != "" ) {
         this.settings_choices = eval( ADK.settingsChoices );
-        createHTMLFromSettings( this.settings_choices );
+        showSettings( "#Settings", this.settings_choices );
         createValidationCode( this.settings_choices );
     } else {
         this.settings_choices = [];
@@ -596,9 +596,86 @@ function createTippingHTML(defaultTip, defaultNote) {
 
 }
 
-function loadSettings(settings) {
+/**
+ *
+ * @param whichDiv
+ * @param currSettings
+ */
+function showSettings(whichDiv, currSettings) {
 
-    var z;
+    var str, e, s, selectDefaults = [];
+
+    str = "";
+
+    for ( s = 0; s < currSettings.length; s++ ) {
+        if ( currSettings[s].label != undefined ) {
+            $( whichDiv ).append( "<DIV class='settingLabel'>" + currSettings[s].label + "</DIV>" );
+        } else {
+            $( whichDiv ).append( "<DIV class='settingLabel'>" + currSettings[s].name + "</DIV>" );
+        }
+
+        //
+        // For HTML DISPLAY purposes, there's little difference between a string and an int
+        //
+        if ( currSettings[s].type == "int" || currSettings[s].type == "str" ) {
+            str = "<DIV class='settingField'><INPUT type='text' id='in" + currSettings[s].name +
+                "' ";
+            if ( currSettings[s].default != undefined ) {
+                str += 'value="' + currSettings[s].default + '" ';
+            }
+            if ( currSettings[s].defaultValue != undefined ) {
+                str += 'value="' + currSettings[s].defaultValue + '" ';
+            }
+            $( whichDiv ).append( str + "></DIV>" );
+        } else {
+            if ( currSettings[s].type == "choice" ) {
+                str = "<DIV class='settingField'><SELECT id=lst" + currSettings[s].name + " >";
+                for ( var q in currSettings[s] ) {
+                    if ( q.match( "^choice*" ) != null ) {
+                        str += '<OPTION value="' + currSettings[s][q] + '">' + currSettings[s][q] +
+                            '</OPTION>';
+                    }
+                    if ( q == "defaultValue" ) {
+                        selectDefaults.push( {'name': "lst" + currSettings[s].name,
+                            'defaultValue': currSettings[s][q]} );
+                    }
+                }
+                str += "</SELECT></DIV>"
+                $( whichDiv ).append( str );
+            }
+        }
+
+
+        /* if ( str.charAt( str.length - 1 ) != ">" ) {
+         str = str + ">";
+         }
+
+         str = str + "</DIV>" */
+    }
+
+    // e = document.getElementById( whichDiv );
+
+    // Add the "Activate Button"
+    // str += "<BUTTON id='btnActivate' class='button' onclick='btnActivateClicked()'>Activate</BUTTON>";
+
+    // $(whichDiv).html(str);
+
+    // Now that the "form" is created, set the default for the selects
+    for ( s = 0; s < selectDefaults.length; s++ ) {
+        e = document.getElementById( selectDefaults[s].name );
+        for ( q = 0; q < e.options.length; q++ ) {
+            if ( e.options[q].value == selectDefaults[s].defaultValue ) {
+                e.selectedIndex = q;
+            }
+        }
+    }
+
+    var scrpt = document.createElement( "script" );
+    scrpt.innerHTML = "function validateSettings() " + createValidationCode( currSettings );
+    document.body.appendChild( scrpt );
+
+    return str;
+
 }
 function createHTMLFromSettings(allsettings) {
 
@@ -1151,7 +1228,7 @@ function loadScript() {
 function callback() {
     cb.log( ADK.trueScriptName + " loaded" );
     if ( ADK.settingsChoices == "" ) {
-        createHTMLFromSettings( cb.settings_choices ); // Script has to be loaded before these can be done
+        showSettings( "#Settings", cb.settings_choices ); // Script has to be loaded before these can be done
         createValidationCode( cb.settings_choices );
     }
     createTippingHTML( 1, "" );

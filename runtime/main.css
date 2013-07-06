@@ -53,10 +53,11 @@ div {
 
 #Settings {
     width: 84%;
-    height: 100%;
+    height: 95%;
     overflow-y: scroll;
     border: 0;
     margin: 0;
+    padding-top: 10px;
 }
 
 #Activate {
@@ -291,3 +292,24 @@ div {
     display: block;
 }
 
+.settingLabel {
+    width: 48%;
+    height: 60px;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    padding-right: 2px;
+    text-align: right;
+
+}
+
+.settingField {
+    width: 48%;
+    height: 60px;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    padding-left: 2px;
+    text-align: left;
+    float: right;
+}
