@@ -480,6 +480,103 @@ function objCBUser(username, gender, fanclub, has_tokens, is_mod, tipped_recentl
 
 }
 
+
+/**
+ *
+ * @param whichDiv
+ * @param currSettings
+ */
+function showSettings(whichDiv, currSettings) {
+
+    var str, vStr, currId, f, e, s, selectDefaults = [];
+
+    str = "";
+
+    /**
+     *
+     * Generate the validation functions now . . .
+     *
+     * I find it seems to be more reliable to generate
+     * and <SCRIPT> all the elements at once - otherwise
+     * assigning the handlers to the HTML elements (onblur)
+     * tend to get squirrelly.
+     *
+     */
+    vStr = "";
+    for ( s = 0; s < currSettings.length; s++ ) {
+        vStr += createValidationCode( currSettings[s] );
+    }
+    $( "body" ).append( "<SCRIPT>" + vStr + "</SCRIPT>" );
+    /* var scrpt = document.createElement( "script" );
+     scrpt.innerHTML = vStr;
+     document.body.appendChild( scrpt );
+     */
+
+    for ( s = 0; s < currSettings.length; s++ ) {
+        if ( currSettings[s].label != undefined ) {
+            $( whichDiv ).append( "<DIV class='settingLabel'>" + currSettings[s].label + "</DIV>" );
+        } else {
+            $( whichDiv ).append( "<DIV class='settingLabel'>" + currSettings[s].name + "</DIV>" );
+        }
+
+
+        //
+        // For HTML DISPLAY purposes, there's little difference between a string and an int
+        //
+        if ( currSettings[s].type == "int" || currSettings[s].type == "str" ) {
+
+            currId = "in" + currSettings[s].name;
+
+            // vStr = createValidationCode( currSettings[s] );
+
+            str = "<DIV class='settingField'><INPUT type='text' id='" + currId + "' ";
+            str += "onchange='validate" + currId + "()' ";
+            // str += "onblur='validate" + currId + "()' ";
+            str += "onkeydown='clearErrors()' ";
+            str += "onclick='clearErrors()' ";
+            if ( currSettings[s].default != undefined ) {
+                str += 'value="' + currSettings[s].default + '" ';
+            }
+            if ( currSettings[s].defaultValue != undefined ) {
+                str += 'value="' + currSettings[s].defaultValue + '" ';
+            }
+            $( whichDiv ).append( str + "></DIV>" );
+        } else {
+            if ( currSettings[s].type == "choice" ) {
+
+                currId = "lst" + currSettings[s].name;
+
+                str = "<DIV class='settingField'><SELECT id=" + currId + " >";
+                for ( var q in currSettings[s] ) {
+                    if ( q.match( "^choice*" ) != null ) {
+                        str += '<OPTION value="' + currSettings[s][q] + '">' + currSettings[s][q] +
+                            '</OPTION>';
+                    }
+                    if ( q == "defaultValue" ) {
+                        selectDefaults.push( {'name': currId,
+                            'defaultValue': currSettings[s][q]} );
+                    }
+                }
+                str += "</SELECT></DIV>"
+                $( whichDiv ).append( str );
+            }
+        }
+        // f=eval("validate"+currId);
+        // $("#"+currId ).on("change", f());
+    }
+
+    // Now that the "form" is created, set the default for the selects
+    for ( s = 0; s < selectDefaults.length; s++ ) {
+        e = document.getElementById( selectDefaults[s].name );
+        for ( q = 0; q < e.options.length; q++ ) {
+            if ( e.options[q].value == selectDefaults[s].defaultValue ) {
+                e.selectedIndex = q;
+            }
+        }
+    }
+
+}
+
 /**
  *
  * createValidationCode - Takes a single settings object and returns
@@ -490,54 +587,64 @@ function objCBUser(username, gender, fanclub, has_tokens, is_mod, tipped_recentl
  */
 function createValidationCode(sc) {
 
-    var fstr;
+    var fstr, idName, idSelector;
 
-    fstr = "{";
+    fstr = "";
 
     // for ( x = 0; x < sc.length; x++ ) {
 
     switch (sc.type) {
         case "int":
+            idName = "in" + sc.name;
+            idSelector = "#" + idName;
             if ( sc.required == true || typeof sc.required == "undefined" ) {
-                fstr = "{ alert('int validation'); if ($('#in" + sc.name + "').value.trim() == '') " +
-                    " { $('#in" + sc.name + "').append(\"<DIV class='errorLabel'>"
-                    + (typeof sc.label == 'undefined' ? sc.name : sc.label) + " is required</DIV>\"); }" +
-                    " else { cb.settings['" + sc.name + "'] = $('#in" + sc.name +
-                    "').value.trim();}";
+                fstr = " if (" + makeJQS( idSelector ) + ".val().trim() == '') { " +
+                    " validationError('" + idSelector + "', '" +
+                    useLabel( sc.name, sc.label ) + " is required'); return false;}"
             }
             if ( typeof sc.minValue != "undefined" ) {
-                fstr = fstr + " if ($('#in" + sc.name + "').value < " + sc.minValue + ") " +
-                    " { return '" + (typeof sc.label == 'undefined' ? sc.name : sc.label) + " below min. value " +
-                    sc.minValue + "' }" +
-                    " else { cb.settings['" + sc.name + "'] = parseInt($('#in" + sc.name +
-                    "').value);}";
+                fstr += " if (parseInt(" + makeJQS( idSelector ) + ".val()) < " + sc.minValue + ") { " +
+                    " validationError('" + idSelector + "', '" + useLabel( sc.name, sc.label ) +
+                    " below min. value " + sc.minValue + "'); return false;}"
             }
             if ( typeof sc.maxValue != "undefined" ) {
-                fstr = fstr + " if (parseInt($('#in" + sc.name + "').value) > " +
-                    sc.maxValue + ") " +
-                    " { return '" + (typeof sc.label == 'undefined' ? sc.name : sc.label) + " above max value " +
-                    sc.maxValue + "' }" +
-                    " else { cb.settings['" + sc.name + "'] = parseInt($('#in" + sc.name +
-                    "').value);}";
+                fstr += " if (parseInt(" + makeJQS( idSelector ) + ".val()) > " + sc.maxValue + ") { " +
+                    " validationError('" + idSelector + "', '" + useLabel( sc.name, sc.label ) +
+                    " above max. value " + sc.maxValue + "'); return false;}"
             }
-
+            fstr += "{ cb.settings['" + sc.name + "'] = parseInt(" + makeJQS( idSelector ) +
+                ".val());}";
+            // fstr += "}";
+            // fstr = "{ alert('Int validation'); }";
             break;
         case "str":
+            idName = "in" + sc.name;
+            idSelector = "#" + idName;
             if ( sc.required == true || typeof sc.required == "undefined" ) {
-                fstr = fstr + " if ($('#in" + sc.name + "').value.trim() == '') " +
-                    " { return '" + (sc.label == undefined ? sc.name : sc.label) + " is required' }" +
-                    " else { cb.settings['" + sc.name + "'] = " +
-                    " $('#in" + sc.name + "').value.trim();}";
-            } else {
-                // No error checking here, just add whatever is in the field
-                fstr = fstr + "{ cb.settings['" + sc.name + "'] = $('#in" + sc.name +
-                    "').value.trim();}";
+                fstr += "if (" + makeJQS( idSelector ) + ".val().trim() == '') { " +
+                    " validationError('" + idSelector + "', '" + useLabel( sc.name, sc.label ) +
+                    " is required '); return false;}";
             }
+            if ( sc.minLength != "undefined" ) {
+                fstr += "if (" + makeJQS( idSelector ) + ".val().trim().length < " + sc.minLength + ") { " +
+                    " validationError('" + idSelector + "', '" + useLabel( sc.name, sc.label ) +
+                    " min. length is " + sc.minLength + " '); return false;}";
+            }
+            if ( sc.maxLength != "undefined" ) {
+                fstr += "if (" + makeJQS( idSelector ) + ".val().trim().length > " + sc.maxLength + ") { " +
+                    " validationError('" + idSelector + "', '" + useLabel( sc.name, sc.label ) +
+                    " max. length is " + sc.maxLength + " '); return false;}";
+            }
+            fstr += "{ cb.settings['" + sc.name + "'] = " + makeJQS( idSelector ) + ".val().trim();}";
+            // fstr += "}";
+            // fstr = "{ alert('String validation'); }";
             break;
         case "choice":
+            idName = "lst" + sc.name;
             // No error checking here, just add whatever is selected
-            fstr = fstr + "{ var e = document.getElementById('lst" + sc.name + "'); cb.settings['" +
+            fstr = "{ var e = document.getElementById('lst" + sc.name + "'); cb.settings['" +
                 sc.name + "'] = e.options[e.selectedIndex].value }";
+            // fstr = "{ alert('choice validation');}";
             break;
         default:
             // cb.log( "Skipping " + sc.name + " Unknown Type: " + sc.type );
@@ -545,9 +652,65 @@ function createValidationCode(sc) {
     }
     // }
 
-    fstr = fstr + " return ''; }";
+    // fstr = fstr + " return ''; }";
+    // alert(fstr);
+    return "function validate" + idName + "() {" + fstr + "}";
 
-    return fstr;
+}
+
+function validationError(id, mesg) {
+
+    $( id ).after( "<DIV class='errorLabel'>" + mesg + "</DIV>" );
+    setTimeout( function () {
+        $( id ).focus();
+    }, 50 );
+}
+
+function clearErrors() {
+
+    $( ".errorLabel" ).remove();
+
+}
+
+/**
+ *
+ * makeJQS - just wraps a JQS selector in "$(' . . . ')."
+ *           to make the sources a little cleaner
+ *
+ * @param tgt
+ * @returns {string}
+ */
+function makeJQS(tgt) {
+
+    return "$('" + tgt + "')";
+
+}
+
+function useLabel(sname, slabel) {
+
+    return (typeof slabel == 'undefined' ? sname : slabel);
+
+}
+function btnActivateClicked() {
+
+//noinspection JSUnresolvedFunction
+    if ( validateSettings() == "" ) {
+        cb.log( "Validation successful" );
+        cb.changeRoomSubject( cb.room_slug + "'s room" );
+        if ( ADK.initFunction != "" )
+            window[ADK.initFunction]();
+        else {
+            // NOW, it's safe to load the script after the settings_choices have
+            // been input and validated
+            loadScript();
+        }
+
+        cb.drawPanel();
+
+    }
+    else { //noinspection JSUnresolvedFunction
+        cb.log( "Validation failed: " + validateSettings() );
+    }
 
 }
 
@@ -590,135 +753,6 @@ function createTippingHTML(defaultTip, defaultNote) {
 
 }
 
-/**
- *
- * @param whichDiv
- * @param currSettings
- */
-function showSettings(whichDiv, currSettings) {
-
-    var str, vStr, currId, e, s, selectDefaults = [];
-
-    str = "";
-
-    for ( s = 0; s < currSettings.length; s++ ) {
-        if ( currSettings[s].label != undefined ) {
-            $( whichDiv ).append( "<DIV class='settingLabel'>" + currSettings[s].label + "</DIV>" );
-        } else {
-            $( whichDiv ).append( "<DIV class='settingLabel'>" + currSettings[s].name + "</DIV>" );
-        }
-
-
-        //
-        // For HTML DISPLAY purposes, there's little difference between a string and an int
-        //
-        if ( currSettings[s].type == "int" || currSettings[s].type == "str" ) {
-
-            currId = "in" + currSettings[s].name;
-
-            str = "<DIV class='settingField'><INPUT type='text' id='" + currId +
-                // "' ";
-                "' onblur='validate" + currId + "' ";
-            if ( currSettings[s].default != undefined ) {
-                str += 'value="' + currSettings[s].default + '" ';
-            }
-            if ( currSettings[s].defaultValue != undefined ) {
-                str += 'value="' + currSettings[s].defaultValue + '" ';
-            }
-            $( whichDiv ).append( str + "></DIV>" );
-        } else {
-            if ( currSettings[s].type == "choice" ) {
-
-                currId = "lst" + currSettings[s].name;
-
-                str = "<DIV class='settingField'><SELECT id=" + currId + " >";
-                for ( var q in currSettings[s] ) {
-                    if ( q.match( "^choice*" ) != null ) {
-                        str += '<OPTION value="' + currSettings[s][q] + '">' + currSettings[s][q] +
-                            '</OPTION>';
-                    }
-                    if ( q == "defaultValue" ) {
-                        selectDefaults.push( {'name': currId,
-                            'defaultValue': currSettings[s][q]} );
-                    }
-                }
-                str += "</SELECT></DIV>"
-                $( whichDiv ).append( str );
-            }
-        }
-        /**
-         *
-         * Generate the validation functions now . . .
-         *
-         * You may be wondering why I'm not just using some anonymous
-         * functions such as:
-         *
-         *  $("#" + currId ).blur(function() {
-         *      // Slap some validation code here
-         *  })
-         *
-         * Simple really . . . I want to be able to trigger ALL the
-         * callbacks at once via a JQuery callback array.  That way a
-         * user doesn't have to visit every field for it to be validated
-         * (and loaded into the real settings array).
-         *
-         */
-        vStr = createValidationCode( currSettings[s] );
-        var scrpt = document.createElement( "script" );
-        scrpt.innerHTML = "function validate" + currId + "() " + vStr
-        // document.body.appendChild( scrpt );
-        $( "body" ).append( scrpt );
-
-        // $("#" + currId ).on("blur" , "validate" + currId);
-        // $("#" + currId ).blur("validate" + currId);
-        // $("#" + currId ).blur(function(){vStr});
-        // $("#" + currId ).blur(function());
-        // $("#" + currId ).blur(function(){alert("Blur.");});
-        // settingsCallbacks.add("validate"+currId);
-
-
-    }
-
-    // Now that the "form" is created, set the default for the selects
-    for ( s = 0; s < selectDefaults.length; s++ ) {
-        e = document.getElementById( selectDefaults[s].name );
-        for ( q = 0; q < e.options.length; q++ ) {
-            if ( e.options[q].value == selectDefaults[s].defaultValue ) {
-                e.selectedIndex = q;
-            }
-        }
-    }
-
-    /* var scrpt = document.createElement( "script" );
-     scrpt.innerHTML = "function validateSettings() " + createValidationCode( currSettings );
-     document.body.appendChild( scrpt ); */
-
-    return str;
-
-}
-
-function btnActivateClicked() {
-
-//noinspection JSUnresolvedFunction
-    if ( validateSettings() == "" ) {
-        cb.log( "Validation successful" );
-        cb.changeRoomSubject( cb.room_slug + "'s room" );
-        if ( ADK.initFunction != "" )
-            window[ADK.initFunction]();
-        else {
-            // NOW, it's safe to load the script after the settings_choices have
-            // been input and validated
-            loadScript();
-        }
-
-        cb.drawPanel();
-
-    }
-    else { //noinspection JSUnresolvedFunction
-        cb.log( "Validation failed: " + validateSettings() );
-    }
-
-}
 
 Object.size = function (obj) {
     var size = 0, key;

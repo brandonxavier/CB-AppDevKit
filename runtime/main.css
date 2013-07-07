@@ -293,18 +293,19 @@ div {
 }
 
 .settingLabel {
-    width: 48%;
-    height: 60px;
+    width: 47%;
+    height: 48px;
     border: 0;
     padding: 0;
     margin: 0;
     padding-right: 2px;
     text-align: right;
+    display: block;
 
 }
 
 .settingField, .errorLabel {
-    width: 48%;
+    width: 47%;
     height: 48px;
     border: 0;
     margin: 0;
@@ -316,5 +317,9 @@ div {
 
 .errorLabel {
     height: 16px;
+    width: 90%;
     color: red;
+    display: block;
+    float: none;
+    font-size: 11px;
 }
