@@ -304,6 +304,10 @@ div {
 
 }
 
+.settingInput {
+    /* Just an empty class for selector purposes */
+}
+
 .settingField, .errorLabel {
     width: 47%;
     height: 48px;

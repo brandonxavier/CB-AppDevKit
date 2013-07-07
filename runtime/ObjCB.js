@@ -63,7 +63,7 @@ function objCB() {
     if ( ADK.settingsChoices != "" ) {
         this.settings_choices = eval( ADK.settingsChoices );
         showSettings( "#Settings", this.settings_choices );
-        createValidationCode( this.settings_choices );
+        // createValidationCode( this.settings_choices );
     } else {
         this.settings_choices = [];
     }
@@ -529,7 +529,7 @@ function showSettings(whichDiv, currSettings) {
 
             // vStr = createValidationCode( currSettings[s] );
 
-            str = "<DIV class='settingField'><INPUT type='text' id='" + currId + "' ";
+            str = "<DIV class='settingField'><INPUT type='text' class='settingInput' id='" + currId + "' ";
             str += "onchange='validate" + currId + "()' ";
             // str += "onblur='validate" + currId + "()' ";
             str += "onkeydown='clearErrors()' ";
@@ -546,14 +546,14 @@ function showSettings(whichDiv, currSettings) {
 
                 currId = "lst" + currSettings[s].name;
 
-                str = "<DIV class='settingField'><SELECT id=" + currId + " >";
+                str = "<DIV class='settingField'><SELECT  class='settingInput' id=" + currId + " >";
                 for ( var q in currSettings[s] ) {
                     if ( q.match( "^choice*" ) != null ) {
                         str += '<OPTION value="' + currSettings[s][q] + '">' + currSettings[s][q] +
                             '</OPTION>';
                     }
                     if ( q == "defaultValue" ) {
-                        selectDefaults.push( {'name': currId,
+                        selectDefaults.push( {'name': "#" + currId,
                             'defaultValue': currSettings[s][q]} );
                     }
                 }
@@ -567,12 +567,11 @@ function showSettings(whichDiv, currSettings) {
 
     // Now that the "form" is created, set the default for the selects
     for ( s = 0; s < selectDefaults.length; s++ ) {
-        e = document.getElementById( selectDefaults[s].name );
-        for ( q = 0; q < e.options.length; q++ ) {
-            if ( e.options[q].value == selectDefaults[s].defaultValue ) {
-                e.selectedIndex = q;
-            }
-        }
+
+        $( selectDefaults[s].name + " option" ).each( function () {
+            this.selected = (this.text == selectDefaults[s].defaultValue);
+        } );
+
     }
 
 }
@@ -602,6 +601,10 @@ function createValidationCode(sc) {
                     " validationError('" + idSelector + "', '" +
                     useLabel( sc.name, sc.label ) + " is required'); return false;}"
             }
+            // Not a settings_choice . . . just common sense
+            fstr += " if ( isNaN(parseInt(" + makeJQS( idSelector ) + ".val().trim())) == true ) { " +
+                " validationError('" + idSelector + "', '" +
+                useLabel( sc.name, sc.label ) + " must be numeric'); return false;}";
             if ( typeof sc.minValue != "undefined" ) {
                 fstr += " if (parseInt(" + makeJQS( idSelector ) + ".val()) < " + sc.minValue + ") { " +
                     " validationError('" + idSelector + "', '" + useLabel( sc.name, sc.label ) +
@@ -641,9 +644,9 @@ function createValidationCode(sc) {
             break;
         case "choice":
             idName = "lst" + sc.name;
+            idSelector = "#" + idName;
             // No error checking here, just add whatever is selected
-            fstr = "{ var e = document.getElementById('lst" + sc.name + "'); cb.settings['" +
-                sc.name + "'] = e.options[e.selectedIndex].value }";
+            fstr = "{  cb.settings['" + sc.name + "'] = " + makeJQS( idSelector ) + ".val(); }";
             // fstr = "{ alert('choice validation');}";
             break;
         default:
@@ -674,8 +677,9 @@ function clearErrors() {
 
 /**
  *
- * makeJQS - just wraps a JQS selector in "$(' . . . ')."
- *           to make the sources a little cleaner
+ * makeJQS - just wraps a JQ selector in "$(' . . . ')"
+ *           to make the sources a little cleaner in
+ *           generated code.
  *
  * @param tgt
  * @returns {string}
@@ -694,7 +698,13 @@ function useLabel(sname, slabel) {
 function btnActivateClicked() {
 
 //noinspection JSUnresolvedFunction
-    if ( validateSettings() == "" ) {
+    clearErrors();
+
+    $( ".settingInput" ).change();
+
+    if ( $( ".errorLabel" ).length == 0 ) {
+        $( "#btnActivate" ).prop( "disabled", true );
+        $( ".settingInput" ).prop( "disabled", true );
         cb.log( "Validation successful" );
         cb.changeRoomSubject( cb.room_slug + "'s room" );
         if ( ADK.initFunction != "" )
@@ -709,7 +719,7 @@ function btnActivateClicked() {
 
     }
     else { //noinspection JSUnresolvedFunction
-        cb.log( "Validation failed: " + validateSettings() );
+        // cb.log( "Validation failed: " + validateSettings() );
     }
 
 }
@@ -948,6 +958,22 @@ function okBtnClicked() {
     ADK.initFunction = getInitFunction();
 
     if ( ADK.scriptName != "" ) {
+        /**
+         *
+         * We need to disable the script/init/ok elements otherwise
+         * things will get very messy very quickly.  Main problem
+         * is all the generated code that gets injected into BODY.
+         *
+         * A secondary concern is a dev getting sloppy with closures/
+         * scoping/initializations.
+         *
+         * Rather than attempting to clear everything out, just make
+         * them start over every time.
+         *
+         */
+        $( "#inFileList" ).prop( "disabled", true );
+        $( "#lstFunctions" ).prop( "disabled", true );
+        $( "#btnOK" ).prop( "disabled", true );
         cb = new objCB();
         if ( ADK.initFunction != "" ) {  // We have an init function, so DON'T defer script loading
             loadScript();
@@ -1191,7 +1217,7 @@ function callback() {
     cb.log( ADK.trueScriptName + " loaded" );
     if ( ADK.settingsChoices == "" ) {
         showSettings( "#Settings", cb.settings_choices ); // Script has to be loaded before these can be done
-        createValidationCode( cb.settings_choices );
+        // createValidationCode( cb.settings_choices );
     }
     createTippingHTML( 1, "" );
 }
