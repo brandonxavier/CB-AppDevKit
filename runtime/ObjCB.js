@@ -546,7 +546,8 @@ function showSettings(whichDiv, currSettings) {
 
                 currId = "lst" + currSettings[s].name;
 
-                str = "<DIV class='settingField'><SELECT  class='settingInput' id=" + currId + " >";
+                str = "<DIV class='settingField'><SELECT  class='settingInput' id=" + currId + " ";
+                str += "onchange='validate" + currId + "()' >";
                 for ( var q in currSettings[s] ) {
                     if ( q.match( "^choice*" ) != null ) {
                         str += '<OPTION value="' + currSettings[s][q] + '">' + currSettings[s][q] +
