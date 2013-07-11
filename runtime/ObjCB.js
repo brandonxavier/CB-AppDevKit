@@ -24,8 +24,13 @@
  */
 
 var AppDevKit = true;
-var ADK = {'readyToRun': false, 'scriptName': "", 'initFunction': "",
-    settingsChoices: "", 'trueScriptName': "" };
+var ADK = {'readyToRun': false,
+    'scriptName': "",
+    'initFunction': "",
+    'settingsChoices': "",
+    'tipOptions': "",
+    'trueScriptName': ""
+};
 
 var cb;
 
@@ -34,8 +39,6 @@ $( document ).ready( function () {
     // do some jquery stuff here
 
 } );
-
-var settingsCallbacks = $.Callbacks();
 
 function objCB() {
 
@@ -59,7 +62,7 @@ function objCB() {
     this.populateUserDropdown = populateUserDropdown;
     this.scriptName = ADK.scriptName;
     this.initFunction = ADK.initFunction;
-    this.tipOptions = [];
+
     if ( ADK.settingsChoices != "" ) {
         this.settings_choices = eval( ADK.settingsChoices );
         showSettings( "#Settings", this.settings_choices );
@@ -68,6 +71,14 @@ function objCB() {
         this.settings_choices = [];
     }
     this.settings = [];
+
+    if ( ADK.tipOptions != "" ) {
+
+    } else {
+        this.tipOptions = function () {
+            return;
+        };
+    }
 
     this.panelHandler = function () {
     };
@@ -727,7 +738,11 @@ function btnActivateClicked() {
 
 function createTippingHTML(defaultTip, defaultNote) {
 
-    var currTipOptions = cb.tipOptions;
+    var currTipOptions = cb.tipOptions();
+
+    // clear panel first
+    $( ".tipLabel" ).remove();
+    $( ".tipField" ).remove();
 
     var hstr;
 
@@ -739,29 +754,31 @@ function createTippingHTML(defaultTip, defaultNote) {
         defaultNote = "";
     }
 
-    hstr = "<LABEL >Tip Amount</LABEL>" +
-        "<INPUT type='text' id='inTipAmount' class='inputAreas' STYLE='width:15%' + value='" +
-        defaultTip + "'>";
+    $( "#Tipping" ).append( "<DIV class='tipLabel' >Tip Amount from " + getSelectedUser() + "</DIV>" );
+    $( "#Tipping" ).append( "<INPUT type='text' id='inTipAmount' class='tipField' + value='" +
+        defaultTip + "'>" );
+    // $("#Tipping" ).append("<DIV><INPUT type='text' id='inTipAmount' class='tipField' + value='" +
+    //    defaultTip + "'></DIV>");
 
     if ( currTipOptions.length == 0 ) { // Display the default note box
-        hstr = hstr + "<LABEL STYLE='display:block'>Tip Note</LABEL>" +
-            "<TEXTAREA id='inTipNote' >" + defaultNote + "</TEXTAREA>";
+        $( "#Tipping" ).append( "<DIV class='tipLabel' >Tip Note</DIV>" );
+        $( "#Tipping" ).append( "<TEXTAREA id='inTipNote' class='tipField'  >" + defaultNote +
+            "</TEXTAREA>" );
     } else {
-        hstr = hstr + "<LABEL STYLE='display:block'>" + currTipOptions['label'] + "</LABEL>" +
-            "<SELECT id='lstTipping' >" +
-            "<OPTION value='Select a choice:'>Select a choice:</OPTION>"; // To match CB behavior
+        $( "#Tipping" ).append( "<DIV class='tipLabel'>" + currTipOptions['label'] + "</DIV>" );
+        // hstr = hstr + "<LABEL STYLE='display:block'>" + currTipOptions['label'] + "</LABEL>" +
+        $( "#Tipping" ).append( "<SELECT id='lstTipping' class='tipField'>" );
+        $( "#lstTipping" )
+            .attr( ("value", 'Select a choice:' )
+                .text( 'Select a choice:' ) );
         for ( var x = 0; x < currTipOptions.options.length; x++ ) {
-            hstr = hstr + "<OPTION value='" + currTipOptions.options[x].label + "'>" +
-                currTipOptions.options[x].label + "</OPTION>";
+            $( "#lstTipping" )
+                .append( ("<SELECT id='lstTipping' class='tipField'>")
+                    .attr( "value", currTipOptions.options[x].label )
+                    .text( currTipOptions.options[x].label ) );
         }
-        hstr = hstr + "</SELECT>";
     }
-
-    hstr = hstr + "<BUTTON STYLE='display:block' id='btnSendTip' class='buttons' " + "" +
-        "onclick='sendTipClicked()'>Send Tip</BUTTON>";
-
-    document.getElementById( "Tip" ).innerHTML = hstr;
-
+    // document.getElementById( "Tip" ).innerHTML = hstr;
 }
 
 
@@ -811,7 +828,7 @@ function objTipObject(fromUser, amt, msg) {
 
 function sendTipClicked() {
 
-    var amt = parseInt( document.getElementById( "inTipAmount" ).value );
+    var amt = parseInt( $( "#inTipAmount" ).val() );
     var msg = document.getElementById( "lstTipping" );
     if ( msg == null )
         msg = document.getElementById( "inTipNote" ).value;

@@ -51,7 +51,7 @@ div {
     margin: 5px;
 }
 
-#Settings {
+#Settings, #Tipping {
     width: 84%;
     height: 95%;
     overflow-y: scroll;
@@ -60,7 +60,7 @@ div {
     padding-top: 10px;
 }
 
-#Activate {
+#Activate, #SendTip {
     width: 14%;
     height: 100%;
     border: 0;
@@ -286,13 +286,7 @@ div {
     width: 65%;
 }
 
-#inTipNote {
-    width: 50%;
-    height: 40%;
-    display: block;
-}
-
-.settingLabel {
+.settingLabel, .tipLabel {
     width: 47%;
     height: 48px;
     border: 0;
@@ -308,7 +302,7 @@ div {
     /* Just an empty class for selector purposes */
 }
 
-.settingField, .errorLabel {
+.settingField, .errorLabel, .tipField {
     width: 47%;
     height: 48px;
     border: 0;
@@ -317,6 +311,28 @@ div {
     padding-left: 2px;
     text-align: left;
     float: right;
+}
+
+.tipField, #inTipNote {
+    height: 20px;
+    width: 80px;
+    float: none;
+    display: block;
+    border: 1px solid black;
+    margin: 5px;
+}
+
+.tipLabel {
+    height: 20px;
+    margin: 5px;
+}
+
+#inTipNote {
+    width: 242px;
+    height: 69px;
+    display: block;
+    resize: none;
+    float: none;
 }
 
 .errorLabel {

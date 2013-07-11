@@ -111,7 +111,15 @@
     <BUTTON class="button" id="btnUser" onclick="cb.sendClicked('inUser')">Send</BUTTON>
 </DIV>
 
-<DIV id='Tip' title='Tipping Window'></DIV>
+<DIV id='Tip' title='Tipping Window'>
+    <DIV id='Tipping'>
+    </DIV>
+    <DIV id='SendTip'>
+        <DIV STYLE='vertical-align: middle;text-align:center; float: none;border:0;display:table-cell;'>
+            <BUTTON id='btnTip' class='button' onclick='sendTipClicked()'>Send Tip</BUTTON>
+        </DIV>
+    </DIV>
+</DIV>
 
 <DIV id='Log' title='Logged Output'>
     <DIV id='txtLog' class='textareas'></DIV>
