@@ -28,7 +28,6 @@ var ADK = {'readyToRun': false,
     'scriptName': "",
     'initFunction': "",
     'settingsChoices': "",
-    'tipOptions': "",
     'trueScriptName': ""
 };
 
@@ -72,14 +71,6 @@ function objCB() {
     }
     this.settings = [];
 
-    if ( ADK.tipOptions != "" ) {
-
-    } else {
-        this.tipOptions = function () {
-            return;
-        };
-    }
-
     this.panelHandler = function () {
     };
     this.mesgHandler = function () {
@@ -87,6 +78,10 @@ function objCB() {
     this.tipHandler = function () {
     };
 
+    this.tipOptions = tipOptions;
+
+    this.tipOptionsHandler = function () {
+    };
 
     // Seed some dummy users;
     //
@@ -295,6 +290,10 @@ function objCB() {
 
     }
 
+    function tipOptions(func) {
+        this.tipOptionsHandler = func;
+        return(func);
+    }
 
     function onDrawPanel(func) {
 
@@ -454,7 +453,7 @@ function objCB() {
             } else {
                 var m = document.getElementById( "inUser" ).value;
                 if ( m.length > 4 ) {
-                    if ( m.search( "^/tip " ) == 0 ) { // We have a tip!
+                    if ( m.search( /^\/tip /i ) == 0 ) { // We have a tip!
                         var t = parseInt( m.substr( 5 ) );
                         var p = (m.substr( 5 )).indexOf( " " );
                         var tm = ( p != -1 ? m.substr( p + 6 ) : "" );
@@ -586,6 +585,7 @@ function showSettings(whichDiv, currSettings) {
 
     }
 
+
 }
 
 /**
@@ -603,6 +603,17 @@ function createValidationCode(sc) {
     fstr = "";
 
     // for ( x = 0; x < sc.length; x++ ) {
+
+    /**
+     *
+     * JS gobbles up the backslash used to escape
+     * single quotes . . . which causes JQuery to
+     * choke . . . so put them pack in
+     *
+     */
+    if ( typeof sc.label != "undefined" ) {
+        sc.label = sc.label.replace( /\'/g, "\\'" );
+    }
 
     switch (sc.type) {
         case "int":
@@ -629,8 +640,7 @@ function createValidationCode(sc) {
             }
             fstr += "{ cb.settings['" + sc.name + "'] = parseInt(" + makeJQS( idSelector ) +
                 ".val());}";
-            // fstr += "}";
-            // fstr = "{ alert('Int validation'); }";
+            // alert(fstr);
             break;
         case "str":
             idName = "in" + sc.name;
@@ -719,8 +729,17 @@ function btnActivateClicked() {
         $( ".settingInput" ).prop( "disabled", true );
         cb.log( "Validation successful" );
         cb.changeRoomSubject( cb.room_slug + "'s room" );
-        if ( ADK.initFunction != "" )
+        if ( ADK.initFunction != "" ) {
+            /**
+             * I have mixed feelings about doing this here
+             *  but it *IS* an effective way to seed at least
+             *  some of the settings[] array
+             *
+             */
+            $( ".settingInput" ).change();
+            clearErrors();
             window[ADK.initFunction]();
+        }
         else {
             // NOW, it's safe to load the script after the settings_choices have
             // been input and validated
@@ -738,7 +757,7 @@ function btnActivateClicked() {
 
 function createTippingHTML(defaultTip, defaultNote) {
 
-    var currTipOptions = cb.tipOptions();
+    var currTipOptions = cb.tipOptionsHandler( getSelectedUser() );
 
     // clear panel first
     $( ".tipLabel" ).remove();
@@ -754,26 +773,23 @@ function createTippingHTML(defaultTip, defaultNote) {
         defaultNote = "";
     }
 
-    $( "#Tipping" ).append( "<DIV class='tipLabel' >Tip Amount from " + getSelectedUser() + "</DIV>" );
-    $( "#Tipping" ).append( "<INPUT type='text' id='inTipAmount' class='tipField' + value='" +
-        defaultTip + "'>" );
-    // $("#Tipping" ).append("<DIV><INPUT type='text' id='inTipAmount' class='tipField' + value='" +
-    //    defaultTip + "'></DIV>");
+    $( "#Tipping" ).append( "<DIV class='tipLabel' >Tip Amount from " + getSelectedUser() + "</DIV>" )
+        .append( "<INPUT type='text' id='inTipAmount' class='tipField' + value='" +
+            defaultTip + "'>" );
 
-    if ( currTipOptions.length == 0 ) { // Display the default note box
-        $( "#Tipping" ).append( "<DIV class='tipLabel' >Tip Note</DIV>" );
-        $( "#Tipping" ).append( "<TEXTAREA id='inTipNote' class='tipField'  >" + defaultNote +
-            "</TEXTAREA>" );
+    if ( currTipOptions == null ) { // Display the default note box
+        $( "#Tipping" ).append( "<DIV class='tipLabel' >Tip Note</DIV>" )
+            .append( "<TEXTAREA id='inTipNote' class='tipField'  >" + defaultNote +
+                "</TEXTAREA>" );
     } else {
-        $( "#Tipping" ).append( "<DIV class='tipLabel'>" + currTipOptions['label'] + "</DIV>" );
-        // hstr = hstr + "<LABEL STYLE='display:block'>" + currTipOptions['label'] + "</LABEL>" +
-        $( "#Tipping" ).append( "<SELECT id='lstTipping' class='tipField'>" );
-        $( "#lstTipping" )
-            .attr( ("value", 'Select a choice:' )
-                .text( 'Select a choice:' ) );
+        $( "#Tipping" ).append( "<DIV class='tipLabel'>" + currTipOptions['label'] + "</DIV>" )
+            .append( "<SELECT id='lstTipping' class='tipField'>" );
+        $( "#lstTipping" ).append( (  $( "<option></option>" ) )
+            .attr( "value", 'Select a choice:' )
+            .text( 'Select a choice:' ) );
         for ( var x = 0; x < currTipOptions.options.length; x++ ) {
             $( "#lstTipping" )
-                .append( ("<SELECT id='lstTipping' class='tipField'>")
+                .append( $( "<option></option>" )
                     .attr( "value", currTipOptions.options[x].label )
                     .text( currTipOptions.options[x].label ) );
         }
@@ -829,11 +845,13 @@ function objTipObject(fromUser, amt, msg) {
 function sendTipClicked() {
 
     var amt = parseInt( $( "#inTipAmount" ).val() );
-    var msg = document.getElementById( "lstTipping" );
-    if ( msg == null )
-        msg = document.getElementById( "inTipNote" ).value;
+    var msg;
+
+    if ( $( "#lstTipping" ).length > 0 )
+        msg = $( "#lstTipping" ).val();
+    // msg = msg.options[msg.selectedIndex].value;
     else
-        msg = msg.options[msg.selectedIndex].value;
+        msg = $( "#inTipNote" ).val().trim();
 
     var currentTip = new objTipObject( getSelectedUser(), amt, msg );
 
@@ -887,6 +905,35 @@ function createMesg(fromUser, mesg) {
 
 }
 
+/**
+ *
+ * userChanged
+ *
+ * When a different user is selected from the dropdown list,
+ * force a redraw of the tipping and panel viewports
+ *
+ */
+function userChanged() {
+
+    var newUser = $( "#lstUsers" ).val();
+    var defTip = 0;
+    var defNote = "";
+
+    // Find whatever is in the tip window now and use for defaults
+    //
+    // Note: Not really worried about the default for a choice/select
+    //
+    defTip = parseInt( $( "#inTipAmount" ).val() );
+    if ( $( "#inTipNote" ).length > 0 ) {
+        defNote = $( "#inTipNote" ).val().trim();
+    }
+
+    createTippingHTML( defTip, defNote );
+
+    //
+    cb.drawPanel();
+
+}
 /**
  *
  * insertEmotes
@@ -1234,8 +1281,18 @@ function loadScript() {
 function callback() {
     cb.log( ADK.trueScriptName + " loaded" );
     if ( ADK.settingsChoices == "" ) {
-        showSettings( "#Settings", cb.settings_choices ); // Script has to be loaded before these can be done
-        // createValidationCode( cb.settings_choices );
+        showSettings( "#Settings", cb.settings_choices );
     }
+
+    /**
+     *
+     * I have mixed feelings about doing this here
+     *  but it *IS* an effective way to seed at least
+     *  some of the settings[] array
+     *
+     */
+    $( ".settingInput" ).change();
+    clearErrors();
+
     createTippingHTML( 1, "" );
 }

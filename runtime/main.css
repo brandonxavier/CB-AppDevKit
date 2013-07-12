@@ -282,6 +282,10 @@ div {
     margin: 13px;
 }
 
+#lstTipping {
+    width: 125px;
+}
+
 #inUser {
     width: 65%;
 }

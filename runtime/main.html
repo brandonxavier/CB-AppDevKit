@@ -106,9 +106,9 @@
 
 <DIV id="User" title="User Chat">
     <DIV id="txtUserChat" class='textareas'></DIV>
-    <SELECT id="lstUsers"></SELECT>
-    <INPUT type="text" class="inputAreas" id="inUser" onkeydown="return press (event)">
-    <BUTTON class="button" id="btnUser" onclick="cb.sendClicked('inUser')">Send</BUTTON>
+    <SELECT id='lstUsers' onchange='userChanged()'></SELECT>
+    <INPUT type='text' class='inputAreas' id='inUser' onkeydown='return press (event)'>
+    <BUTTON class='button' id='btnUser' onclick="cb.sendClicked('inUser')">Send</BUTTON>
 </DIV>
 
 <DIV id='Tip' title='Tipping Window'>
