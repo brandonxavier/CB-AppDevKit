@@ -602,39 +602,44 @@ function createValidationCode(sc) {
 
     fstr = "";
 
-    // for ( x = 0; x < sc.length; x++ ) {
-
     /**
      *
      * JS gobbles up the backslash used to escape
      * single quotes . . . which causes JQuery to
-     * choke . . . so put them pack in
+     * choke . . . but here's the kicker:  JQuery
+     * doesn't handle the \ . . . so without it
+     * the eval fails . . . with it, the string
+     * is displayed WITH the \ (example: "can\'t")
+     * . . . so we just punt and replace it with
+     * a space.
      *
      */
     if ( typeof sc.label != "undefined" ) {
-        sc.label = sc.label.replace( /\'/g, "\\'" );
+        sc.label = sc.label.replace( /\'/g, " " );
     }
 
     switch (sc.type) {
         case "int":
             idName = "in" + sc.name;
             idSelector = "#" + idName;
+            // Eliminate a few JQuery calls
+            fstr = " var x = " + makeJQS( idSelector ) + ".val().trim(); ";
             if ( sc.required == true || typeof sc.required == "undefined" ) {
-                fstr = " if (" + makeJQS( idSelector ) + ".val().trim() == '') { " +
+                fstr += " if ( x == '') { " +
                     " validationError('" + idSelector + "', '" +
                     useLabel( sc.name, sc.label ) + " is required'); return false;}"
             }
             // Not a settings_choice . . . just common sense
-            fstr += " if ( isNaN(parseInt(" + makeJQS( idSelector ) + ".val().trim())) == true ) { " +
+            fstr += " if ( x != '' && isNaN(parseInt( x )) == true ) { " +
                 " validationError('" + idSelector + "', '" +
                 useLabel( sc.name, sc.label ) + " must be numeric'); return false;}";
             if ( typeof sc.minValue != "undefined" ) {
-                fstr += " if (parseInt(" + makeJQS( idSelector ) + ".val()) < " + sc.minValue + ") { " +
+                fstr += " if (parseInt( x ) < " + sc.minValue + ") { " +
                     " validationError('" + idSelector + "', '" + useLabel( sc.name, sc.label ) +
                     " below min. value " + sc.minValue + "'); return false;}"
             }
             if ( typeof sc.maxValue != "undefined" ) {
-                fstr += " if (parseInt(" + makeJQS( idSelector ) + ".val()) > " + sc.maxValue + ") { " +
+                fstr += " if (parseInt( x ) > " + sc.maxValue + ") { " +
                     " validationError('" + idSelector + "', '" + useLabel( sc.name, sc.label ) +
                     " above max. value " + sc.maxValue + "'); return false;}"
             }
@@ -645,34 +650,32 @@ function createValidationCode(sc) {
         case "str":
             idName = "in" + sc.name;
             idSelector = "#" + idName;
+            // Eliminate a few JQuery calls
+            fstr = " var x = " + makeJQS( idSelector ) + ".val().trim(); ";
             if ( sc.required == true || typeof sc.required == "undefined" ) {
-                fstr += "if (" + makeJQS( idSelector ) + ".val().trim() == '') { " +
+                fstr += "if ( x == '') { " +
                     " validationError('" + idSelector + "', '" + useLabel( sc.name, sc.label ) +
                     " is required '); return false;}";
             }
             if ( sc.minLength != "undefined" ) {
-                fstr += "if (" + makeJQS( idSelector ) + ".val().trim().length < " + sc.minLength + ") { " +
+                fstr += "if ( x.length < " + sc.minLength + ") { " +
                     " validationError('" + idSelector + "', '" + useLabel( sc.name, sc.label ) +
                     " min. length is " + sc.minLength + " '); return false;}";
             }
             if ( sc.maxLength != "undefined" ) {
-                fstr += "if (" + makeJQS( idSelector ) + ".val().trim().length > " + sc.maxLength + ") { " +
+                fstr += "if ( x.length > " + sc.maxLength + ") { " +
                     " validationError('" + idSelector + "', '" + useLabel( sc.name, sc.label ) +
                     " max. length is " + sc.maxLength + " '); return false;}";
             }
-            fstr += "{ cb.settings['" + sc.name + "'] = " + makeJQS( idSelector ) + ".val().trim();}";
-            // fstr += "}";
-            // fstr = "{ alert('String validation'); }";
+            fstr += "{ cb.settings['" + sc.name + "'] = x;}";
             break;
         case "choice":
             idName = "lst" + sc.name;
             idSelector = "#" + idName;
             // No error checking here, just add whatever is selected
             fstr = "{  cb.settings['" + sc.name + "'] = " + makeJQS( idSelector ) + ".val(); }";
-            // fstr = "{ alert('choice validation');}";
             break;
         default:
-            // cb.log( "Skipping " + sc.name + " Unknown Type: " + sc.type );
             break;
     }
     // }
