@@ -112,6 +112,12 @@ Specifying Your Script File & Init Function:
 As of v1.4, there is one preferred way of specifying your script name and
 init function:  via the "Script & Init Function" panel.
 
+**NOTE:  Debugging is MUCH more reliable if your source .js file exists in
+the same directory/folder as the ADK. This is due to the way the File object
+doesn't make the path to the file available - if I load the file as a blob (no
+path required), then debuggers don't work -- but if it's loaded via a file
+name, debugging miraculously works**
+
 Simply use the "Browse" or "Choose File" (label is browser dependent) button
 to locate and select your script file.  The ADK will then try to parse your
 file to locate the "cb.settings_choices = " line(s) and eval them. This
@@ -187,7 +193,7 @@ If you come across a situation where a script is not working under the ADK as
 it does on the live/testbed servers, by all means please let me know.  I can be
 reached (in general order of preference) via github (issues), email at
 brandonxavier421@gmail.com, or the Chaturbate API DISQUS discussions (my access
-there during normal business hours is effectively zero though ;)   I will need
+there during normal US business hours is effectively zero though ;) I will need
 the following:  name and location (testbed or live server)of your script, init
 function you use (or none, if you don't use one), what browser version you use,
 and a general description of what the problem is unless it's obvious (like the
