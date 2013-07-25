@@ -51,6 +51,26 @@ div {
     margin: 5px;
 }
 
+#Settings, #Tipping {
+    width: 84%;
+    height: 95%;
+    overflow-y: scroll;
+    border: 0;
+    margin: 0;
+    padding-top: 10px;
+}
+
+#Activate, #SendTip {
+    width: 14%;
+    height: 100%;
+    border: 0;
+    margin: 0;
+    padding: 4px;
+    float: none;
+    vertical-align: middle;
+    display: table;
+}
+
 #Subject {
     overflow-y: scroll;
     overflow-x: scroll;
@@ -215,10 +235,6 @@ div {
     margin: 13px auto;
 }
 
-#Startup {
-    overflow-y: scroll;
-}
-
 #txtSubject {
     resize: none;
     margin: 13px;
@@ -246,11 +262,11 @@ div {
 }
 
 #btnActivate {
-    vertical-align: bottom;
+    vertical-align: middle;
+    float: none;
     text-align: center;
     margin: 0 auto;
-    display: block;
-    position: relative;
+
 }
 
 #btnSendTip {
@@ -266,13 +282,68 @@ div {
     margin: 13px;
 }
 
+#lstTipping {
+    width: 125px;
+}
+
 #inUser {
     width: 65%;
 }
 
-#inTipNote {
-    width: 50%;
-    height: 40%;
+.settingLabel, .tipLabel {
+    width: 47%;
+    height: 48px;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    padding-right: 2px;
+    text-align: right;
     display: block;
+
 }
 
+.settingInput {
+    /* Just an empty class for selector purposes */
+}
+
+.settingField, .errorLabel, .tipField {
+    width: 47%;
+    height: 48px;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    padding-left: 2px;
+    text-align: left;
+    float: right;
+}
+
+.tipField, #inTipNote {
+    height: 20px;
+    width: 80px;
+    float: none;
+    display: block;
+    border: 1px solid black;
+    margin: 5px;
+}
+
+.tipLabel {
+    height: 20px;
+    margin: 5px;
+}
+
+#inTipNote {
+    width: 242px;
+    height: 69px;
+    display: block;
+    resize: none;
+    float: none;
+}
+
+.errorLabel {
+    height: 16px;
+    width: 90%;
+    color: red;
+    display: block;
+    float: none;
+    font-size: 11px;
+}

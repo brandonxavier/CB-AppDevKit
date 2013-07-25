@@ -24,10 +24,20 @@
  */
 
 var AppDevKit = true;
-var ADK = {'readyToRun': false, 'scriptName': "", 'initFunction': "",
-    settingsChoices: "", 'trueScriptName': "" };
+var ADK = {'readyToRun': false,
+    'scriptName': "",
+    'initFunction': "",
+    'settingsChoices': "",
+    'trueScriptName': ""
+};
 
 var cb;
+
+$( document ).ready( function () {
+
+    // do some jquery stuff here
+
+} );
 
 function objCB() {
 
@@ -51,11 +61,11 @@ function objCB() {
     this.populateUserDropdown = populateUserDropdown;
     this.scriptName = ADK.scriptName;
     this.initFunction = ADK.initFunction;
-    this.tipOptions = [];
+
     if ( ADK.settingsChoices != "" ) {
         this.settings_choices = eval( ADK.settingsChoices );
-        createHTMLFromSettings( this.settings_choices );
-        createValidationCode( this.settings_choices );
+        showSettings( "#Settings", this.settings_choices );
+        // createValidationCode( this.settings_choices );
     } else {
         this.settings_choices = [];
     }
@@ -68,6 +78,10 @@ function objCB() {
     this.tipHandler = function () {
     };
 
+    this.tipOptions = tipOptions;
+
+    this.tipOptionsHandler = function () {
+    };
 
     // Seed some dummy users;
     //
@@ -120,13 +134,17 @@ function objCB() {
         area.scrollTop = area.scrollHeight;
     }
 
-    function chatNotice(message, to_user) {
 
-        /**
-         *
-         * This should be considered an immutable function -- don't attempt to redefine it
-         *
-         */
+    /**
+     *
+     *
+     * @param message
+     * @param to_user optional Defaults to all users
+     * @param bg_color optional Defaults to #000000 (white)
+     * @param fg_color optional Defaults to #ffffff (black)
+     * @param weight optional {'normal', 'bold', 'bolder'}
+     */
+    function chatNotice(message, to_user, bg_color, fg_color, weight) {
 
         var msgObj;
 
@@ -135,7 +153,7 @@ function objCB() {
             message = message.replace( "\n", "</br>Notice: " );
 
 
-        if ( to_user == null ) {
+        if ( to_user == null || to_user == "" ) {
             // area = document.getElementById(this.cbDiv['Main'].txtMainChat);
 
             msgObj = createMesg( "Notice", message );
@@ -276,6 +294,10 @@ function objCB() {
 
     }
 
+    function tipOptions(func) {
+        this.tipOptionsHandler = func;
+        return(func);
+    }
 
     function onDrawPanel(func) {
 
@@ -364,6 +386,10 @@ function objCB() {
         //
         // First set the color of the name
         //
+        // Note: I *intentionally* don't format this with background
+        //       colors - just a personal preference, I find it harder
+        //       to discern the colors on a non-white background.
+        //
         if ( msg['user'] == "Notice" ) {
             mstr = "<SPAN STYLE='color:black'>" + msg['user'] + ": </SPAN>"
         } else if ( msg['user'] == cb.room_slug ) {
@@ -435,7 +461,7 @@ function objCB() {
             } else {
                 var m = document.getElementById( "inUser" ).value;
                 if ( m.length > 4 ) {
-                    if ( m.search( "^/tip " ) == 0 ) { // We have a tip!
+                    if ( m.search( /^\/tip /i ) == 0 ) { // We have a tip!
                         var t = parseInt( m.substr( 5 ) );
                         var p = (m.substr( 5 )).indexOf( " " );
                         var tm = ( p != -1 ? m.substr( p + 6 ) : "" );
@@ -475,84 +501,278 @@ function objCBUser(username, gender, fanclub, has_tokens, is_mod, tipped_recentl
 
 /**
  *
- *
- * @param sc
- * @returns {string}
+ * @param whichDiv
+ * @param currSettings
  */
-function createValidationCode(sc) {
+function showSettings(whichDiv, currSettings) {
+
+    var str, vStr, currId, f, e, s, selectDefaults = [];
+
+    str = "";
 
     /**
-     * TODO:  Consider the merits of moving this all into the CreateHTML as onblur events for each element
      *
-     * Pros:  From a design viewpoint, that's where this belongs
+     * Generate the validation functions now . . .
      *
-     * Cons:  Not sure it's worth the time/effort/additional complexity for code in the corollary to the 80/20 rule
+     * I find it seems to be more reliable to generate
+     * and <SCRIPT> all the elements at once - otherwise
+     * assigning the handlers to the HTML elements (onblur)
+     * tend to get squirrelly.
      *
      */
-    var fstr, x;
+    vStr = "";
+    for ( s = 0; s < currSettings.length; s++ ) {
+        vStr += createValidationCode( currSettings[s] );
+    }
+    $( "body" ).append( "<SCRIPT>" + vStr + "</SCRIPT>" );
+    /* var scrpt = document.createElement( "script" );
+     scrpt.innerHTML = vStr;
+     document.body.appendChild( scrpt );
+     */
 
-    fstr = "{";
-
-    for ( x = 0; x < sc.length; x++ ) {
-
-        switch (sc[x].type) {
-            case "int":
-                if ( sc[x].required == true || typeof sc[x].required == "undefined" ) {
-                    fstr = fstr + " if (document.getElementById('in" + sc[x].name + "').value.trim() == '') " +
-                        " { return '" + (typeof sc[x].label == 'undefined' ? sc[x].name : sc[x].label) + " is required' }" +
-                        " else { cb.settings['" + sc[x].name + "'] = document.getElementById('in" + sc[x].name +
-                        "').value.trim();}";
-                }
-                if ( typeof sc[x].minValue != "undefined" ) {
-                    fstr = fstr + " if (document.getElementById('in" + sc[x].name + "').value < " + sc[x].minValue + ") " +
-                        " { return '" + (typeof sc[x].label == 'undefined' ? sc[x].name : sc[x].label) + " below min. value " +
-                        sc[x].minValue + "' }" +
-                        " else { cb.settings['" + sc[x].name + "'] = parseInt(document.getElementById('in" + sc[x].name +
-                        "').value);}";
-                }
-                if ( typeof sc[x].minValue != "undefined" ) {
-                    fstr = fstr + " if (parseInt(document.getElementById('in" + sc[x].name + "').value) > " +
-                        sc[x].maxValue + ") " +
-                        " { return '" + (typeof sc[x].label == 'undefined' ? sc[x].name : sc[x].label) + " above max value " +
-                        sc[x].maxValue + "' }" +
-                        " else { cb.settings['" + sc[x].name + "'] = parseInt(document.getElementById('in" + sc[x].name +
-                        "').value);}";
-                }
-
-                break;
-            case "str":
-                if ( sc[x].required == true || typeof sc[x].required == "undefined" ) {
-                    fstr = fstr + " if (document.getElementById('in" + sc[x].name + "').value.trim() == '') " +
-                        " { return '" + (sc[x].label == undefined ? sc[x].name : sc[x].label) + " is required' }" +
-                        " else { cb.settings['" + sc[x].name + "'] = " +
-                        " document.getElementById('in" + sc[x].name + "').value.trim();}";
-                } else {
-                    // No error checking here, just add whatever is in the field
-                    fstr = fstr + "{ cb.settings['" + sc[x].name + "'] = document.getElementById('in" + sc[x].name +
-                        "').value.trim();}";
-                }
-                break;
-            case "choice":
-                // No error checking here, just add whatever is selected
-                fstr = fstr + "{ var e = document.getElementById('lst" + sc[x].name + "'); cb.settings['" +
-                    sc[x].name + "'] = e.options[e.selectedIndex].value }";
-                break;
-            default:
-                cb.log( "Skipping " + sc[x].name + " Unknown Type: " + sc[x].type );
-                break;
+    for ( s = 0; s < currSettings.length; s++ ) {
+        if ( currSettings[s].label != undefined ) {
+            $( whichDiv ).append( "<DIV class='settingLabel'>" + currSettings[s].label + "</DIV>" );
+        } else {
+            $( whichDiv ).append( "<DIV class='settingLabel'>" + currSettings[s].name + "</DIV>" );
         }
+
+
+        //
+        // For HTML DISPLAY purposes, there's little difference between a string and an int
+        //
+        if ( currSettings[s].type == "int" || currSettings[s].type == "str" ) {
+
+            currId = "in" + currSettings[s].name;
+
+            // vStr = createValidationCode( currSettings[s] );
+
+            str = "<DIV class='settingField'><INPUT type='text' class='settingInput' id='" + currId + "' ";
+            str += "onchange='validate" + currId + "()' ";
+            // str += "onblur='validate" + currId + "()' ";
+            str += "onkeydown='clearErrors()' ";
+            str += "onclick='clearErrors()' ";
+            if ( currSettings[s].default != undefined ) {
+                str += 'value="' + currSettings[s].default + '" ';
+            }
+            if ( currSettings[s].defaultValue != undefined ) {
+                str += 'value="' + currSettings[s].defaultValue + '" ';
+            }
+            $( whichDiv ).append( str + "></DIV>" );
+        } else {
+            if ( currSettings[s].type == "choice" ) {
+
+                currId = "lst" + currSettings[s].name;
+
+                str = "<DIV class='settingField'><SELECT  class='settingInput' id=" + currId + " ";
+                str += "onchange='validate" + currId + "()' >";
+                for ( var q in currSettings[s] ) {
+                    if ( q.match( "^choice*" ) != null ) {
+                        str += '<OPTION value="' + currSettings[s][q] + '">' + currSettings[s][q] +
+                            '</OPTION>';
+                    }
+                    if ( q == "defaultValue" ) {
+                        selectDefaults.push( {'name': "#" + currId,
+                            'defaultValue': currSettings[s][q]} );
+                    }
+                }
+                str += "</SELECT></DIV>"
+                $( whichDiv ).append( str );
+            }
+        }
+        // f=eval("validate"+currId);
+        // $("#"+currId ).on("change", f());
+    }
+
+    // Now that the "form" is created, set the default for the selects
+    for ( s = 0; s < selectDefaults.length; s++ ) {
+
+        $( selectDefaults[s].name + " option" ).each( function () {
+            this.selected = (this.text == selectDefaults[s].defaultValue);
+        } );
+
     }
 
 
-    fstr = fstr + "; return ''; };";
+}
 
-    return fstr;
+/**
+ *
+ * createValidationCode - Takes a single settings object and returns
+ *  a function in string form that can be later used for something useful
+ *
+ * @param sc single settings object
+ * @returns {string} function
+ */
+function createValidationCode(sc) {
+
+    var fstr, idName, idSelector;
+
+    fstr = "";
+
+    /**
+     *
+     * JS gobbles up the backslash used to escape
+     * single quotes . . . which causes JQuery to
+     * choke . . . but here's the kicker:  JQuery
+     * doesn't handle the \ . . . so without it
+     * the eval fails . . . with it, the string
+     * is displayed WITH the \ (example: "can\'t")
+     * . . . so we just punt and replace it with
+     * a space.
+     *
+     */
+    if ( typeof sc.label != "undefined" ) {
+        sc.label = sc.label.replace( /\'/g, " " );
+    }
+
+    switch (sc.type) {
+        case "int":
+            idName = "in" + sc.name;
+            idSelector = "#" + idName;
+            // Eliminate a few JQuery calls
+            fstr = " var x = " + makeJQS( idSelector ) + ".val().trim(); ";
+            if ( sc.required == true || typeof sc.required == "undefined" ) {
+                fstr += " if ( x == '') { " +
+                    " validationError('" + idSelector + "', '" +
+                    useLabel( sc.name, sc.label ) + " is required'); return false;}"
+            }
+            // Not a settings_choice . . . just common sense
+            fstr += " if ( x != '' && isNaN(parseInt( x )) == true ) { " +
+                " validationError('" + idSelector + "', '" +
+                useLabel( sc.name, sc.label ) + " must be numeric'); return false;}";
+            if ( typeof sc.minValue != "undefined" ) {
+                fstr += " if (parseInt( x ) < " + sc.minValue + ") { " +
+                    " validationError('" + idSelector + "', '" + useLabel( sc.name, sc.label ) +
+                    " below min. value " + sc.minValue + "'); return false;}"
+            }
+            if ( typeof sc.maxValue != "undefined" ) {
+                fstr += " if (parseInt( x ) > " + sc.maxValue + ") { " +
+                    " validationError('" + idSelector + "', '" + useLabel( sc.name, sc.label ) +
+                    " above max. value " + sc.maxValue + "'); return false;}"
+            }
+            fstr += "{ cb.settings['" + sc.name + "'] = parseInt(" + makeJQS( idSelector ) +
+                ".val());}";
+            // alert(fstr);
+            break;
+        case "str":
+            idName = "in" + sc.name;
+            idSelector = "#" + idName;
+            // Eliminate a few JQuery calls
+            fstr = " var x = " + makeJQS( idSelector ) + ".val().trim(); ";
+            if ( sc.required == true || typeof sc.required == "undefined" ) {
+                fstr += "if ( x == '') { " +
+                    " validationError('" + idSelector + "', '" + useLabel( sc.name, sc.label ) +
+                    " is required '); return false;}";
+            }
+            if ( sc.minLength != "undefined" ) {
+                fstr += "if ( x.length < " + sc.minLength + ") { " +
+                    " validationError('" + idSelector + "', '" + useLabel( sc.name, sc.label ) +
+                    " min. length is " + sc.minLength + " '); return false;}";
+            }
+            if ( sc.maxLength != "undefined" ) {
+                fstr += "if ( x.length > " + sc.maxLength + ") { " +
+                    " validationError('" + idSelector + "', '" + useLabel( sc.name, sc.label ) +
+                    " max. length is " + sc.maxLength + " '); return false;}";
+            }
+            fstr += "{ cb.settings['" + sc.name + "'] = x;}";
+            break;
+        case "choice":
+            idName = "lst" + sc.name;
+            idSelector = "#" + idName;
+            // No error checking here, just add whatever is selected
+            fstr = "{  cb.settings['" + sc.name + "'] = " + makeJQS( idSelector ) + ".val(); }";
+            break;
+        default:
+            break;
+    }
+    // }
+
+    // fstr = fstr + " return ''; }";
+    // alert(fstr);
+    return "function validate" + idName + "() {" + fstr + "}";
+
+}
+
+function validationError(id, mesg) {
+
+    $( id ).after( "<DIV class='errorLabel'>" + mesg + "</DIV>" );
+    setTimeout( function () {
+        $( id ).focus();
+    }, 50 );
+}
+
+function clearErrors() {
+
+    $( ".errorLabel" ).remove();
+
+}
+
+/**
+ *
+ * makeJQS - just wraps a JQ selector in "$(' . . . ')"
+ *           to make the sources a little cleaner in
+ *           generated code.
+ *
+ * @param tgt
+ * @returns {string}
+ */
+function makeJQS(tgt) {
+
+    return "$('" + tgt + "')";
+
+}
+
+function useLabel(sname, slabel) {
+
+    return (typeof slabel == 'undefined' ? sname : slabel);
+
+}
+function btnActivateClicked() {
+
+//noinspection JSUnresolvedFunction
+    clearErrors();
+
+    $( ".settingInput" ).change();
+
+    if ( $( ".errorLabel" ).length == 0 ) {
+        $( "#btnActivate" ).prop( "disabled", true );
+        $( ".settingInput" ).prop( "disabled", true );
+        cb.log( "Validation successful" );
+        cb.changeRoomSubject( cb.room_slug + "'s room" );
+        if ( ADK.initFunction != "" ) {
+            /**
+             * I have mixed feelings about doing this here
+             *  but it *IS* an effective way to seed at least
+             *  some of the settings[] array
+             *
+             */
+            $( ".settingInput" ).change();
+            clearErrors();
+            window[ADK.initFunction]();
+        }
+        else {
+            // NOW, it's safe to load the script after the settings_choices have
+            // been input and validated
+            loadScript();
+        }
+
+        cb.drawPanel();
+
+    }
+    else { //noinspection JSUnresolvedFunction
+        // cb.log( "Validation failed: " + validateSettings() );
+    }
 
 }
 
 function createTippingHTML(defaultTip, defaultNote) {
 
-    var currTipOptions = cb.tipOptions;
+    var currTipOptions = cb.tipOptionsHandler( getSelectedUser() );
+
+    // clear panel first
+    $( ".tipLabel" ).remove();
+    $( ".tipField" ).remove();
 
     var hstr;
 
@@ -564,134 +784,30 @@ function createTippingHTML(defaultTip, defaultNote) {
         defaultNote = "";
     }
 
-    hstr = "<LABEL >Tip Amount</LABEL>" +
-        "<INPUT type='text' id='inTipAmount' class='inputAreas' STYLE='width:15%' + value='" +
-        defaultTip + "'>";
+    $( "#Tipping" ).append( "<DIV class='tipLabel' >Tip Amount from " + getSelectedUser() + "</DIV>" )
+        .append( "<INPUT type='text' id='inTipAmount' class='tipField' + value='" +
+            defaultTip + "'>" );
 
-    if ( currTipOptions.length == 0 ) { // Display the default note box
-        hstr = hstr + "<LABEL STYLE='display:block'>Tip Note</LABEL>" +
-            "<TEXTAREA id='inTipNote' >" + defaultNote + "</TEXTAREA>";
+    if ( currTipOptions == null ) { // Display the default note box
+        $( "#Tipping" ).append( "<DIV class='tipLabel' >Tip Note</DIV>" )
+            .append( "<TEXTAREA id='inTipNote' class='tipField'  >" + defaultNote +
+                "</TEXTAREA>" );
     } else {
-        hstr = hstr + "<LABEL STYLE='display:block'>" + currTipOptions['label'] + "</LABEL>" +
-            "<SELECT id='lstTipping' >" +
-            "<OPTION value='Select a choice:'>Select a choice:</OPTION>"; // To match CB behavior
+        $( "#Tipping" ).append( "<DIV class='tipLabel'>" + currTipOptions['label'] + "</DIV>" )
+            .append( "<SELECT id='lstTipping' class='tipField'>" );
+        $( "#lstTipping" ).append( (  $( "<option></option>" ) )
+            .attr( "value", 'Select a choice:' )
+            .text( 'Select a choice:' ) );
         for ( var x = 0; x < currTipOptions.options.length; x++ ) {
-            hstr = hstr + "<OPTION value='" + currTipOptions.options[x].label + "'>" +
-                currTipOptions.options[x].label + "</OPTION>";
+            $( "#lstTipping" )
+                .append( $( "<option></option>" )
+                    .attr( "value", currTipOptions.options[x].label )
+                    .text( currTipOptions.options[x].label ) );
         }
-        hstr = hstr + "</SELECT>";
     }
-
-    hstr = hstr + "<BUTTON STYLE='display:block' id='btnSendTip' class='buttons' " + "" +
-        "onclick='sendTipClicked()'>Send Tip</BUTTON>";
-
-    document.getElementById( "Tip" ).innerHTML = hstr;
-
+    // document.getElementById( "Tip" ).innerHTML = hstr;
 }
 
-
-function createHTMLFromSettings(allsettings) {
-
-    var str, e, s, selectDefaults = [];
-
-    str = "";
-
-    for ( s = 0; s < allsettings.length; s++ ) {
-        if ( allsettings[s].label != undefined ) {
-            str += '<DIV STYLE="display:inline-block;margin:0;width:90%;height:28px"><LABEL >' +
-                allsettings[s].label + "</LABEL>";
-        } else {
-            str += '<DIV STYLE="display:inline-block;margin:0;width:90%;height:28px"><LABEL >' +
-                allsettings[s].name + "</LABEL>";
-        }
-
-        //
-        // For HTML DISPLAY purposes, there's little difference between a string and an int
-        //
-        if ( allsettings[s].type == "int" || allsettings[s].type == "str" ) {
-            str += '<INPUT type="text"  id="in' + allsettings[s].name +
-                '" ';
-            if ( allsettings[s].default != undefined ) {
-                str += 'value="' + allsettings[s].default + '" ';
-            }
-            if ( allsettings[s].defaultValue != undefined ) {
-                str += 'value="' + allsettings[s].defaultValue + '" ';
-            }
-        } else {
-            /**
-             * TODO Set the default in the dropdown list(s)
-             */
-            if ( allsettings[s].type == "choice" ) {
-                str = str + '<SELECT id=lst' + allsettings[s].name + ' >';
-                for ( var q in allsettings[s] ) {
-                    if ( q.match( "^choice*" ) != null ) {
-                        str += '<OPTION value="' + allsettings[s][q] + '">' + allsettings[s][q] +
-                            '</OPTION>';
-                    }
-                    if ( q == "defaultValue" ) {
-                        selectDefaults.push( {'name': "lst" + allsettings[s].name,
-                            'defaultValue': allsettings[s][q]} );
-                    }
-                }
-                str += "</SELECT>"
-            }
-        }
-
-
-        if ( str.charAt( str.length - 1 ) != ">" ) {
-            str = str + ">";
-        }
-
-        str = str + "</DIV>"
-    }
-
-    e = document.getElementById( "Startup" );
-
-    // Add the "Activate Button"
-    str += "<BUTTON id='btnActivate' class='button' onclick='btnActivateClicked()'>Activate</BUTTON>";
-
-    e.innerHTML = str;
-
-    // Now that the "form" is created, set the default for the selects
-    for ( s = 0; s < selectDefaults.length; s++ ) {
-        e = document.getElementById( selectDefaults[s].name );
-        for ( q = 0; q < e.options.length; q++ ) {
-            if ( e.options[q].value == selectDefaults[s].defaultValue ) {
-                e.selectedIndex = q;
-            }
-        }
-    }
-
-    var scrpt = document.createElement( "script" );
-    scrpt.innerHTML = "function validateSettings() " + createValidationCode( allsettings );
-    document.body.appendChild( scrpt );
-
-    return str;
-
-}
-
-function btnActivateClicked() {
-
-//noinspection JSUnresolvedFunction
-    if ( validateSettings() == "" ) {
-        cb.log( "Validation successful" );
-        cb.changeRoomSubject( cb.room_slug + "'s room" );
-        if ( ADK.initFunction != "" )
-            window[ADK.initFunction]();
-        else {
-            // NOW, it's safe to load the script after the settings_choices have
-            // been input and validated
-            loadScript();
-        }
-
-        cb.drawPanel();
-
-    }
-    else { //noinspection JSUnresolvedFunction
-        cb.log( "Validation failed: " + validateSettings() );
-    }
-
-}
 
 Object.size = function (obj) {
     var size = 0, key;
@@ -739,12 +855,14 @@ function objTipObject(fromUser, amt, msg) {
 
 function sendTipClicked() {
 
-    var amt = parseInt( document.getElementById( "inTipAmount" ).value );
-    var msg = document.getElementById( "lstTipping" );
-    if ( msg == null )
-        msg = document.getElementById( "inTipNote" ).value;
+    var amt = parseInt( $( "#inTipAmount" ).val() );
+    var msg;
+
+    if ( $( "#lstTipping" ).length > 0 )
+        msg = $( "#lstTipping" ).val();
+    // msg = msg.options[msg.selectedIndex].value;
     else
-        msg = msg.options[msg.selectedIndex].value;
+        msg = $( "#inTipNote" ).val().trim();
 
     var currentTip = new objTipObject( getSelectedUser(), amt, msg );
 
@@ -798,6 +916,35 @@ function createMesg(fromUser, mesg) {
 
 }
 
+/**
+ *
+ * userChanged
+ *
+ * When a different user is selected from the dropdown list,
+ * force a redraw of the tipping and panel viewports
+ *
+ */
+function userChanged() {
+
+    var newUser = $( "#lstUsers" ).val();
+    var defTip = 0;
+    var defNote = "";
+
+    // Find whatever is in the tip window now and use for defaults
+    //
+    // Note: Not really worried about the default for a choice/select
+    //
+    defTip = parseInt( $( "#inTipAmount" ).val() );
+    if ( $( "#inTipNote" ).length > 0 ) {
+        defNote = $( "#inTipNote" ).val().trim();
+    }
+
+    createTippingHTML( defTip, defNote );
+
+    //
+    cb.drawPanel();
+
+}
 /**
  *
  * insertEmotes
@@ -887,6 +1034,22 @@ function okBtnClicked() {
     ADK.initFunction = getInitFunction();
 
     if ( ADK.scriptName != "" ) {
+        /**
+         *
+         * We need to disable the script/init/ok elements otherwise
+         * things will get very messy very quickly.  Main problem
+         * is all the generated code that gets injected into BODY.
+         *
+         * A secondary concern is a dev getting sloppy with closures/
+         * scoping/initializations.
+         *
+         * Rather than attempting to clear everything out, just make
+         * them start over every time.
+         *
+         */
+        $( "#inFileList" ).prop( "disabled", true );
+        $( "#lstFunctions" ).prop( "disabled", true );
+        $( "#btnOK" ).prop( "disabled", true );
         cb = new objCB();
         if ( ADK.initFunction != "" ) {  // We have an init function, so DON'T defer script loading
             loadScript();
@@ -1104,6 +1267,16 @@ function getInitFunction() {
     var ele = document.getElementById( "lstFunctions" );
     return  ele.options[ele.selectedIndex].value;
 }
+
+/**
+ *
+ * You may be wondering whey I don't simply use a JQuery
+ * $.getScript() here.  If I do that, debugging won't work.
+ * for some black magic reason, this method preserves the
+ * ability to use your debuggers on the dynamically loaded
+ * code.
+ *
+ */
 function loadScript() {
 
     var script = document.createElement( "script" );
@@ -1122,15 +1295,28 @@ function loadScript() {
             callback();
         };
     }
-    script.src = ADK.scriptName;
+    script.src = ADK.trueScriptName;
     document.getElementsByTagName( "body" )[0].appendChild( script );
+
+
 }
+
 
 function callback() {
     cb.log( ADK.trueScriptName + " loaded" );
     if ( ADK.settingsChoices == "" ) {
-        createHTMLFromSettings( cb.settings_choices ); // Script has to be loaded before these can be done
-        createValidationCode( cb.settings_choices );
+        showSettings( "#Settings", cb.settings_choices );
     }
+
+    /**
+     *
+     * I have mixed feelings about doing this here
+     *  but it *IS* an effective way to seed at least
+     *  some of the settings[] array
+     *
+     */
+    $( ".settingInput" ).change();
+    clearErrors();
+
     createTippingHTML( 1, "" );
 }
