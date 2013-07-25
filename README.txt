@@ -14,9 +14,11 @@ What the ADK IS:
 -   A way to utilize your favorite debuggers/IDEs in your development (getting
     tired of spending 30+ minutes chasing down a bug that would take 30 seconds
     to find in a debugger?)
--   Completely free of any external dependencies -- only the most generic
-    Javascript is used -- no additional libraries/frameworks (JQuery, etc.)
-    are used. The minimal set of software required is a browser and a text
+-   Mostly free of any external dependencies -- only the most generic JS is
+    used plus JQuery (included) -- no other additional libraries/frameworks are
+    used. (Yes! This is a departure from my original stance of NO external
+    libraries - but circumstances change, and the code was becoming a bit too
+    unruly). The minimal set of software required is a browser and a text
     editor - although you probably almost always want to use some sort of IDE
     (at the risk of sounding like a shill, I'm quite happy with Webstorm)
 -   Released under GPLv3 license.  Within the (quite liberal) constraints of
@@ -61,7 +63,7 @@ What the ADK is NOT:
 
 Usage:
 
-The ADK runtime system is composed of 3 files:
+The ADK runtime system is composed of 4 files:
 
 objCB.js    -   This provides the cb object.  Generally you should not have
                 to modify this.
@@ -74,10 +76,12 @@ main.css    -   All the basic formatting is done via css, so change it here
                 within the JavaScript code (Hint: Search for "STYLE=")  Note:
                 Unless you're fixing some functional issue, main.css should
                 NOT be included in pull requests.
+jquery      -   This is included in the runtime to continue the ability to
+                run the ADK completely offline.  The current version is
+                jquery-2.0.3.js
 
-Put these 3 files along with YOUR app/bot script in a folder/directory, fix up
-main.html to point to your app/bot and then simply point your IDE/browser/
-debugger to main.html!
+Put these 4 files along with YOUR app/bot script in a folder/directory, and then
+simply point your IDE/browser/debugger to main.html!
 
 When the window opens in the browser, you should have 7 panels:
 
@@ -154,11 +158,25 @@ Panel Revamp:
 
 Panels now should behave very nearly identically to real CB panels.  In
 addition, customized panels are now supported.  So for example, the broadcaster,
-Bob, Carol and every other user could be show a complerely different panel.
+Bob, Carol and every other user could be shown a completely different panel.
 This has some interesting possibilities for some multiplayer games (Texas Hold
 'Em comes to mind offhand (thinking players 2 cards on top row, flop/turn/river
 cards on second, other info on third).  For ADK purposes, only the currently
 selected users' panel is displayed.
+
+*******************************************************************************
+*******************************************************************************
+
+JQuery Support:
+
+All the DOM handling is being transitioned to JQuery.  Version 2.x was chosen
+over the slightly more browser compatible 1.x versions mainly because the
+only additional compatibility 1.x would give us is IE versions <= 8.0.  Well,
+ guess what? Those IE versions don't have the HTML5 File API support we need
+ anyway.  So no point in going out of our way to support them.
+
+ The included jquery is, and should be, unmodified from the distribution.  It
+ is only included to maintain the completely offline usability goal.
 
 *******************************************************************************
 *******************************************************************************

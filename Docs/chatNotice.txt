@@ -1,5 +1,10 @@
-cb.chatNotice(message, [to_user])
-Send a message to the room. If to_user is given, the message will only be seen by that user.
+cb.chatNotice(message, [to_user], [background], [foreground], [weight])
+Send a message to the room. If to_user is given, the message will only be seen by
+that user. You can also use the optional params background, foreground, and weight
+to style your message. Only HTML color codes (such as #FF0000) may be given for the
+color stying, and the font weight will only accept the options normal, bold, or
+bolder. If you want to provide styling options, but not a to_user, just pass an
+empty string to to_user.
 
 You can use a \n inside the message to send a multi-line notice.
 

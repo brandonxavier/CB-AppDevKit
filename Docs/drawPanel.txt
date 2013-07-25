@@ -1,7 +1,5 @@
-cb.chatNotice(message, [to_user])
-Send a message to the room. If to_user is given, the message will only be seen by that user.
+cb.drawPanel()
+This function is only available to apps, not bots.
 
-You can use a \n inside the message to send a multi-line notice.
-
-You may use :emoticons in the notice.
-
+Requests that all users reload the panel (the HTML info area below the cam).
+The contents of the panel are controlled by cb.onDrawPanel(func).
