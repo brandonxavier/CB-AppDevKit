@@ -134,13 +134,17 @@ function objCB() {
         area.scrollTop = area.scrollHeight;
     }
 
-    function chatNotice(message, to_user) {
 
-        /**
-         *
-         * This should be considered an immutable function -- don't attempt to redefine it
-         *
-         */
+    /**
+     *
+     *
+     * @param message
+     * @param to_user optional Defaults to all users
+     * @param bg_color optional Defaults to #000000 (white)
+     * @param fg_color optional Defaults to #ffffff (black)
+     * @param weight optional {'normal', 'bold', 'bolder'}
+     */
+    function chatNotice(message, to_user, bg_color, fg_color, weight) {
 
         var msgObj;
 
@@ -149,7 +153,7 @@ function objCB() {
             message = message.replace( "\n", "</br>Notice: " );
 
 
-        if ( to_user == null ) {
+        if ( to_user == null || to_user == "" ) {
             // area = document.getElementById(this.cbDiv['Main'].txtMainChat);
 
             msgObj = createMesg( "Notice", message );
@@ -381,6 +385,10 @@ function objCB() {
 
         //
         // First set the color of the name
+        //
+        // Note: I *intentionally* don't format this with background
+        //       colors - just a personal preference, I find it harder
+        //       to discern the colors on a non-white background.
         //
         if ( msg['user'] == "Notice" ) {
             mstr = "<SPAN STYLE='color:black'>" + msg['user'] + ": </SPAN>"
@@ -1259,6 +1267,16 @@ function getInitFunction() {
     var ele = document.getElementById( "lstFunctions" );
     return  ele.options[ele.selectedIndex].value;
 }
+
+/**
+ *
+ * You may be wondering whey I don't simply use a JQuery
+ * $.getScript() here.  If I do that, debugging won't work.
+ * for some black magic reason, this method preserves the
+ * ability to use your debuggers on the dynamically loaded
+ * code.
+ *
+ */
 function loadScript() {
 
     var script = document.createElement( "script" );
@@ -1277,9 +1295,12 @@ function loadScript() {
             callback();
         };
     }
-    script.src = ADK.scriptName;
+    script.src = ADK.trueScriptName;
     document.getElementsByTagName( "body" )[0].appendChild( script );
+
+
 }
+
 
 function callback() {
     cb.log( ADK.trueScriptName + " loaded" );
