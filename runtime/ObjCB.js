@@ -31,6 +31,158 @@ var ADK = {'readyToRun': false,
     'trueScriptName': ""
 };
 
+// Standard CSS color names gathered from various freely available sources
+
+var cp = {  // I like being able to use symbolic names rather than hex codes :-)
+    aliceblue: "#F0F8FF",
+    antiquewhite: "#FAEBD7",
+    aqua: "#00FFFF",
+    aquamarine: "#7FFFD4",
+    azure: "#F0FFFF",
+    beige: "#F5F5DC",
+    bisque: "#FFE4C4",
+    black: "#000000",
+    blanchedalmond: "#FFEBCD",
+    blue: "#0000FF",
+    blueviolet: "#8A2BE2",
+    brown: "#A52A2A",
+    burlywood: "#DEB887",
+    cadetblue: "#5F9EA0",
+    chartreuse: "#7FFF00",
+    chocolate: "#D2691E",
+    coral: "#FF7F50",
+    cornflowerblue: "#6495ED",
+    cornsilk: "#FFF8DC",
+    crimson: "#DC143C",
+    cyan: "#00FFFF",
+    darkblue: "#00008B",
+    darkcyan: "#008B8B",
+    darkgoldenrod: "#B8860B",
+    darkgray: "#A9A9A9",
+    darkgrey: "#A9A9A9",
+    darkgreen: "#006400",
+    darkkhaki: "#BDB76B",
+    darkmagenta: "#8B008B",
+    darkolivegreen: "#556B2F",
+    darkorange: "#FF8C00",
+    darkorchid: "#9932CC",
+    darkred: "#8B0000",
+    darksalmon: "#E9967A",
+    darkseagreen: "#8FBC8F",
+    darkslateblue: "#483D8B",
+    darkslategray: "#2F4F4F",
+    darkslategrey: "#2F4F4F",
+    darkturquoise: "#00CED1",
+    darkviolet: "#9400D3",
+    deeppink: "#FF1493",
+    deepskyblue: "#00BFFF",
+    dimgray: "#696969",
+    dimgrey: "#696969",
+    dodgerblue: "#1E90FF",
+    firebrick: "#B22222",
+    floralwhite: "#FFFAF0",
+    forestgreen: "#228B22",
+    fuchsia: "#FF00FF",
+    gainsboro: "#DCDCDC",
+    ghostwhite: "#F8F8FF",
+    gold: "#FFD700",
+    goldenrod: "#DAA520",
+    gray: "#808080",
+    grey: "#808080",
+    green: "#008000",
+    greenyellow: "#ADFF2F",
+    honeydew: "#F0FFF0",
+    hotpink: "#FF69B4",
+    indianred: "#CD5C5C",
+    indigo: "#4B0082",
+    ivory: "#FFFFF0",
+    khaki: "#F0E68C",
+    lavender: "#E6E6FA",
+    lavenderblush: "#FFF0F5",
+    lawngreen: "#7CFC00",
+    lemonchiffon: "#FFFACD",
+    lightblue: "#ADD8E6",
+    lightcoral: "#F08080",
+    lightcyan: "#E0FFFF",
+    lightgoldenrodyellow: "#FAFAD2",
+    lightgreen: "#90EE90",
+    lightgrey: "#D3D3D3",
+    lightpink: "#FFB6C1",
+    lightsalmon: "#FFA07A",
+    lightseagreen: "#20B2AA",
+    lightskyblue: "#87CEFA",
+    lightslategray: "#778899",
+    lightslategrey: "#778899",
+    lightsteelblue: "#B0C4DE",
+    lightyellow: "#FFFFE0",
+    lime: "#00FF00",
+    limegreen: "#32CD32",
+    linen: "#FAF0E6",
+    magenta: "#FF00FF",
+    maroon: "#800000",
+    mediumaquamarine: "#66CDAA",
+    mediumblue: "#0000CD",
+    mediumorchid: "#BA55D3",
+    mediumpurple: "#9370DB",
+    mediumseagreen: "#3CB371",
+    mediumslateblue: "#7B68EE",
+    mediumspringgreen: "#00FA9A",
+    mediumturquoise: "#48D1CC",
+    mediumvioletred: "#C71585",
+    midnightblue: "#191970",
+    mintcream: "#F5FFFA",
+    mistyrose: "#FFE4E1",
+    moccasin: "#FFE4B5",
+    navajowhite: "#FFDEAD",
+    navy: "#000080",
+    oldlace: "#FDF5E6",
+    olive: "#808000",
+    olivedrab: "#6B8E23",
+    orange: "#FFA500",
+    orangered: "#FF4500",
+    orchid: "#DA70D6",
+    palegoldenrod: "#EEE8AA",
+    palegreen: "#98FB98",
+    paleturquoise: "#AFEEEE",
+    palevioletred: "#DB7093",
+    papayawhip: "#FFEFD5",
+    peachpuff: "#FFDAB9",
+    peru: "#CD853F",
+    pink: "#FFC0CB",
+    plum: "#DDA0DD",
+    powderblue: "#B0E0E6",
+    purple: "#800080",
+    red: "#FF0000",
+    rosybrown: "#BC8F8F",
+    royalblue: "#4169E1",
+    saddlebrown: "#8B4513",
+    salmon: "#FA8072",
+    sandybrown: "#F4A460",
+    seagreen: "#2E8B57",
+    seashell: "#FFF5EE",
+    sienna: "#A0522D",
+    silver: "#C0C0C0",
+    skyblue: "#87CEEB",
+    slateblue: "#6A5ACD",
+    slategray: "#708090",
+    slategrey: "#708090",
+    snow: "#FFFAFA",
+    springgreen: "#00FF7F",
+    steelblue: "#4682B4",
+    tan: "#D2B48C",
+    teal: "#008080",
+    thistle: "#D8BFD8",
+    tomato: "#FF6347",
+    turquoise: "#40E0D0",
+    violet: "#EE82EE",
+    wheat: "#F5DEB3",
+    white: "#FFFFFF",
+    whitesmoke: "#F5F5F5",
+    yellow: "#FFFF00",
+    yellowgreen: "#9ACD32"
+};
+
+
 var cb;
 
 $( document ).ready( function () {
@@ -138,6 +290,7 @@ function objCB() {
     /**
      *
      *
+     *
      * @param message
      * @param to_user optional Defaults to all users
      * @param bg_color optional Defaults to #000000 (white)
@@ -152,16 +305,25 @@ function objCB() {
         while ( message.indexOf( "\n" ) >= 0 )
             message = message.replace( "\n", "</br>Notice: " );
 
+        if ( bg_color == null || bg_color == "" ) {
+            bg_color = cp.white;
+        }
+        if ( fg_color == null || fg_color == "" ) {
+            fg_color = cp.black;
+        }
+        if ( weight == null || weight == "" ) {
+            weight = "normal";
+        }
 
         if ( to_user == null || to_user == "" ) {
             // area = document.getElementById(this.cbDiv['Main'].txtMainChat);
 
-            msgObj = createMesg( "Notice", message );
+            msgObj = createMesg( "Notice", message, bg_color, fg_color, weight );
             this.writeToChatArea( "txtUserChat", msgObj );
             this.writeToChatArea( "txtBroadcaster", msgObj );
         }
         else {
-            msgObj = createMesg( "Notice", message + " to " + to_user );
+            msgObj = createMesg( "Notice", message + " to " + to_user, bg_color, fg_color, weight );
             if ( to_user == cb.room_slug )
                 this.writeToChatArea( "txtBroadcaster", msgObj );
             else
@@ -331,12 +493,6 @@ function objCB() {
 
     function subjectChangeClicked() {
 
-        /**
-         *
-         * This should be considered an immutable function -- don't attempt to redefine it
-         *
-         */
-
         this.changeRoomSubject( document.getElementById( "txtSubject" ).value );
 
         var area = document.getElementById( "txtUserChat" );
@@ -390,6 +546,7 @@ function objCB() {
         //       colors - just a personal preference, I find it harder
         //       to discern the colors on a non-white background.
         //
+        // var cls = " CLASS='class" + msg['user'] + "' ";
         if ( msg['user'] == "Notice" ) {
             mstr = "<SPAN STYLE='color:black'>" + msg['user'] + ": </SPAN>"
         } else if ( msg['user'] == cb.room_slug ) {
@@ -403,21 +560,9 @@ function objCB() {
         } else if ( msg['tipped_recently'] == true ) {
             mstr = "<SPAN STYLE='color:#009;font-weight:bold'>" + msg['user'] + ": </SPAN>"
         } else
-            mstr = "<SPAN STYLE='color:#666'>" + msg['user'] + ": </SPAN>";
+            mstr = "<SPAN STYLE='color:#666'>" + msg['user'] + ": ";
 
-        // Background color is a pain
-        if ( msg['background'] != "white" && msg['background'] != "#ffffff" ) {
-            mstr = mstr + "<SPAN STYLE='background-color:" + msg['background'] + "'>"
-        }
-
-        // Foreground isn't so bad
-        mstr = mstr + "<SPAN STYLE='color:" + msg['c'] + "'>" + msg['m'] + "</SPAN>";
-
-        // Close up the background span
-        if ( msg['background'] != "white" && msg['background'] != "#ffffff" ) {
-            mstr = mstr + "</SPAN>"
-        }
-
+        mstr = mstr + "<SPAN " + msg['style'] + "'>" + msg['m'] + "</SPAN>";
 
         // End with a newline
         mstr = mstr + "</br>";
@@ -443,12 +588,6 @@ function objCB() {
     }
 
     function sendClicked(targetField) {
-
-        /**
-         *
-         * This should be considered an immutable function -- don't attempt to redefine it
-         *
-         */
 
         var msgObj = [];
 
@@ -890,14 +1029,14 @@ function onTip(func) {
 
 }
 
-function createMesg(fromUser, mesg) {
+function createMesg(fromUser, mesg, bg_color, fg_color, weight) {
 
     var tmp = [];
+    var style = "";
 
     // why am I using "tmp" instead of "this."?
     tmp['m'] = mesg;
     tmp['user'] = fromUser;
-    tmp['c'] = "black";
     tmp['f'] = "some font";  // TODO: Implement changing fonts
     tmp['in_fanclub'] = cb.cbUsers[fromUser].in_fanclub;
     tmp['has_tokens'] = cb.cbUsers[fromUser].has_tokens;
@@ -905,12 +1044,26 @@ function createMesg(fromUser, mesg) {
     tmp['tipped_recently'] = cb.cbUsers[fromUser].tipped_recently;
     tmp['gender'] = cb.cbUsers[fromUser].gender;
     tmp['X-Spam'] = false;
-    tmp['background'] = "white";
 
-    if ( tmp['user'] == "Notice" ) {
-        tmp['c'] = "black";
-        tmp['background'] = "white";
+    if ( bg_color == null || bg_color == "" ) {
+        tmp['background'] = cp.white;
+    } else {
+        tmp['background'] = bg_color;
     }
+    if ( fg_color == null || fg_color == "" ) {
+        tmp['c'] = cp.black;
+    } else {
+        tmp['c'] = fg_color;
+    }
+    if ( weight == null || weight == "" ) {
+        tmp['fw'] = "normal";
+    } else {
+        tmp['fw'] = weight;
+    }
+
+    tmp['style'] = " STYLE='background-color:" + tmp['background'] + ";";
+    tmp['style'] += "color:" + tmp['c'] + ";";
+    tmp['style'] += "font-weight:" + tmp['fw'] + ";' ";
 
     return tmp;
 
