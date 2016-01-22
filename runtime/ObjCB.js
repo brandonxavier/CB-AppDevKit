@@ -198,7 +198,7 @@ function objCB() {
 
     this.changeRoomSubject = changeRoomSubject;
     this.subjectChangeClicked = subjectChangeClicked;
-    this.chatNotice = chatNotice;
+    this.sendNotice = sendNotice;  // Updated from chatNotice to new sendNotice
     this.drawPanel = drawPanel;
     this.log = log;
     this.onDrawPanel = onDrawPanel;
@@ -288,7 +288,7 @@ function objCB() {
 
 
     /**
-     *
+     *Updated chatNotice to the new replacement sendNotice
      *
      *
      * @param message
@@ -296,8 +296,9 @@ function objCB() {
      * @param bg_color optional Defaults to #000000 (white)
      * @param fg_color optional Defaults to #ffffff (black)
      * @param weight optional {'normal', 'bold', 'bolder'}
+     * 
      */
-    function chatNotice(message, to_user, bg_color, fg_color, weight) {
+    function sendNotice(message, to_user, bg_color, fg_color, weight) {
 
         var msgObj;
 
