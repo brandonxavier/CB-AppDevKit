@@ -202,6 +202,8 @@ function objCB() {
     this.drawPanel = drawPanel;
     this.log = log;
     this.onDrawPanel = onDrawPanel;
+    this.onEnter = onEnter;
+    this.onLeave = onLeave;
     this.onMessage = onMessage;
     this.onTip = onTip;
     this.setTimeout = setTimeout;
@@ -244,7 +246,8 @@ function objCB() {
     this.cbUsers['Bob'] = new objCBUser( "Bob", "m", false, true, false, false );
     this.cbUsers['Carol'] = new objCBUser( "Carol", "f", false, true, true, true );
     this.cbUsers['Ted'] = new objCBUser( "Ted", "m", true, false, false, false );
-    this.cbUsers['Alice'] = new objCBUser( "Alice", "f", false, false, false, true );
+    this.cbUsers['Alice'] = new objCBUser("Alice", "f", false, false, false, true);
+    this.cbUsers['Grey'] = new objCBUser("Grey", "m", false, false, false, false); // Added a dummy grey to test against
 
     this.populateUserDropdown();
 
@@ -288,17 +291,19 @@ function objCB() {
 
 
     /**
-     *Updated chatNotice to the new replacement sendNotice
-     *
+     * Updated chatNotice to the new replacement sendNotice
+     * It adds ability to msg users by color category
      *
      * @param message
      * @param to_user optional Defaults to all users
      * @param bg_color optional Defaults to #000000 (white)
      * @param fg_color optional Defaults to #ffffff (black)
      * @param weight optional {'normal', 'bold', 'bolder'}
+     * @param to_group optionals
+     *
      * 
      */
-    function sendNotice(message, to_user, bg_color, fg_color, weight) {
+    function sendNotice(message, to_user, bg_color, fg_color, weight, to_group) {
 
         var msgObj;
 

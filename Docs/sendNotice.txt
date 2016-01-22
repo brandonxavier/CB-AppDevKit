@@ -1,0 +1,8 @@
+cb.sendNotice(message, [to_user], [background], [foreground], [weight], [to_group])
+Send a message to the room. If to_user is given, the message will only be seen by that user. You can also use the optional params background, foreground, and weight to style your message. Only HTML color codes (such as #FF0000) may be given for the color stying, and the font weight will only accept the options normal, bold, or bolder. If you want to provide styling options, but not a to_user, just pass an empty string to to_user.
+
+You can use a \n inside the message to send a multi-line notice.
+
+You may use :emoticons in the notice.
+
+You can send a message to a certain category of users with the optional to_group param. Just provide the color of which class of users you would like the message to be sent to. Valid choices are red (moderators), green (fan club members), darkblue (users who have tipped 50 recently), lightpurple (users who have tipped 250 recently), darkpurple (users who have tipped 1000 recently), and lightblue (users who own or have purchased tokens). Keep in mind that many users will have multiple categories applied to them, for example a fan club member who is also a moderator will get messages sent with red and green, even though his name only shows in red in chat. Using to_group will always override to_user.
