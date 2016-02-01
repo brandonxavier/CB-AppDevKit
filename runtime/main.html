@@ -31,6 +31,7 @@
     <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
     <title>CB App Dev</title>
     <link rel='stylesheet' type='text/css' href='./main.css'>
+    <SCRIPT src="./jquery-2.0.3.js"></SCRIPT>
 
 </head>
 
@@ -43,7 +44,16 @@
     <BUTTON id="btnOK" onClick='okBtnClicked()'>OK</BUTTON>
 </DIV>
 
-<DIV id='Startup' title='Startup'></DIV>
+<DIV id='Startup' title='Startup'>
+    <DIV id='Settings'>
+
+    </DIV>
+    <DIV id='Activate'>
+        <DIV STYLE='vertical-align: middle;text-align:center; float: none;border:0;display:table-cell;'>
+            <BUTTON id='btnActivate' class='button' onclick='btnActivateClicked()'>Activate</BUTTON>
+        </DIV>
+    </DIV>
+</DIV>
 
 <DIV id='Subject' title='Subject & Panels'>
     <TEXTAREA id='txtSubject'></TEXTAREA>
@@ -96,12 +106,20 @@
 
 <DIV id="User" title="User Chat">
     <DIV id="txtUserChat" class='textareas'></DIV>
-    <SELECT id="lstUsers"></SELECT>
-    <INPUT type="text" class="inputAreas" id="inUser" onkeydown="return press (event)">
-    <BUTTON class="button" id="btnUser" onclick="cb.sendClicked('inUser')">Send</BUTTON>
+    <SELECT id='lstUsers' onchange='userChanged()'></SELECT>
+    <INPUT type='text' class='inputAreas' id='inUser' onkeydown='return press (event)'>
+    <BUTTON class='button' id='btnUser' onclick="cb.sendClicked('inUser')">Send</BUTTON>
 </DIV>
 
-<DIV id='Tip' title='Tipping Window'></DIV>
+<DIV id='Tip' title='Tipping Window'>
+    <DIV id='Tipping'>
+    </DIV>
+    <DIV id='SendTip'>
+        <DIV STYLE='vertical-align: middle;text-align:center; float: none;border:0;display:table-cell;'>
+            <BUTTON id='btnTip' class='button' onclick='sendTipClicked()'>Send Tip</BUTTON>
+        </DIV>
+    </DIV>
+</DIV>
 
 <DIV id='Log' title='Logged Output'>
     <DIV id='txtLog' class='textareas'></DIV>
@@ -110,31 +128,7 @@
 
 <SCRIPT src="ObjCB.js"></SCRIPT>
 
-<!-- ***********************************************************************************************
-*****      Put the name of script and YOUR startup/load function in as arguments to cbInit()
-*****      Hint: init seems to be a popular name for this function.
-*****
-*****      For example:  cbInit("YourCoolScript.js", "init");
-*****
-*****
-*****      In your script file, you probably want to wrap the the call to your Init function
-*****      like this:
-*****
-*****      if (!!AppDevKit == false )
-*****           Init();
-*****
-*****      AppDevKit is a boolean defined in the ADK - this prevents the function from being
-*****      called twice: once by the ADK and then again by your script.  A sure sign that
-*****      this is happening is if your subject and panel changes BEFORE you hit the "Activate"
-*****      button.
-*****
-****************************************************************************************************
--->
-
 <SCRIPT>cbInit( "", "" )</SCRIPT>
-<!-- <SCRIPT>cbInit("YourScriptName.js","YourInitFunction")</SCRIPT> Use this format if you have an init -->
-<!-- <SCRIPT>cbInit( "","")</SCRIPT>  Use this line instead if you don't use init functions -->
-
 
 </body>
 </html>

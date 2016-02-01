@@ -24,10 +24,172 @@
  */
 
 var AppDevKit = true;
-var ADK = {'readyToRun': false, 'scriptName': "", 'initFunction': "",
-    settingsChoices: "", 'trueScriptName': "" };
+var ADK = {'readyToRun': false,
+    'scriptName': "",
+    'initFunction': "",
+    'settingsChoices': "",
+    'trueScriptName': ""
+};
+
+// Standard CSS color names gathered from various freely available sources
+
+var cp = {  // I like being able to use symbolic names rather than hex codes :-)
+    aliceblue: "#F0F8FF",
+    antiquewhite: "#FAEBD7",
+    aqua: "#00FFFF",
+    aquamarine: "#7FFFD4",
+    azure: "#F0FFFF",
+    beige: "#F5F5DC",
+    bisque: "#FFE4C4",
+    black: "#000000",
+    blanchedalmond: "#FFEBCD",
+    blue: "#0000FF",
+    blueviolet: "#8A2BE2",
+    brown: "#A52A2A",
+    burlywood: "#DEB887",
+    cadetblue: "#5F9EA0",
+    chartreuse: "#7FFF00",
+    chocolate: "#D2691E",
+    coral: "#FF7F50",
+    cornflowerblue: "#6495ED",
+    cornsilk: "#FFF8DC",
+    crimson: "#DC143C",
+    cyan: "#00FFFF",
+    darkblue: "#00008B",
+    darkcyan: "#008B8B",
+    darkgoldenrod: "#B8860B",
+    darkgray: "#A9A9A9",
+    darkgrey: "#A9A9A9",
+    darkgreen: "#006400",
+    darkkhaki: "#BDB76B",
+    darkmagenta: "#8B008B",
+    darkolivegreen: "#556B2F",
+    darkorange: "#FF8C00",
+    darkorchid: "#9932CC",
+    darkred: "#8B0000",
+    darksalmon: "#E9967A",
+    darkseagreen: "#8FBC8F",
+    darkslateblue: "#483D8B",
+    darkslategray: "#2F4F4F",
+    darkslategrey: "#2F4F4F",
+    darkturquoise: "#00CED1",
+    darkviolet: "#9400D3",
+    deeppink: "#FF1493",
+    deepskyblue: "#00BFFF",
+    dimgray: "#696969",
+    dimgrey: "#696969",
+    dodgerblue: "#1E90FF",
+    firebrick: "#B22222",
+    floralwhite: "#FFFAF0",
+    forestgreen: "#228B22",
+    fuchsia: "#FF00FF",
+    gainsboro: "#DCDCDC",
+    ghostwhite: "#F8F8FF",
+    gold: "#FFD700",
+    goldenrod: "#DAA520",
+    gray: "#808080",
+    grey: "#808080",
+    green: "#008000",
+    greenyellow: "#ADFF2F",
+    honeydew: "#F0FFF0",
+    hotpink: "#FF69B4",
+    indianred: "#CD5C5C",
+    indigo: "#4B0082",
+    ivory: "#FFFFF0",
+    khaki: "#F0E68C",
+    lavender: "#E6E6FA",
+    lavenderblush: "#FFF0F5",
+    lawngreen: "#7CFC00",
+    lemonchiffon: "#FFFACD",
+    lightblue: "#ADD8E6",
+    lightcoral: "#F08080",
+    lightcyan: "#E0FFFF",
+    lightgoldenrodyellow: "#FAFAD2",
+    lightgreen: "#90EE90",
+    lightgrey: "#D3D3D3",
+    lightpink: "#FFB6C1",
+    lightsalmon: "#FFA07A",
+    lightseagreen: "#20B2AA",
+    lightskyblue: "#87CEFA",
+    lightslategray: "#778899",
+    lightslategrey: "#778899",
+    lightsteelblue: "#B0C4DE",
+    lightyellow: "#FFFFE0",
+    lime: "#00FF00",
+    limegreen: "#32CD32",
+    linen: "#FAF0E6",
+    magenta: "#FF00FF",
+    maroon: "#800000",
+    mediumaquamarine: "#66CDAA",
+    mediumblue: "#0000CD",
+    mediumorchid: "#BA55D3",
+    mediumpurple: "#9370DB",
+    mediumseagreen: "#3CB371",
+    mediumslateblue: "#7B68EE",
+    mediumspringgreen: "#00FA9A",
+    mediumturquoise: "#48D1CC",
+    mediumvioletred: "#C71585",
+    midnightblue: "#191970",
+    mintcream: "#F5FFFA",
+    mistyrose: "#FFE4E1",
+    moccasin: "#FFE4B5",
+    navajowhite: "#FFDEAD",
+    navy: "#000080",
+    oldlace: "#FDF5E6",
+    olive: "#808000",
+    olivedrab: "#6B8E23",
+    orange: "#FFA500",
+    orangered: "#FF4500",
+    orchid: "#DA70D6",
+    palegoldenrod: "#EEE8AA",
+    palegreen: "#98FB98",
+    paleturquoise: "#AFEEEE",
+    palevioletred: "#DB7093",
+    papayawhip: "#FFEFD5",
+    peachpuff: "#FFDAB9",
+    peru: "#CD853F",
+    pink: "#FFC0CB",
+    plum: "#DDA0DD",
+    powderblue: "#B0E0E6",
+    purple: "#800080",
+    red: "#FF0000",
+    rosybrown: "#BC8F8F",
+    royalblue: "#4169E1",
+    saddlebrown: "#8B4513",
+    salmon: "#FA8072",
+    sandybrown: "#F4A460",
+    seagreen: "#2E8B57",
+    seashell: "#FFF5EE",
+    sienna: "#A0522D",
+    silver: "#C0C0C0",
+    skyblue: "#87CEEB",
+    slateblue: "#6A5ACD",
+    slategray: "#708090",
+    slategrey: "#708090",
+    snow: "#FFFAFA",
+    springgreen: "#00FF7F",
+    steelblue: "#4682B4",
+    tan: "#D2B48C",
+    teal: "#008080",
+    thistle: "#D8BFD8",
+    tomato: "#FF6347",
+    turquoise: "#40E0D0",
+    violet: "#EE82EE",
+    wheat: "#F5DEB3",
+    white: "#FFFFFF",
+    whitesmoke: "#F5F5F5",
+    yellow: "#FFFF00",
+    yellowgreen: "#9ACD32"
+};
+
 
 var cb;
+
+$( document ).ready( function () {
+
+    // do some jquery stuff here
+
+} );
 
 function objCB() {
 
@@ -51,11 +213,11 @@ function objCB() {
     this.populateUserDropdown = populateUserDropdown;
     this.scriptName = ADK.scriptName;
     this.initFunction = ADK.initFunction;
-    this.tipOptions = [];
+
     if ( ADK.settingsChoices != "" ) {
         this.settings_choices = eval( ADK.settingsChoices );
-        createHTMLFromSettings( this.settings_choices );
-        createValidationCode( this.settings_choices );
+        showSettings( "#Settings", this.settings_choices );
+        // createValidationCode( this.settings_choices );
     } else {
         this.settings_choices = [];
     }
@@ -68,6 +230,10 @@ function objCB() {
     this.tipHandler = function () {
     };
 
+    this.tipOptions = tipOptions;
+
+    this.tipOptionsHandler = function () {
+    };
 
     // Seed some dummy users;
     //
@@ -109,16 +275,29 @@ function objCB() {
     function changeRoomSubject(new_subject) {
         document.getElementById( "txtSubject" ).value = new_subject;
         this.writeToTextarea( "txtSubject", new_subject, true );
+        var area = document.getElementById( "txtUserChat" );
+        area.innerHTML += "<span style='color: #DC5500;background-color: white;font-weight:bold;' >" +
+            "room subject changed to \"" + new_subject + "\"</span></br>";
+        area.scrollTop = area.scrollHeight;
 
+        area = document.getElementById( "txtBroadcaster" );
+        area.innerHTML += "<span style='color: #DC5500;background-color: white;font-weight:bold;' >" +
+            "room subject changed to \"" + new_subject + "\"</span></br>";
+        area.scrollTop = area.scrollHeight;
     }
 
-    function chatNotice(message, to_user) {
 
-        /**
-         *
-         * This should be considered an immutable function -- don't attempt to redefine it
-         *
-         */
+    /**
+     *
+     *
+     *
+     * @param message
+     * @param to_user optional Defaults to all users
+     * @param bg_color optional Defaults to #000000 (white)
+     * @param fg_color optional Defaults to #ffffff (black)
+     * @param weight optional {'normal', 'bold', 'bolder'}
+     */
+    function chatNotice(message, to_user, bg_color, fg_color, weight) {
 
         var msgObj;
 
@@ -126,16 +305,25 @@ function objCB() {
         while ( message.indexOf( "\n" ) >= 0 )
             message = message.replace( "\n", "</br>Notice: " );
 
+        if ( bg_color == null || bg_color == "" ) {
+            bg_color = cp.white;
+        }
+        if ( fg_color == null || fg_color == "" ) {
+            fg_color = cp.black;
+        }
+        if ( weight == null || weight == "" ) {
+            weight = "normal";
+        }
 
-        if ( to_user == null ) {
+        if ( to_user == null || to_user == "" ) {
             // area = document.getElementById(this.cbDiv['Main'].txtMainChat);
 
-            msgObj = createMesg( "Notice", message );
+            msgObj = createMesg( "Notice", message, bg_color, fg_color, weight );
             this.writeToChatArea( "txtUserChat", msgObj );
             this.writeToChatArea( "txtBroadcaster", msgObj );
         }
         else {
-            msgObj = createMesg( "Notice", message + " to " + to_user );
+            msgObj = createMesg( "Notice", message + " to " + to_user, bg_color, fg_color, weight );
             if ( to_user == cb.room_slug )
                 this.writeToChatArea( "txtBroadcaster", msgObj );
             else
@@ -268,6 +456,10 @@ function objCB() {
 
     }
 
+    function tipOptions(func) {
+        this.tipOptionsHandler = func;
+        return(func);
+    }
 
     function onDrawPanel(func) {
 
@@ -300,12 +492,6 @@ function objCB() {
     }
 
     function subjectChangeClicked() {
-
-        /**
-         *
-         * This should be considered an immutable function -- don't attempt to redefine it
-         *
-         */
 
         this.changeRoomSubject( document.getElementById( "txtSubject" ).value );
 
@@ -341,8 +527,6 @@ function objCB() {
      */
     function writeToChatArea(targetArea, msg) {
 
-        // cb.log("typeof msg" + typeof msg);
-
         var mstr = "";
 
         //
@@ -358,6 +542,11 @@ function objCB() {
         //
         // First set the color of the name
         //
+        // Note: I *intentionally* don't format this with background
+        //       colors - just a personal preference, I find it harder
+        //       to discern the colors on a non-white background.
+        //
+        // var cls = " CLASS='class" + msg['user'] + "' ";
         if ( msg['user'] == "Notice" ) {
             mstr = "<SPAN STYLE='color:black'>" + msg['user'] + ": </SPAN>"
         } else if ( msg['user'] == cb.room_slug ) {
@@ -371,24 +560,12 @@ function objCB() {
         } else if ( msg['tipped_recently'] == true ) {
             mstr = "<SPAN STYLE='color:#009;font-weight:bold'>" + msg['user'] + ": </SPAN>"
         } else
-            mstr = "<SPAN STYLE='color:#666'>" + msg['user'] + ": </SPAN>";
+            mstr = "<SPAN STYLE='color:#666'>" + msg['user'] + ": ";
 
-        // Background color is a pain
-        if ( msg['background'] != "white" && msg['background'] != "#ffffff" ) {
-            mstr = mstr + "<SPAN STYLE='background-color:" + msg['background'] + "'>"
-        }
-
-        // Foreground isn't so bad
-        mstr = mstr + "<SPAN STYLE='color:" + msg['c'] + "'>" + msg['m'] + "</SPAN";
-
-        // Close up the background span
-        if ( msg['background'] != "white" && msg['background'] != "#ffffff" ) {
-            mstr = mstr + "</SPAN>"
-        }
-
+        mstr = mstr + "<SPAN " + msg['style'] + "'>" + msg['m'] + "</SPAN>";
 
         // End with a newline
-        mstr = mstr + "</br></br>"; // No, I don't know why I need 2 of these here
+        mstr = mstr + "</br>";
 
         var area = document.getElementById( targetArea );
         area.innerHTML += mstr;
@@ -412,12 +589,6 @@ function objCB() {
 
     function sendClicked(targetField) {
 
-        /**
-         *
-         * This should be considered an immutable function -- don't attempt to redefine it
-         *
-         */
-
         var msgObj = [];
 
         if ( document.getElementById( targetField ).value.trim() != "" ) {
@@ -429,7 +600,7 @@ function objCB() {
             } else {
                 var m = document.getElementById( "inUser" ).value;
                 if ( m.length > 4 ) {
-                    if ( m.search( "^/tip " ) == 0 ) { // We have a tip!
+                    if ( m.search( /^\/tip /i ) == 0 ) { // We have a tip!
                         var t = parseInt( m.substr( 5 ) );
                         var p = (m.substr( 5 )).indexOf( " " );
                         var tm = ( p != -1 ? m.substr( p + 6 ) : "" );
@@ -469,84 +640,278 @@ function objCBUser(username, gender, fanclub, has_tokens, is_mod, tipped_recentl
 
 /**
  *
- *
- * @param sc
- * @returns {string}
+ * @param whichDiv
+ * @param currSettings
  */
-function createValidationCode(sc) {
+function showSettings(whichDiv, currSettings) {
+
+    var str, vStr, currId, f, e, s, selectDefaults = [];
+
+    str = "";
 
     /**
-     * TODO:  Consider the merits of moving this all into the CreateHTML as onblur events for each element
      *
-     * Pros:  From a design viewpoint, that's where this belongs
+     * Generate the validation functions now . . .
      *
-     * Cons:  Not sure it's worth the time/effort/additional complexity for code in the corollary to the 80/20 rule
+     * I find it seems to be more reliable to generate
+     * and <SCRIPT> all the elements at once - otherwise
+     * assigning the handlers to the HTML elements (onblur)
+     * tend to get squirrelly.
      *
      */
-    var fstr, x;
+    vStr = "";
+    for ( s = 0; s < currSettings.length; s++ ) {
+        vStr += createValidationCode( currSettings[s] );
+    }
+    $( "body" ).append( "<SCRIPT>" + vStr + "</SCRIPT>" );
+    /* var scrpt = document.createElement( "script" );
+     scrpt.innerHTML = vStr;
+     document.body.appendChild( scrpt );
+     */
 
-    fstr = "{";
-
-    for ( x = 0; x < sc.length; x++ ) {
-
-        switch (sc[x].type) {
-            case "int":
-                if ( sc[x].required == true || typeof sc[x].required == "undefined" ) {
-                    fstr = fstr + " if (document.getElementById('in" + sc[x].name + "').value.trim() == '') " +
-                        " { return '" + (typeof sc[x].label == 'undefined' ? sc[x].name : sc[x].label) + " is required' }" +
-                        " else { cb.settings['" + sc[x].name + "'] = document.getElementById('in" + sc[x].name +
-                        "').value.trim();}";
-                }
-                if ( typeof sc[x].minValue != "undefined" ) {
-                    fstr = fstr + " if (document.getElementById('in" + sc[x].name + "').value < " + sc[x].minValue + ") " +
-                        " { return '" + (typeof sc[x].label == 'undefined' ? sc[x].name : sc[x].label) + " below min. value " +
-                        sc[x].minValue + "' }" +
-                        " else { cb.settings['" + sc[x].name + "'] = parseInt(document.getElementById('in" + sc[x].name +
-                        "').value);}";
-                }
-                if ( typeof sc[x].minValue != "undefined" ) {
-                    fstr = fstr + " if (parseInt(document.getElementById('in" + sc[x].name + "').value) > " +
-                        sc[x].maxValue + ") " +
-                        " { return '" + (typeof sc[x].label == 'undefined' ? sc[x].name : sc[x].label) + " above max value " +
-                        sc[x].maxValue + "' }" +
-                        " else { cb.settings['" + sc[x].name + "'] = parseInt(document.getElementById('in" + sc[x].name +
-                        "').value);}";
-                }
-
-                break;
-            case "str":
-                if ( sc[x].required == true || typeof sc[x].required == "undefined" ) {
-                    fstr = fstr + " if (document.getElementById('in" + sc[x].name + "').value.trim() == '') " +
-                        " { return '" + (sc[x].label == undefined ? sc[x].name : sc[x].label) + " is required' }" +
-                        " else { cb.settings['" + sc[x].name + "'] = " +
-                        " document.getElementById('in" + sc[x].name + "').value.trim();}";
-                } else {
-                    // No error checking here, just add whatever is in the field
-                    fstr = fstr + "{ cb.settings['" + sc[x].name + "'] = document.getElementById('in" + sc[x].name +
-                        "').value.trim();}";
-                }
-                break;
-            case "choice":
-                // No error checking here, just add whatever is selected
-                fstr = fstr + "{ var e = document.getElementById('lst" + sc[x].name + "'); cb.settings['" +
-                    sc[x].name + "'] = e.options[e.selectedIndex].value }";
-                break;
-            default:
-                cb.log( "Skipping " + sc[x].name + " Unknown Type: " + sc[x].type );
-                break;
+    for ( s = 0; s < currSettings.length; s++ ) {
+        if ( currSettings[s].label != undefined ) {
+            $( whichDiv ).append( "<DIV class='settingLabel'>" + currSettings[s].label + "</DIV>" );
+        } else {
+            $( whichDiv ).append( "<DIV class='settingLabel'>" + currSettings[s].name + "</DIV>" );
         }
+
+
+        //
+        // For HTML DISPLAY purposes, there's little difference between a string and an int
+        //
+        if ( currSettings[s].type == "int" || currSettings[s].type == "str" ) {
+
+            currId = "in" + currSettings[s].name;
+
+            // vStr = createValidationCode( currSettings[s] );
+
+            str = "<DIV class='settingField'><INPUT type='text' class='settingInput' id='" + currId + "' ";
+            str += "onchange='validate" + currId + "()' ";
+            // str += "onblur='validate" + currId + "()' ";
+            str += "onkeydown='clearErrors()' ";
+            str += "onclick='clearErrors()' ";
+            if ( currSettings[s].default != undefined ) {
+                str += 'value="' + currSettings[s].default + '" ';
+            }
+            if ( currSettings[s].defaultValue != undefined ) {
+                str += 'value="' + currSettings[s].defaultValue + '" ';
+            }
+            $( whichDiv ).append( str + "></DIV>" );
+        } else {
+            if ( currSettings[s].type == "choice" ) {
+
+                currId = "lst" + currSettings[s].name;
+
+                str = "<DIV class='settingField'><SELECT  class='settingInput' id=" + currId + " ";
+                str += "onchange='validate" + currId + "()' >";
+                for ( var q in currSettings[s] ) {
+                    if ( q.match( "^choice*" ) != null ) {
+                        str += '<OPTION value="' + currSettings[s][q] + '">' + currSettings[s][q] +
+                            '</OPTION>';
+                    }
+                    if ( q == "defaultValue" ) {
+                        selectDefaults.push( {'name': "#" + currId,
+                            'defaultValue': currSettings[s][q]} );
+                    }
+                }
+                str += "</SELECT></DIV>"
+                $( whichDiv ).append( str );
+            }
+        }
+        // f=eval("validate"+currId);
+        // $("#"+currId ).on("change", f());
+    }
+
+    // Now that the "form" is created, set the default for the selects
+    for ( s = 0; s < selectDefaults.length; s++ ) {
+
+        $( selectDefaults[s].name + " option" ).each( function () {
+            this.selected = (this.text == selectDefaults[s].defaultValue);
+        } );
+
     }
 
 
-    fstr = fstr + "; return ''; };";
+}
 
-    return fstr;
+/**
+ *
+ * createValidationCode - Takes a single settings object and returns
+ *  a function in string form that can be later used for something useful
+ *
+ * @param sc single settings object
+ * @returns {string} function
+ */
+function createValidationCode(sc) {
+
+    var fstr, idName, idSelector;
+
+    fstr = "";
+
+    /**
+     *
+     * JS gobbles up the backslash used to escape
+     * single quotes . . . which causes JQuery to
+     * choke . . . but here's the kicker:  JQuery
+     * doesn't handle the \ . . . so without it
+     * the eval fails . . . with it, the string
+     * is displayed WITH the \ (example: "can\'t")
+     * . . . so we just punt and replace it with
+     * a space.
+     *
+     */
+    if ( typeof sc.label != "undefined" ) {
+        sc.label = sc.label.replace( /\'/g, " " );
+    }
+
+    switch (sc.type) {
+        case "int":
+            idName = "in" + sc.name;
+            idSelector = "#" + idName;
+            // Eliminate a few JQuery calls
+            fstr = " var x = " + makeJQS( idSelector ) + ".val().trim(); ";
+            if ( sc.required == true || typeof sc.required == "undefined" ) {
+                fstr += " if ( x == '') { " +
+                    " validationError('" + idSelector + "', '" +
+                    useLabel( sc.name, sc.label ) + " is required'); return false;}"
+            }
+            // Not a settings_choice . . . just common sense
+            fstr += " if ( x != '' && isNaN(parseInt( x )) == true ) { " +
+                " validationError('" + idSelector + "', '" +
+                useLabel( sc.name, sc.label ) + " must be numeric'); return false;}";
+            if ( typeof sc.minValue != "undefined" ) {
+                fstr += " if (parseInt( x ) < " + sc.minValue + ") { " +
+                    " validationError('" + idSelector + "', '" + useLabel( sc.name, sc.label ) +
+                    " below min. value " + sc.minValue + "'); return false;}"
+            }
+            if ( typeof sc.maxValue != "undefined" ) {
+                fstr += " if (parseInt( x ) > " + sc.maxValue + ") { " +
+                    " validationError('" + idSelector + "', '" + useLabel( sc.name, sc.label ) +
+                    " above max. value " + sc.maxValue + "'); return false;}"
+            }
+            fstr += "{ cb.settings['" + sc.name + "'] = parseInt(" + makeJQS( idSelector ) +
+                ".val());}";
+            // alert(fstr);
+            break;
+        case "str":
+            idName = "in" + sc.name;
+            idSelector = "#" + idName;
+            // Eliminate a few JQuery calls
+            fstr = " var x = " + makeJQS( idSelector ) + ".val().trim(); ";
+            if ( sc.required == true || typeof sc.required == "undefined" ) {
+                fstr += "if ( x == '') { " +
+                    " validationError('" + idSelector + "', '" + useLabel( sc.name, sc.label ) +
+                    " is required '); return false;}";
+            }
+            if ( sc.minLength != "undefined" ) {
+                fstr += "if ( x.length < " + sc.minLength + ") { " +
+                    " validationError('" + idSelector + "', '" + useLabel( sc.name, sc.label ) +
+                    " min. length is " + sc.minLength + " '); return false;}";
+            }
+            if ( sc.maxLength != "undefined" ) {
+                fstr += "if ( x.length > " + sc.maxLength + ") { " +
+                    " validationError('" + idSelector + "', '" + useLabel( sc.name, sc.label ) +
+                    " max. length is " + sc.maxLength + " '); return false;}";
+            }
+            fstr += "{ cb.settings['" + sc.name + "'] = x;}";
+            break;
+        case "choice":
+            idName = "lst" + sc.name;
+            idSelector = "#" + idName;
+            // No error checking here, just add whatever is selected
+            fstr = "{  cb.settings['" + sc.name + "'] = " + makeJQS( idSelector ) + ".val(); }";
+            break;
+        default:
+            break;
+    }
+    // }
+
+    // fstr = fstr + " return ''; }";
+    // alert(fstr);
+    return "function validate" + idName + "() {" + fstr + "}";
+
+}
+
+function validationError(id, mesg) {
+
+    $( id ).after( "<DIV class='errorLabel'>" + mesg + "</DIV>" );
+    setTimeout( function () {
+        $( id ).focus();
+    }, 50 );
+}
+
+function clearErrors() {
+
+    $( ".errorLabel" ).remove();
+
+}
+
+/**
+ *
+ * makeJQS - just wraps a JQ selector in "$(' . . . ')"
+ *           to make the sources a little cleaner in
+ *           generated code.
+ *
+ * @param tgt
+ * @returns {string}
+ */
+function makeJQS(tgt) {
+
+    return "$('" + tgt + "')";
+
+}
+
+function useLabel(sname, slabel) {
+
+    return (typeof slabel == 'undefined' ? sname : slabel);
+
+}
+function btnActivateClicked() {
+
+//noinspection JSUnresolvedFunction
+    clearErrors();
+
+    $( ".settingInput" ).change();
+
+    if ( $( ".errorLabel" ).length == 0 ) {
+        $( "#btnActivate" ).prop( "disabled", true );
+        $( ".settingInput" ).prop( "disabled", true );
+        cb.log( "Validation successful" );
+        cb.changeRoomSubject( cb.room_slug + "'s room" );
+        if ( ADK.initFunction != "" ) {
+            /**
+             * I have mixed feelings about doing this here
+             *  but it *IS* an effective way to seed at least
+             *  some of the settings[] array
+             *
+             */
+            $( ".settingInput" ).change();
+            clearErrors();
+            window[ADK.initFunction]();
+        }
+        else {
+            // NOW, it's safe to load the script after the settings_choices have
+            // been input and validated
+            loadScript();
+        }
+
+        cb.drawPanel();
+
+    }
+    else { //noinspection JSUnresolvedFunction
+        // cb.log( "Validation failed: " + validateSettings() );
+    }
 
 }
 
 function createTippingHTML(defaultTip, defaultNote) {
 
-    var currTipOptions = cb.tipOptions;
+    var currTipOptions = cb.tipOptionsHandler( getSelectedUser() );
+
+    // clear panel first
+    $( ".tipLabel" ).remove();
+    $( ".tipField" ).remove();
 
     var hstr;
 
@@ -558,116 +923,30 @@ function createTippingHTML(defaultTip, defaultNote) {
         defaultNote = "";
     }
 
-    hstr = "<LABEL >Tip Amount</LABEL>" +
-        "<INPUT type='text' id='inTipAmount' class='inputAreas' STYLE='width:15%' + value='" + defaultTip + "'>";
+    $( "#Tipping" ).append( "<DIV class='tipLabel' >Tip Amount from " + getSelectedUser() + "</DIV>" )
+        .append( "<INPUT type='text' id='inTipAmount' class='tipField' + value='" +
+            defaultTip + "'>" );
 
-    if ( currTipOptions.length == 0 ) { // Display the default note box
-        hstr = hstr + "<LABEL STYLE='display:block'>Tip Note</LABEL>" +
-            "<TEXTAREA id='inTipNote' >" + defaultNote + "</TEXTAREA>";
+    if ( currTipOptions == null ) { // Display the default note box
+        $( "#Tipping" ).append( "<DIV class='tipLabel' >Tip Note</DIV>" )
+            .append( "<TEXTAREA id='inTipNote' class='tipField'  >" + defaultNote +
+                "</TEXTAREA>" );
     } else {
-        hstr = hstr + "<LABEL STYLE='display:block'>" + currTipOptions['label'] + "</LABEL>" +
-            "<SELECT id='lstTipping' >" +
-            "<OPTION value='Select a choice:'>Select a choice:</OPTION>"; // To match CB behavior
+        $( "#Tipping" ).append( "<DIV class='tipLabel'>" + currTipOptions['label'] + "</DIV>" )
+            .append( "<SELECT id='lstTipping' class='tipField'>" );
+        $( "#lstTipping" ).append( (  $( "<option></option>" ) )
+            .attr( "value", 'Select a choice:' )
+            .text( 'Select a choice:' ) );
         for ( var x = 0; x < currTipOptions.options.length; x++ ) {
-            hstr = hstr + "<OPTION value='" + currTipOptions.options[x].label + "'>" +
-                currTipOptions.options[x].label + "</OPTION>";
+            $( "#lstTipping" )
+                .append( $( "<option></option>" )
+                    .attr( "value", currTipOptions.options[x].label )
+                    .text( currTipOptions.options[x].label ) );
         }
-        hstr = hstr + "</SELECT>";
     }
-
-    hstr = hstr + "<BUTTON STYLE='display:block' id='btnSendTip' class='buttons' " + "" +
-        "onclick='sendTipClicked()'>Send Tip</BUTTON>";
-
-    document.getElementById( "Tip" ).innerHTML = hstr;
-
+    // document.getElementById( "Tip" ).innerHTML = hstr;
 }
 
-
-function createHTMLFromSettings(allsettings) {
-
-    var str, e, s;
-
-    str = "";
-
-    for ( s = 0; s < allsettings.length; s++ ) {
-        if ( allsettings[s].label != undefined ) {
-            str += '<DIV STYLE="display:inline-block;margin:0;width:90%;height:28px"><LABEL >' + allsettings[s].label + "</LABEL>";
-        } else {
-            str += '<DIV STYLE="display:inline-block;margin:0;width:90%;height:28px"><LABEL >' + allsettings[s].name + "</LABEL>";
-        }
-
-        //
-        // For HTML DISPLAY purposes, there's little difference between a string and an int
-        //
-        if ( allsettings[s].type == "int" || allsettings[s].type == "str" ) {
-            str = str + '<INPUT type="text"  id="in' + allsettings[s].name +
-                '" ';
-            if ( allsettings[s].default != undefined ) {
-                str = str + 'value="' + allsettings[s].default + '" ';
-            }
-            if ( allsettings[s].defaultValue != undefined ) {
-                str = str + 'value="' + allsettings[s].defaultValue + '" ';
-            }
-        } else {
-            /**
-             * TODO Set the default in the dropdown list(s)
-             */
-            if ( allsettings[s].type == "choice" ) {
-                str = str + '<SELECT id=lst' + allsettings[s].name + ' >';
-                for ( var q in allsettings[s] ) {
-                    if ( q.match( "^choice*" ) != null ) {
-                        str = str + '<OPTION value="' + allsettings[s][q] + '">' + allsettings[s][q] + '</OPTION>'
-                    }
-                }
-                str = str + "</SELECT>"
-            }
-        }
-
-
-        if ( str.charAt( str.length - 1 ) != ">" ) {
-            str = str + ">";
-        }
-
-        str = str + "</DIV>"
-    }
-
-    e = document.getElementById( "Startup" );
-
-    // Add the "Activate Button"
-    str = str + "<BUTTON id='btnActivate' class='button' onclick='btnActivateClicked()'>Activate</BUTTON>";
-
-    e.innerHTML = str;
-
-    var scrpt = document.createElement( "script" );
-    scrpt.innerHTML = "function validateSettings() " + createValidationCode( allsettings );
-    document.body.appendChild( scrpt );
-
-    return str;
-
-}
-
-function btnActivateClicked() {
-
-//noinspection JSUnresolvedFunction
-    if ( validateSettings() == "" ) {
-        cb.log( "Validation successful" );
-        cb.changeRoomSubject( cb.room_slug + "'s room" );
-        if ( ADK.initFunction != "" )
-            window[ADK.initFunction]();
-        else {
-            // NOW, it's safe to load the script after the settings_choices have
-            // been input and validated
-            loadScript();
-        }
-
-        cb.drawPanel();
-
-    }
-    else { //noinspection JSUnresolvedFunction
-        cb.log( "Validation failed: " + validateSettings() );
-    }
-
-}
 
 Object.size = function (obj) {
     var size = 0, key;
@@ -709,18 +988,20 @@ function objTipObject(fromUser, amt, msg) {
     this['from_user_tipped_recently'] = cb.cbUsers[fromUser].tipped_recently; // is the user a “dark blue”?
     this['from_user_gender'] = cb.cbUsers[fromUser].gender; // “m” (male), “f” (female), “s” (shemale), or “c” (couple)
 
-    cb.cbUsers[fromUser].tipped_recently = true; // TODO: Should THIS tip count as recently tipped?
+    cb.cbUsers[fromUser].tipped_recently = true;
 
 }
 
 function sendTipClicked() {
 
-    var amt = parseInt( document.getElementById( "inTipAmount" ).value );
-    var msg = document.getElementById( "lstTipping" );
-    if ( msg == null )
-        msg = document.getElementById( "inTipNote" ).value;
+    var amt = parseInt( $( "#inTipAmount" ).val() );
+    var msg;
+
+    if ( $( "#lstTipping" ).length > 0 )
+        msg = $( "#lstTipping" ).val();
+    // msg = msg.options[msg.selectedIndex].value;
     else
-        msg = msg.options[msg.selectedIndex].value;
+        msg = $( "#inTipNote" ).val().trim();
 
     var currentTip = new objTipObject( getSelectedUser(), amt, msg );
 
@@ -748,13 +1029,14 @@ function onTip(func) {
 
 }
 
-function createMesg(fromUser, mesg) {
+function createMesg(fromUser, mesg, bg_color, fg_color, weight) {
 
     var tmp = [];
+    var style = "";
 
+    // why am I using "tmp" instead of "this."?
     tmp['m'] = mesg;
     tmp['user'] = fromUser;
-    tmp['c'] = "black";
     tmp['f'] = "some font";  // TODO: Implement changing fonts
     tmp['in_fanclub'] = cb.cbUsers[fromUser].in_fanclub;
     tmp['has_tokens'] = cb.cbUsers[fromUser].has_tokens;
@@ -762,17 +1044,60 @@ function createMesg(fromUser, mesg) {
     tmp['tipped_recently'] = cb.cbUsers[fromUser].tipped_recently;
     tmp['gender'] = cb.cbUsers[fromUser].gender;
     tmp['X-Spam'] = false;
-    tmp['background'] = "white";
 
-    if ( tmp['user'] == "Notice" ) {
-        tmp['c'] = "black";
-        tmp['background'] = "white";
+    if ( bg_color == null || bg_color == "" ) {
+        tmp['background'] = cp.white;
+    } else {
+        tmp['background'] = bg_color;
     }
+    if ( fg_color == null || fg_color == "" ) {
+        tmp['c'] = cp.black;
+    } else {
+        tmp['c'] = fg_color;
+    }
+    if ( weight == null || weight == "" ) {
+        tmp['fw'] = "normal";
+    } else {
+        tmp['fw'] = weight;
+    }
+
+    tmp['style'] = " STYLE='background-color:" + tmp['background'] + ";";
+    tmp['style'] += "color:" + tmp['c'] + ";";
+    tmp['style'] += "font-weight:" + tmp['fw'] + ";' ";
 
     return tmp;
 
 }
 
+/**
+ *
+ * userChanged
+ *
+ * When a different user is selected from the dropdown list,
+ * force a redraw of the tipping and panel viewports
+ *
+ */
+function userChanged() {
+
+    var newUser = $( "#lstUsers" ).val();
+    var defTip = 0;
+    var defNote = "";
+
+    // Find whatever is in the tip window now and use for defaults
+    //
+    // Note: Not really worried about the default for a choice/select
+    //
+    defTip = parseInt( $( "#inTipAmount" ).val() );
+    if ( $( "#inTipNote" ).length > 0 ) {
+        defNote = $( "#inTipNote" ).val().trim();
+    }
+
+    createTippingHTML( defTip, defNote );
+
+    //
+    cb.drawPanel();
+
+}
 /**
  *
  * insertEmotes
@@ -862,6 +1187,22 @@ function okBtnClicked() {
     ADK.initFunction = getInitFunction();
 
     if ( ADK.scriptName != "" ) {
+        /**
+         *
+         * We need to disable the script/init/ok elements otherwise
+         * things will get very messy very quickly.  Main problem
+         * is all the generated code that gets injected into BODY.
+         *
+         * A secondary concern is a dev getting sloppy with closures/
+         * scoping/initializations.
+         *
+         * Rather than attempting to clear everything out, just make
+         * them start over every time.
+         *
+         */
+        $( "#inFileList" ).prop( "disabled", true );
+        $( "#lstFunctions" ).prop( "disabled", true );
+        $( "#btnOK" ).prop( "disabled", true );
         cb = new objCB();
         if ( ADK.initFunction != "" ) {  // We have an init function, so DON'T defer script loading
             loadScript();
@@ -1079,6 +1420,16 @@ function getInitFunction() {
     var ele = document.getElementById( "lstFunctions" );
     return  ele.options[ele.selectedIndex].value;
 }
+
+/**
+ *
+ * You may be wondering whey I don't simply use a JQuery
+ * $.getScript() here.  If I do that, debugging won't work.
+ * for some black magic reason, this method preserves the
+ * ability to use your debuggers on the dynamically loaded
+ * code.
+ *
+ */
 function loadScript() {
 
     var script = document.createElement( "script" );
@@ -1097,15 +1448,28 @@ function loadScript() {
             callback();
         };
     }
-    script.src = ADK.scriptName;
+    script.src = ADK.trueScriptName;
     document.getElementsByTagName( "body" )[0].appendChild( script );
+
+
 }
+
 
 function callback() {
     cb.log( ADK.trueScriptName + " loaded" );
     if ( ADK.settingsChoices == "" ) {
-        createHTMLFromSettings( cb.settings_choices ); // Script has to be loaded before these can be done
-        createValidationCode( cb.settings_choices );
+        showSettings( "#Settings", cb.settings_choices );
     }
+
+    /**
+     *
+     * I have mixed feelings about doing this here
+     *  but it *IS* an effective way to seed at least
+     *  some of the settings[] array
+     *
+     */
+    $( ".settingInput" ).change();
+    clearErrors();
+
     createTippingHTML( 1, "" );
 }
