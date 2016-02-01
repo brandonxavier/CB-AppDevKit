@@ -1,7 +1,9 @@
-/**
+﻿/**
+ * Update Date: 2/1/2016
+ * User: JHamerstix (jhamerstix@myself.com)
  * Created with JetBrains WebStorm
  * User: brandonxavier (brandonxavier421@gmail.com)
- * Date: 6/20/13
+ * Original Date: 6/20/13
  *
 
  Copyright 2013 Brandon Xavier (brandonxavier421@gmail.com)
@@ -246,8 +248,8 @@ function objCB() {
     this.cbUsers['Bob'] = new objCBUser( "Bob", "m", false, true, false, false );
     this.cbUsers['Carol'] = new objCBUser( "Carol", "f", false, true, true, true );
     this.cbUsers['Ted'] = new objCBUser( "Ted", "m", true, false, false, false );
-    this.cbUsers['Alice'] = new objCBUser("Alice", "f", false, false, false, true);
-    this.cbUsers['Grey'] = new objCBUser("Grey", "m", false, false, false, false); // Added a dummy grey to test against
+    this.cbUsers['Alice'] = new objCBUser( "Alice", "f", false, false, false, true);
+    this.cbUsers['Grey'] = new objCBUser( "Grey", "m", false, false, false, false); // Added a dummy grey, not in fan club, no tokens, not mod, not recent_tipper
 
     this.populateUserDropdown();
 
@@ -292,14 +294,17 @@ function objCB() {
 
     /**
      * Updated chatNotice to the new replacement sendNotice
-     * It adds ability to msg users by color category
-     *
+     * You can send a message to a certain category of users with the optional to_group param. 
+	 * Just provide the color of which class of users you would like the message to be sent to. 
+	 * Valid choices are red (moderators), green (fan club members), darkblue (users who have tipped 50 recently), lightpurple (users who have tipped 250 recently), darkpurple (users who have tipped 
+	 * 1000 recently), and lightblue (users who own or have purchased tokens). 
+	 * Keep in mind that many users will have multiple categories applied to them, for example a fan club member who is also a moderator will get messages sent with red and green, even though his name * only shows in red in chat. Using to_group will always override to_user.
      * @param message
      * @param to_user optional Defaults to all users
      * @param bg_color optional Defaults to #000000 (white)
      * @param fg_color optional Defaults to #ffffff (black)
      * @param weight optional {'normal', 'bold', 'bolder'}
-     * @param to_group optionals
+     * @param to_group optional
      *
      * 
      */
@@ -320,7 +325,9 @@ function objCB() {
         if ( weight == null || weight == "" ) {
             weight = "normal";
         }
-
+		if ( to_group == null || to_group == "" ) {
+            to_group = "normal";
+        }
         if ( to_user == null || to_user == "" ) {
             // area = document.getElementById(this.cbDiv['Main'].txtMainChat);
 
@@ -475,6 +482,20 @@ function objCB() {
         return(func);
     }
 
+	function onEnter(func) {
+
+        this.mesgHandler = func;
+
+        return func;
+
+    }
+	function onLeave(func) {
+
+        this.mesgHandler = func;
+
+        return func;
+
+    }
     function onMessage(func) {
 
         this.mesgHandler = func;
@@ -482,8 +503,7 @@ function objCB() {
         return func;
 
     }
-
-
+	
     /**
      *
      * Avoid changing this
@@ -721,7 +741,7 @@ function showSettings(whichDiv, currSettings) {
                             'defaultValue': currSettings[s][q]} );
                     }
                 }
-                str += "</SELECT></DIV>"
+                str += "</SELECT></DIV>";
                 $( whichDiv ).append( str );
             }
         }
