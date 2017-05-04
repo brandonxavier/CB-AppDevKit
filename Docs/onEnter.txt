@@ -1,0 +1,22 @@
+cb.onEnter(func)
+Receive a notification when a registered member enters the room. The func argument should be a function that receives 1 argument itself, user.
+
+These fields are available:
+
+user: user who entered the room
+in_fanclub: is the user in the broadcaster’s fan club
+has_tokens: does the user have at least 1 token
+is_mod: is the user a moderator
+tipped_recently: is the user a “dark blue”?
+tipped_alot_recently: is the user a “purple”?
+tipped_tons_recently: is the user a “dark purple”?
+gender: “m” (male), “f” (female), “s” (trans), or “c” (couple)
+Example Usage
+cb.onEnter(function(user) {
+    cb.chatNotice('Welcome ' + user['user'] + '!');
+});
+Example Output
+Notice: Welcome testuser!
+Notice: {u'user': u'testuser', u'in_fanclub': False,
+         u'has_tokens': False, u'is_mod': False,
+         u'gender': u'm', u'tipped_recently': True}
